@@ -18,6 +18,7 @@
 \usepackage{amssymb}
 \usepackage{bbold}
 \usepackage{amsmath}
+\usepackage{commath}
 
 % vnořené popisky obrázků
 \usepackage{subcaption}
@@ -37,8 +38,6 @@ pdfpagemode=UseNone,backref=false,colorlinks=true] {hyperref}
 \usepackage{xkeyval}	% Inline todonotes
 \usepackage[textsize = footnotesize]{todonotes}
 \presetkeys{todonotes}{inline}{}
-
-\newcommand{\dif}{\text{d}}
 
 % Zacni sekci slovem ukol
 \renewcommand{\thesection}{Úkol \arabic{section}}
@@ -72,6 +71,7 @@ pdfpagemode=UseNone,backref=false,colorlinks=true] {hyperref}
 \label{sec:ukol1}
 
 \subsection{~}
+\label{sec:ukol1:1}
 Nalezněte statické zesílení K systému popsaného níže uvedeným přenosem.
 \begin{equation}
 	G(s) = \frac{-0.2s+5}{(s+3)(s+2)(s+1)}
@@ -101,10 +101,9 @@ Se znalostí statického zesílení podle \eqref{eq:dcgain} je vidět, že ustá
 
 \subsection{~}
 \label{sec:ukol1:3}
-Jaká bude ustálená hodnota odezvy na Dirakův impulz?
-
-Řešení: Protože odezvy na jednotkový skok $w(t)$ a na Diracův impuls $h(t)$ spojuje vztah $w(t) = \int h(t)$ a již víme, že $w(t)$ se ustálí
-na konstantní hodnotě $K$, poté její derivace musí být po ustálení nulová. Jinými slovy pro ustálenou hodnotu impulsové odezvy platí $\lim_{t \to \infty} h(t) = 0$.
+Jaká bude ustálená hodnota odezvy na Dirakův impulz? \\
+Řešení: Odezvy na jednotkový skok $w(t)$ a na Diracův impuls $h(t)$ spojuje vztah $w(t) = \int h(t)$. Z \ref{sec:ukol1:1} již víme, že $w(t)$ se ustálí
+na konstantní hodnotě $K$, její derivace $h(t)$ tedy po ustálení musí být nulová. Pro ustálenou hodnotu impulsové odezvy tedy platí $\lim_{t \to \infty} h(t) = 0$.
 
 % ---------------------------------
 \section{Laplaceova transformace}
@@ -209,6 +208,12 @@ y = \begin{bmatrix}
 	1 & 0 & -1
 \end{bmatrix} \vec{x}
 \end{math}
+Řešení: Pro rozhodnutí o stabilitě ze stavového popisu lze vyšetřit znaménko vlastních čísel matice systému A.
+Stabilní bude systém tehdy, když vlastní čísla budou mít zápornou reálnou část. Toto platí proto, že při převodu
+stavového popisu na vnější se do jmenovatele přenosu dostane výraz $\det(sI - A)$. To je polynom v s, jeho kořeny
+jsou vlastní čísla matice A, která se tak stávají póly přenosové funkce (předpokládejme, že se v přenosové funkci nic nepokrátí).
+
+Pro zadanou matici mají vlastní čísla hodnotu $1$ a $ -1 \pm 1.73 i$ 
 
 
 \section{Diskretizace}
@@ -228,12 +233,44 @@ libovolný periodický signál, např. sinus, pila, atd. Nezapomeňte na to, jak
 Rozhodněte u každého z následujích přenosů, zdali jím popsaný systém je: stabilní/nestabilní, statický/astatický, kmitavý/nekmitavý.
 \begin{equation*}
 	\begin{split}
-		G_1(s) &= -\frac{s-12}{(s+1)(5s+2)(s+3)} \\
-		G_2(s) &= \frac{1}{s^2 + 0.5s - 1} \\
+		G_1(s) &= -\frac{s-12}{(s+1)(5s+2)(s+3)} = -\frac{1}{5}~\frac{s-12}{(s+1)(s+0.4)(s+3)} \\
+		G_2(s) &= \frac{1}{s^2 + 0.5s - 1} = \frac{1}{(s-0.7808)(s+1.2808)} \\
 		G_3(s) &= \frac{1}{s^2} \\
-		G_4(s) &= \frac{s+2}{s^2-2}
+		G_4(s) &= \frac{s+2}{s^2-2} = \frac{s+2}{(s-\sqrt{2})(s+\sqrt{2})}
 	\end{split}
 \end{equation*}
+
+Vlastnosti budu vyčítat zejména z pólů přenosových funkcí, proto jsme rovnou rozložili polynomy na kořenové činitele.
+
+\begin{itemize}
+	\item \textbf{Stabilita}: Stabilní systém má reálnou složku všech pólů zápornou. Toto kritérium splňuje pouze systém s přenosem $G_1(s)$,
+	ostatní mají alespoň jeden pól na imaginární ose nebo vlevo od ní.
+	\item \textbf{Astatismus}: Astatický systém máintegrační charakter, jeho chování je závislé na přechodím stavu. Přenos astatického 
+	systému obsahuje alespoň jeden pól v počátku. Astatický je jen systém s přenosem $G_3(s)$, ostatní jsou statické.
+	\item \textbf{Kmitání}: Systém s komplexně sdruženými póly bude kmitat, protože se do jeho impulsové charakteristiky promítnou goniometrické funkce
+	(reálná a imaginární složka komplexní exponeniciály). Všechny zadané systémy ale mají póly reálné a tudíž kmitání nemůže nastat.
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \section{Spojování dynamických systémů}
 \label{sec:ukol9}
@@ -241,26 +278,52 @@ Jsou dány dva systémy
 \begin{equation*}
 	G_1(s) = \frac{s-1}{s+1}, G_2(s) = \frac{1}{s}
 \end{equation*}
-odvoďte výsledný přenost $H$ pro jejich ...
+odvoďte výsledný přenost $H(s)$ pro jejich různá zapojení.
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=.4\textwidth]{zadani9-3.png}
+	\caption{Zapojení pro úlohu 9.3}
 	\label{fig:zadani9-3}
-  \end{figure}
-  \begin{figure}[htbp]
+\end{figure}
+\begin{figure}[htbp]
 	\centering
 	\includegraphics[width=.4\textwidth]{zadani9-4.png}
+	\caption{Zapojení pro úlohu 9.4}
 	\label{fig:zadani9-4}
-  \end{figure}
-\subsection{~}
-paralelní zapojení
-\subsection{~}
-seriové zapojení
-\subsection{~}
-zpětnovazební spojení se zápornou zpětnou vazbou, kde přenosy G1 a G2 jsou v přímé vazbě (Odvoďte přenos H (s) = y(s)/r(s)) (viz obr \ref{fig:zadani9-3})
-\subsection{~}
-zpětnovazební spojení se zápornou zpětnou vazbou s G1 v přímé vazbě a G2 ve zpětné vazbě (Odvoďte přenos H (s) = y(s)/r(s)) (viz obr \ref{fig:zadani9-4})
-
+\end{figure}
+\subsection{Paralelní zapojení} 
+Řešení: Paralelní zapojení systémů vede na prostý součet jejich přenosů. Proto je celkový přenos zapojení roven
+\begin{equation*}
+	H(s) = G_1(s) + G_2(s) = \frac{s-1}{s+1} + \frac{1}{s} = \frac{s(s-1) + (s+1)}{s(s+1)} = \frac{s^2 + 1}{s (s+1)}
+\end{equation*}
+\subsection{Kaskádní spojení}
+\label{sec:ukol9:2}
+Řešení: Kaskádní spojení vede na konvoluci v časové oblasti a násobení přenosů v oblasti obrazové. Proto je celkový přenos zapojení roven
+\begin{equation*}
+	H(s) = G_1(s) \cdot G_2(s) = \frac{s-1}{s(s+1)}
+\end{equation*}
+\subsection{Záporná zpětná vazba } 
+\label{sec:ukol9:3}
+Zpětnovazební spojení se zápornou zpětnou vazbou, kde přenosy G1 a G2 jsou v přímé vazbě (viz obr \ref{fig:zadani9-3}) \\
+Řešení: Označme přenos kaskádního zapojení $G_1(s)$, $G_2(s)$ jako $G(s) = G_1(s)G_2(s) = \frac{s-1}{s(s+1)}$ (podle \ref{sec:ukol9:2}).
+Tím se systém zjednodušil na jediný systém zapojený v dopředné cestě zpětnovazební smyčky. Označíme-li $x(s)$ signál za sčítačkou, poté platí
+\begin{equation*}
+	y(s) = G(s) \cdot x(s) = G(s) \cdot (r(s) - y(s)) \Rightarrow y(s) (1 + G(s)) = G(s) \cdot r(s).
+\end{equation*}
+Celkový přenos systému je
+\begin{equation*}
+	H(s) = \frac{y(s)}{r(s)} = \frac{G(s)}{1 + G(s)} = \frac{s^3 - s}{s^4 + 3s^3 + s^2 - s}.
+\end{equation*}
+\subsection{Záporná zpětná vazba } 
+Zpětnovazební spojení se zápornou zpětnou vazbou s G1 v přímé vazbě a G2 ve zpětné vazbě (viz obr \ref{fig:zadani9-4}) \\
+Řešení: Podobně jako \ref{sec:ukol9:3} popíši systém rovnicemi. Označme $x(s)$ signál na výstupu sčítačky. Podle schématu platí:
+\begin{equation*}
+	y(s) = G_1(s) \cdot x(s) = G_1(s) \cdot (r(s) - G_2(s) \cdot y(s)) \Rightarrow y(s) (1 + G_1(s)G_2(s)) = G_1(s) \cdot r(s).
+\end{equation*}
+Celkový přenos systému je
+\begin{equation*}
+	H(s) = \frac{y(s)}{r(s)} = \frac{G_1(s)}{1 + G_1(s)G_2(s)} = \frac{s^3 - s}{s^3 + 3s^2 +s - 1}.
+\end{equation*}
 \section{Diskrétní systém}
 \label{sec:ukol10}
 Je zadán diskrétní systém
@@ -284,10 +347,11 @@ Vyjádřete přenos systému. \\
 \subsection{~}
 Rozhodněte o stabilitě systému. Rozhodnutí zdůvodněte.
 Řešení: Přenosová funkce má dva komplexně sdružené póly $ z_{1,2} = 0.1667 \pm 0.3727i$. Aby byl stabilní, musí ležet póly uvnitř jednotkové kružnice v z-rovině.
-Tento požadavek je zde zřejmě splněn, protože $\vert z_{1,2} \vert < 1 $.
+Tento požadavek je zde zřejmě splněn, protože $\vert z_{1,2} \vert < 1 $ a systém je tedy stabiltní.
 \subsection{~}
 Nakreslete simulinkové schéma realizace tohoto přenosu pro vstup u a výstup y a vykreslete jeho odezvu
 na jednotkový skok pro vzorkovací periodu h = 1
+\todo{Do this}
 
 
 \section{ Skokové (přechodové) a impulzní charakteristiky}
@@ -381,7 +445,13 @@ Charakteristiky lze přiřadit podle tabulky \ref{tab:charakteristiky}.
 	\caption{Přiřazení odpovídajícíh si frekvenčních charakteristik}
 \end{table}
 \subsection{~}
-U frekvenční charakteristiky na obrázku \ref{fig:frekchar:f} najděte pro fázi -45° zesílení systému (v dB).
+U frekvenční charakteristiky na obrázku \ref{fig:frekchar:f} najděte pro fázi -45° zesílení systému (v dB). \\
+Řešení: Komplexní čísla $z$ s fází -45° leží na přímce s předpisem $ \Re(z) = - \Im(z)$. Jejím průsečíkem s danou Nyquistovou charakteristikkou
+je bod $z_0 = 0.5 - 0.5i$. Zesílení systému v daném bodě charakteristiky je 
+\begin{equation}
+	\abs{z} = \sqrt{\frac{2}{4}} = \frac{1}{\sqrt{2}},
+\end{equation}
+což v logaritmických souřadnicích odpovídá zesílení $20 \log{\frac{1}{\sqrt{2}}} = -3$ dB.
 
 
 \begin{figure}[htbp]
