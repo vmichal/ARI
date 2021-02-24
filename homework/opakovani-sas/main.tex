@@ -26,8 +26,9 @@
 % automatická konverze EPS 
 \usepackage{graphicx} 
 \usepackage{epstopdf}
+\epstopdfsetup{update}
 
-\graphicspath{{./images/}}
+\graphicspath{{./images}}
 
 % odkazy a záložky
 \usepackage[unicode=true, bookmarks=true,bookmarksnumbered=true,
@@ -96,7 +97,7 @@ v levé polorovině s. Využijeme linearity systému a Laplaceovy transformace. 
 	y(t) = \mathcal{L}^{-1}\{G(s) \cdot \mathcal{L}\{u(t)\}\} = 5~\mathcal{L}^{-1}\{\underbrace{G(s) \cdot \mathcal{L}\{\mathbb{1}(t)\}}_{= \frac{1}{s}G(s)=W(s)}\}
 	= 5 w(t) \longrightarrow_{t \to \infty} 5 K.
 \end{equation}
-Se znalostí statického zesílení podle \eqref{eq:dcgain} je vidět, že ustálený výstup má hodnotu $y(t)=\frac{25}{6}$.
+Se znalostí statického zesílení podle \eqref{eq:dcgain} je vidět, že se výstup ustálí na hodnotě $y(t)=\frac{25}{6}$.
 
 
 \subsection{~}
@@ -110,24 +111,81 @@ na konstantní hodnotě $K$, její derivace $h(t)$ tedy po ustálení musí být
 \label{sec:ukol2}
 \subsection{~}
 Pomocí Laplaceovy transformace vyřešte následující soustavu diferenciálních rovnic
-\begin{equation}
+\begin{equation*}
 	\begin{split}
-		\frac{\dif x_1(t)}{\dif t} &= - 6x_1 (t) + 26x_2 (t), \\
-		\frac{\dif x_2(t)}{\dif t} &= - 0.5 x_1(t),
+		\dot{x_1} &= - 6x_1 (t) + 26x_2 (t), \\
+		\dot{x_2} &= - 0.5 x_1(t),
 	\end{split}
-\end{equation}
+\end{equation*}
 za počátečních podmínek
-\begin{equation}
+\begin{equation*}
 	\vec{x}_0 = \begin{bmatrix}
 		2 \\
 		0
-	  \end{bmatrix}
-\end{equation}
-Výsledkem budou funkce popisující časový průběh stavu $x_1(t)$ a $x_2(t)$. Řešte ručně a do řešení uveďte postup.
+	  \end{bmatrix}.
+\end{equation*} \\
+Řešení: Převeďme soustavu do maticového tvaru
+\begin{equation*}
+	\dot{\vec{x}}(t) = \underbrace{\begin{bmatrix}
+		-6 & 26 \\
+		-0.5 & 0
+	\end{bmatrix}}_{A} \vec{x}(t)
+\end{equation*}
+a transformujme Laplaceovou transformací. Nechť $\mathcal{L}\{\vec{t}(t)\} = X(s)$, poté
+\begin{equation*}
+	s\vec{X}(s) - \vec{x_0} = A\vec{X}(s) \Rightarrow \vec{X}(s) = (sI-A)^{-1}\vec{x_0}.
+\end{equation*}
+Po dosazení zadaných hodnot do rovnice získám
+\begin{equation*}
+	\vec{X}(s) = \underbrace{\begin{bmatrix}
+		s + 6 & -26 \\
+		0.5 & s
+	\end{bmatrix}^{-1}}_{=(sI - A)} \begin{bmatrix}
+		2 \\
+		0
+	\end{bmatrix} = \underbrace{\frac{1}{s(s+6) + 13}}_{=\text{det}^{-1}(sI - A)} \underbrace{\begin{bmatrix}
+		s & 26 \\
+		-0.5 & s + 6
+	\end{bmatrix}}_{\text{adj}(sI - A)} \begin{bmatrix}
+		2 \\
+		0
+	\end{bmatrix} = \frac{1}{s^2 + 6s + 13} \begin{bmatrix}
+		2s \\
+		-1
+	\end{bmatrix}.
+\end{equation*}
+Pro obrazy funkcí $x_1(t)$, $x_2(t)$ po složkách platí
+\begin{equation*}
+	\begin{split}
+		x_1(s) &= \frac{2s}{s^2 + 6s + 13} \\
+		x_2(s) &= \frac{-1}{s^2 + 6s + 13}
+	\end{split}
+\end{equation*}
+a obě rovnice invertujeme. Jmenovatel má kořeny $s_{1,2} = -3 \pm 2i$, označme $\sigma = -3$, $\omega = 2$. Očekávám, že řešení bude složeno 
+z kvazipolynomů s $\text{exp}(\sigma t)$, $\text{sin}(\omega t)$ a $\text{cos}(\omega t)$.
+\begin{equation*}
+	\begin{split}
+		x_1(t) &= \mathcal{L}^{-1}\{\frac{2s}{(s+3)^2 + 4}\} = \mathcal{L}^{-1}\{\frac{2(s - \sigma)}{(s-\sigma)^2 + \omega^2}\} + \mathcal{L}^{-1}\{\frac{2\sigma}{(s-\sigma)^2 + \omega^2}\} = 
+		2 e^{\sigma t} \text{cos}(\omega t) + 2 \frac{\sigma}{\omega} e^{\sigma t} \text{sin}(\omega t),\\
+		x_2(t) &= \mathcal{L}^{-1}\{\frac{-1}{(s+3)^2 + 4}\} = \mathcal{L}^{-1}\{\frac{-0.5 \omega}{(s-\sigma)^2 + \omega^2}\} = -\frac{1}{2} e^{\sigma t} \text{sin}(\omega t).
+	\end{split}
+\end{equation*}
+Po vyčíslení obdržíme
+\begin{equation*}
+	\begin{split}
+		x_1(t) &= e^{-3t}(2\text{cos}(2t) -3 \text{sin}(2t)), \\
+		x_2(t) &= -0.5 e^{-3t}\text{sin}(2t).
+	\end{split}
+\end{equation*}
 
 \subsection{~}
+\begin{figure}[htb]
+	\includegraphics{solution22.eps}
+	\label{fig:reseni22}
+\end{figure}
 Vykreslete průběhy nalezených funkcí v Matlabu. Nezapomeňte na popisky os, titulek, legendu a přehlednost - tedy vše,
-co by se v mělo u Vašich grafů v budoucnu vždy objevit.
+co by se v mělo u Vašich grafů v budoucnu vždy objevit. \\
+Řešení je vykresleno na \ref{fig:reseni22}.
 
 \section{Linearizace}
 \label{sec:ukol3}
@@ -159,16 +217,38 @@ Pro následující systém nakreslete asymptotickou frekvenční charakteristiku
 \begin{equation}
 	G_1(s) = \frac{s-1}{(s+10)(s-10)(s+80)}
 \end{equation}
-Jako řešení můžete vložit oskenovaný/ dobře vyfocený obrázek nebo můžete využít grafický editor. Obrázek
-simulované frekvenční charakteristiky z příkazu bode v Matlabu použijte jako kontrolu, nicméně jako řešení
-ho neodevzdávejte - nejedná se o asymptotické frekvenční charakteristiky.
-
+Řešení: Přenos nejprve upravím do podoby vhodné pro vyšetřování frekvenční charakteristiky.
+\begin{equation*}
+	G_1(s) = \frac{s-1}{8000(\frac{s}{10}+1)(\frac{s}{10}-1)(\frac{s}{80}+1)} = \frac{1}{8000} \frac{\frac{s}{\omega_1}-1}{(\frac{s}{\omega_2}+1)(\frac{s}{\omega_2}-1)(\frac{s}{\omega_3}+1)}
+\end{equation*}
+Významné body tak jsou nula na frekvenci $\omega_1 = 1 \text{rad.s}^{-1}$, dvojnásobný pól na frekvenci $\omega_2 = 10 \text{rad.s}^{-1}$ a pól na $\omega_3 = 80 \text{rad.s}^{-1}$.
+Výsledná frekvenční i amplitudová charakteristika se bude skládat z příspěvků od dílčích kořenových činitelů v čitateli i jmenovateli.
+\todo{finish}
 
 \subsection{~}
-Pro asymptotickou frekvenční charakteristiku na obrázku (2) sestavte rovnici odpovídajícího systému
-s nejnižším možným počtem pólů.
-\includegraphics{zadani4-2.png}
-
+\begin{figure}
+	\includegraphics{zadani4-2.png}
+	\label{fig:zadani4}
+\end{figure}
+Pro asymptotickou frekvenční charakteristiku na obrázku \ref{fig:zadani4} sestavte rovnici odpovídajícího systému
+s nejnižším možným počtem pólů. \\
+Řešení: Významné body charakteristiky jsou
+\begin{itemize}
+	\item jednoduchý pól na $\omega_1 = 10^{-3}~\text{rad.s}^{-1}$,
+	\item jednoduchá nula na $\omega_2 = 10^{-1}~\text{rad.s}^{-1}$,
+	\item jednoduchá nula na $\omega_3 = 10^1~\text{rad.s}^{-1}$,
+	\item jednoduchý pól na $\omega_4 = 10^3~\text{rad.s}^{-1}$,
+\end{itemize}
+dále pro DC signál ($s = 0$) je zesílení 0dB, takže přenosová funkce nebude obsahovat skalární činitele.
+Na základě amplitudové charakteristiky očekávám přenosovou funkci tvaru
+\begin{equation*}
+	H(s) = \pm \frac{(\frac{s}{\omega_2}\pm 1)(\frac{s}{\omega_3} \pm 1)}{(\frac{s}{\omega_1}\pm 1)(\frac{s}{\omega_4} \pm 1)}.
+\end{equation*}
+O rozložení plus a mínus rozhodneme na základě fázové charakteristiky.
+\begin{equation*}
+	H(s) = - \frac{(\frac{s}{\omega_2} + 1)(\frac{s}{\omega_3} + 1)}{(\frac{s}{\omega_1} + 1)(\frac{s}{\omega_4} + 1)}.
+\end{equation*}
+\todo{finish}
 \section{ Převod do přenosového popisu}
 \label{sec:ukol5}
 Převeďte následující systém do přenosového popisu. Napište postup, kterým jste k výsledku dospěli, a vybrané mezivýsledky.
@@ -188,7 +268,26 @@ Převeďte následující systém do přenosového popisu. Napište postup, kter
 y = \begin{bmatrix}
 	4 & 0 & 0 & 0
 \end{bmatrix} \vec{x}
-\end{math}
+\end{math} \\
+Řešení: Odvoďme maticový vzoreček pomocí stavové a výstupní rovnice a Laplaceovy transformace:
+\begin{equation*}
+	\begin{split}
+		sX(s) &= AX(s) + B U(s) \\
+		(sI - A) X(s) &= BU(s) \\
+		X(s) &= (sI - A)^{-1} B U(s) \\
+		Y(s) &= C \underbrace{(sI - A)^{-1} B U(s)}_{=X(s)}.
+	\end{split}
+\end{equation*}
+Odvození je zjednodušené o to, že matice D je nulová. Přenost systému pomocí matic A, B, C poté má tvar
+\begin{equation}
+	H(s) = \frac{Y(s)}{U(s)} = C(sI-A)^{-1} B.
+\end{equation}
+Pro zadané matice vrátí Matlab numerické řešení
+\begin{equation*}
+	H(s) = \frac{4 s^3 - 12 s^2 - 16s + 48}{s^4 - 8 s^2 + 16}.
+\end{equation*}
+Dává toto řešení smysl? Ve jmenovateli bychom měli mít výraz $ \det{sI - A}$, což je skutečně polynom čtvrtého
+řádu v s. Dále je $D = 0$, takže by přenos měl být striktně ryzí a to je též splněno. Podobné řešení bych očekával.
 
 \section{Stabilita}
 \label{sec:ukol6}
@@ -207,13 +306,13 @@ Rozhodněte o stabilitě systému. Výsledek zdůvodněte.
 y = \begin{bmatrix}
 	1 & 0 & -1
 \end{bmatrix} \vec{x}
-\end{math}
+\end{math} \\
 Řešení: Pro rozhodnutí o stabilitě ze stavového popisu lze vyšetřit znaménko vlastních čísel matice systému A.
 Stabilní bude systém tehdy, když vlastní čísla budou mít zápornou reálnou část. Toto platí proto, že při převodu
 stavového popisu na vnější se do jmenovatele přenosu dostane výraz $\det(sI - A)$. To je polynom v s, jeho kořeny
 jsou vlastní čísla matice A, která se tak stávají póly přenosové funkce (předpokládejme, že se v přenosové funkci nic nepokrátí).
 
-Pro zadanou matici mají vlastní čísla hodnotu $1$ a $ -1 \pm 1.73 i$ 
+Pro zadanou matici mají vlastní čísla hodnotu $1$ a $ -1 \pm 1.73 i$. Kritérium stability tedy není splněno a systém \textbf{není stabilní} 
 
 
 \section{Diskretizace}
