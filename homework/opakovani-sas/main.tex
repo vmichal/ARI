@@ -74,15 +74,15 @@ pdfpagemode=UseNone,backref=false,colorlinks=true] {hyperref}
 
 \subsection{~}
 \label{sec:ukol1:1}
-Nalezněte statické zesílení K systému popsaného níže uvedeným přenosem.
+Nalezněte statické zesílení K systému popsaného níže uvedeným přenosem
 \begin{equation}
-	G(s) = \frac{-0.2s+5}{(s+3)(s+2)(s+1)}
+	G(s) = \frac{-0.2s+5}{(s+3)(s+2)(s+1)}.
 \end{equation}
-\textbf{Řešení:} Statické zesílení je konečná hodnota odezvy na jednotkový skok $w(t)$. Podle věty o konečné hodnotě
+\textbf{Řešení:} Statické zesílení je konečná hodnota odezvy na jednotkový skok $w(t)$. Z věty o konečné hodnotě
 \begin{equation}
 	\lim_{t \to \infty}w(t) = \lim_{s \to 0}sW(s)
 \end{equation}
-pro statické zesílení K plyne:
+pro hodnotu statického zesílení K plyne
 \begin{equation}
 	\label{eq:dcgain}
 	K = \lim_{t \to \infty}w(t) = \lim_{s \to 0}{\underbrace{sW(s)}_{=G(s)}} = \frac{0+5}{(0+3)(0+2)(0+1)} = \frac{5}{6}.
@@ -91,7 +91,7 @@ Statické zesílení zadaného vnějšího modelu je $K = \frac{5}{6}$.
 
 \subsection{~}
 Zjistěte ustálenou hodnotu odezvy na vstup $u (t) = 5$. Své tvrzení odvoďte. \\
-\textbf{Řešení:} Nejdříve je potřeba ověřit, že nějaká ustálená hodnota bude existovat. Zřejmě ano, protože přenosová funkce má všechny póly
+\textbf{Řešení:} Nejdříve je potřeba ověřit, zda nějaká ustálená hodnota bude existovat. Zřejmě ano, protože přenosová funkce má všechny póly
 v levé polorovině s. Využijeme linearity systému a Laplaceovy transformace. Protože $u(t) = 5\cdot \mathbb{1}(t)$, platí pro výstup $y(t)$:
 \begin{equation}
 	y(t) = \mathcal{L}^{-1}\{G(s) \cdot \mathcal{L}\{u(t)\}\} = 5~\mathcal{L}^{-1}\{\underbrace{G(s) \cdot \mathcal{L}\{\mathbb{1}(t)\}}_{= \frac{1}{s}G(s)=W(s)}\}
@@ -103,8 +103,8 @@ Se znalostí statického zesílení podle \eqref{eq:dcgain} je vidět, že se v�
 \subsection{~}
 \label{sec:ukol1:3}
 Jaká bude ustálená hodnota odezvy na Dirakův impulz? \\
-\textbf{Řešení:} Odezvy na jednotkový skok $w(t)$ a na Diracův impuls $h(t)$ spojuje vztah $w(t) = \int h(t)$. Z \ref{sec:ukol1:1} již víme, že $w(t)$ se ustálí
-na konstantní hodnotě $K$, její derivace $h(t)$ tedy po ustálení musí být nulová. Pro ustálenou hodnotu impulsové odezvy tedy platí $\lim_{t \to \infty} h(t) = 0$.
+\textbf{Řešení:} Podle vztahu dezvy na jednotkový skok $w(t)$ a na Diracův impuls $h(t)$ rozebraného v \ref{sec:ukol11:2}. Z \ref{sec:ukol1:1} již víme, že $w(t)$ se ustálí
+na konstantní hodnotě $K$, její derivace $h(t)$ proto po ustálení bude nulová. Pro ustálenou hodnotu impulsové odezvy platí $\lim_{t \to \infty} h(t) = 0$.
 
 % ---------------------------------
 \section{Laplaceova transformace}
@@ -113,8 +113,8 @@ na konstantní hodnotě $K$, její derivace $h(t)$ tedy po ustálení musí být
 Pomocí Laplaceovy transformace vyřešte následující soustavu diferenciálních rovnic
 \begin{equation*}
 	\begin{split}
-		\dot{x_1} &= - 6x_1 (t) + 26x_2 (t), \\
-		\dot{x_2} &= - 0.5 x_1(t),
+		\dot{x_1} &= - 6x_1 (t) + 26x_2 (t) \\
+		\dot{x_2} &= - 0.5 x_1(t)
 	\end{split}
 \end{equation*}
 za počátečních podmínek
@@ -124,14 +124,14 @@ za počátečních podmínek
 		0
 	  \end{bmatrix}.
 \end{equation*} \\
-\textbf{Řešení:} Převeďme soustavu do maticového tvaru
+\textbf{Řešení:} Převedu soustavu do maticového tvaru
 \begin{equation*}
 	\dot{\vec{x}}(t) = \underbrace{\begin{bmatrix}
 		-6 & 26 \\
 		-0.5 & 0
 	\end{bmatrix}}_{A} \vec{x}(t)
 \end{equation*}
-a transformujme Laplaceovou transformací. Nechť $\mathcal{L}\{\vec{t}(t)\} = X(s)$, poté
+a transformuji Laplaceovou transformací. Nechť $\mathcal{L}\{\vec{t}(t)\} = X(s)$, poté
 \begin{equation}
 	\label{eq:laplace-boi}
 	s\vec{X}(s) - \vec{x_0} = A\vec{X}(s) \Rightarrow \vec{X}(s) = (sI-A)^{-1}\vec{x_0}.
@@ -162,7 +162,7 @@ Pro obrazy funkcí $x_1(t)$, $x_2(t)$ po složkách platí
 		x_2(s) &= \frac{-1}{s^2 + 6s + 13}
 	\end{split}
 \end{equation*}
-a obě identity invertujeme. Jmenovatel má kořeny $s_{1,2} = -3 \pm 2i$, označme $\sigma = -3$, $\omega = 2$. Očekávám, že řešení bude složeno 
+a obě identity invertuji. Jmenovatel má kořeny $s_{1,2} = -3 \pm 2i$, označme $\sigma = -3$, $\omega = 2$. Očekávám, že řešení bude složeno 
 z kvazipolynomů s $\text{exp}(\sigma t)$, $\text{sin}(\omega t)$ a $\text{cos}(\omega t)$.
 \begin{equation*}
 	\begin{split}
@@ -171,7 +171,7 @@ z kvazipolynomů s $\text{exp}(\sigma t)$, $\text{sin}(\omega t)$ a $\text{cos}(
 		x_2(t) &= \mathcal{L}^{-1}\{\frac{-1}{(s+3)^2 + 4}\} = \mathcal{L}^{-1}\{\frac{-0.5 \omega}{(s-\sigma)^2 + \omega^2}\} = -\frac{1}{2} e^{\sigma t} \text{sin}(\omega t).
 	\end{split}
 \end{equation*}
-Po vyčíslení obdržíme
+Po vyčíslení obdržím
 \begin{equation*}
 	\begin{split}
 		x_1(t) &= e^{-3t}(2\text{cos}(2t) -3 \text{sin}(2t)), \\
@@ -211,24 +211,24 @@ Využijeme této podmínky pro úpravu \eqref{eq:nelinearni} a nalezení $P$:
 		y_p &= x_{1p}
 	\end{split}
 \end{equation}
-Periodicita funkce sin ve druhé rovnici způsobuje, že existuje spočené nekonečno různých pracovních bodů 
+Periodicita funkce sinus ve druhé rovnici způsobuje, že existuje spočetné nekonečno různých pracovních bodů 
 $\mathcal{P} = \{\begin{bmatrix} k\pi+\frac{\pi}{2} & 0 & k\pi+\frac{\pi}{2} \end{bmatrix} \mid\ k \in \mathbb{Z} \}$.
 Díky periodicitě nelinearity systému se chování v dílčích pracovních bodech liší pouze konstantním posunem výstupu. Stačí proto linearizovat pro jeden bod, na ostatní lze snadno převádět.
-Přirozená volba je vzít $x_{1p} \in \left[-\pi,\pi \right)$ proto budu linearizovat v bodě 
+Přirozená volba je vzít $x_{1p} \in \left[-\pi,\pi \right)$, proto budu linearizovat v bodě 
 \begin{equation*}
 	P = \begin{bmatrix} \frac{\pi}{2}, 0, \frac{\pi}{2} \end{bmatrix}.
 \end{equation*}
 
 \subsection{~}
 Linearizujte systém v nalezeném pracovním bodě $P$.\\
-\textbf{Řešení:} Našim cílem je nalézt matice $A$, $B$, $C$, $D$ popisující lineární systém. Linearizovat stačí funkci $f_2(\vec{x}, u)$; funkce $f_1$ i výstupní
-rovnice jsou lineární. Z pohledu na soustavu jiště platí
+\textbf{Řešení:} Naším cílem je nalézt matice $A$, $B$, $C$, $D$ popisující lineární systém. Linearizovat stačí funkci $f_2(\vec{x}, u)$; funkce $f_1$ i výstupní
+rovnice jsou lineární. Z pohledu na soustavu jistě platí
 \begin{equation*}
 	D = \begin{bmatrix}
 		0
 	\end{bmatrix}, ~~~~~~~~~ C = \begin{bmatrix}
 		1 & 0
-	\end{bmatrix} ~~~~a ~~~ B = \begin{bmatrix}
+	\end{bmatrix} ~~~~a~~~~ B = \begin{bmatrix}
 		0 \\ 1
 	\end{bmatrix}.
 \end{equation*}
@@ -259,8 +259,8 @@ Lineární aproximaci zapíšeme v odchylkovém tvaru (použijeme značení $\De
 Namodelujte v Simulinku nelineární systém současně s linearizovaným. Porovnejte odezvy obou systémů
 na skoky $u(t) = 1$ a $u(t) = 2.001$. \\
 \textbf{Řešení:} Časové průběhy jsou na obrázku \ref{fig:linearizace}. Lineární aproximace byla provedena pro vstup $u(t) = 2$ a je tedy očekávatelné, že se pro vstup $u(t) = 1$
-časové průběhy velmi rychle oddělí kvůli velké chybě způsobené zanedbáním vlivu členů vyšších řádů v Taylorově rozvoji funkce $f$.
-Výstup lineárního systému diverguje, zatímco nelineární osciluje. Průběhy pro $u(t) = 2$ jsou podobnější, mají stejný typ (oba divergují k nekonečnu po exponenciále),
+časové průběhy velmi rychle oddělí. Důvodem je nezanedbatelný vliv členů vyšších řádů v Taylorově rozvoji funkce $f$, jejich zanedbání tak způsobí velkou chybu.
+Výstup lineárního systému diverguje, zatímco nelineární osciluje. Průběhy pro $u(t) = 2$ jsou podobnější, mají stejný typ (oba divergují k nekonečnu po exponenciále);
 lineární aproximace roste mnohem pomaleji.
 \begin{figure}[htbp]
     \centering % <-- added
@@ -307,21 +307,21 @@ Výsledná frekvenční i amplitudová charakteristika se bude skládat z přís
 
 Pro asymptotickou frekvenční charakteristiku na obrázku 2 v zadání (nepovedlo se vykopírovat v obstojné kvalitě)
 sestavte rovnici odpovídajícího systému s nejnižším možným počtem pólů. \\
-\textbf{Řešení:} Významné body charakteristiky jsou
+\textbf{Řešení:} Významné body charakteristiky jsou:
 \begin{itemize}
 	\item jednoduchý pól na $\omega_1 = 10^{-3}~\text{rad.s}^{-1}$, fáze klesá
 	\item jednoduchá nula na $\omega_2 = 10^{-1}~\text{rad.s}^{-1}$, fáze klesá
 	\item jednoduchá nula na $\omega_3 = 10~\text{rad.s}^{-1}$, fáze roste
 	\item jednoduchý pól na $\omega_4 = 10^3~\text{rad.s}^{-1}$, fáze klesá
 \end{itemize}
-dále pro DC signál ($s = 0$) je zesílení 0dB, takže přenosová funkce nebude obsahovat skalární činitele.
+Dále pro DC signál ($s = 0$) je zesílení 0dB, takže přenosová funkce nebude obsahovat skalární činitele.
 Na základě amplitudové charakteristiky očekáváme přenosovou funkci tvaru
 \begin{equation*}
 	H(s) = \pm \frac{(1 \pm \frac{s}{\omega_2})(1 \pm \frac{s}{\omega_3})}{(1 \pm \frac{s}{\omega_1})(1 \pm \frac{s}{\omega_4})},
 \end{equation*}
 což lze odvodit z typu zalomení asymptotické amplitudové charakteristiky na konkrétních frekvencích. Pakliže se charakteristika
-zalamuje dolů (směrem k - $\infty$ dB), poté je na dané frekvenci pól. Zalomení směrem nahoru (směrem k 0 dB) způsobuje nula.
-O rozložení znamének plus a mínus rozhodneme na základě fázové charakteristiky. Pro činitel typu $(1 + \frac{s}{\omega})$ je fáze
+zalamuje dolů (směrem k $-\infty$ dB), poté je na dané frekvenci pól. Zalomení směrem nahoru (směrem k 0 dB) způsobuje nula.
+O rozložení znamének plus a minus rozhodnu na základě fázové charakteristiky. Pro činitel typu $(1 + \frac{s}{\omega})$ je fáze
 nejprve konstantní a následně začne dekádu před $\omega$ s rychlostí 45° na dekádu klesat pro pól a růst pro nulu.
 Na frekvenci $\omega_2$ je nula, ale fáze stále klesá. Příslušný člen tedy musí být $(1 - \frac{s}{\omega_2})$.
 Ostatní činitele obsahují plus. Start s fází 180° vyžaduje záporné znaménko před celým zlomkem. Výsledný hledaný přenos je
@@ -349,7 +349,7 @@ y = \begin{bmatrix}
 	4 & 0 & 0 & 0
 \end{bmatrix} \vec{x}
 \end{equation*} \\
-\textbf{Řešení:} Odvoďme maticový vzoreček pomocí stavové a výstupní rovnice a Laplaceovy transformace:
+\textbf{Řešení:} Odvoďím maticový vzoreček pomocí stavové a výstupní rovnice a Laplaceovy transformace.
 \begin{equation*}
 	\begin{split}
 		sX(s) &= AX(s) + B U(s) \\
@@ -367,8 +367,8 @@ Pro zadané matice vrátí Matlab numerické řešení
 	H(s) = \frac{4 s^3 - 12 s^2 - 16s + 48}{s^4 - 8 s^2 + 16} = \frac{(s-3)(s-2)(s+2)}{(s-2)^2(s+2)^2}.
 \end{equation*}
 Dává toto řešení smysl? Ve jmenovateli bychom měli mít výraz $ \det(sI - A)$, což je skutečně polynom čtvrtého
-řádu v s. Dále je $D = 0$, takže by přenos měl být striktně ryzí a to je též splněno. Podobné řešení je očekávatelné,
-pokud se po cestě nepokrátí činitele $(s+2)(s-2)$. Poté by byl přenos systému v principu stejný, avšak systém by obsahoval skrytý mód.
+řádu v $s$. Dále je $D = 0$, takže by přenos měl být striktně ryzí a to je též splněno. Podobné řešení je očekávatelné,
+pokud se po cestě nepokrátí činitele $(s+2)(s-2)$. Poté by byl přenos systému v principu stejný, obsahoval by však skrytý mód.
 
 \section{Stabilita}
 \label{sec:ukol6}
@@ -390,7 +390,7 @@ y = \begin{bmatrix}
 \end{equation*} \\
 \textbf{Řešení:} Pro rozhodnutí o stabilitě ze stavového popisu lze vyšetřit znaménko vlastních čísel matice systému A.
 Stabilní bude systém tehdy, když vlastní čísla budou mít zápornou reálnou část. Toto platí proto, že při převodu
-stavového popisu na vnější se do jmenovatele přenosu dostane výraz $\det(sI - A)$. To je polynom v s, jeho kořeny
+stavového popisu na vnější se do jmenovatele přenosu dostane výraz $\det(sI - A)$. To je polynom v $s$, jeho kořeny
 jsou vlastní čísla matice A, která se tak stávají póly přenosové funkce (předpokládejme, že se v přenosové funkci žádné kořenové činitele nepokrátí).
 
 Pro zadanou matici mají vlastní čísla hodnotu $1$ a $ -1 \pm 1.73 i$. Kritérium stability tedy není splněno a systém \textbf{není stabilní} 
@@ -405,7 +405,7 @@ Následující systém převeďte do diskrétního popisu, můžete využít nap
 
 \textbf{Řešení:} Vhodný vzorkovací krok pro diskretizaci systému je alespoň o řád menší než nejmenší časová konstanta v systému.
 V našem případě je nejmenší časová konstanta $\tau = \frac{1}{7}$ s, vhodný diskretičaní krok je proto například $T_1 = 10$ ms, nevhodný $T_2 = 100$ ms.
-Diskretizací systému $G(s)$ se vzrokovacími frekvencemi $T_1$, $T_2$ vznikají přenosy
+Diskretizací systému $G(s)$ se vzorkovacími frekvencemi $T_1$, $T_2$ vznikají přenosy
 \begin{equation*}
 	G_1(z) = \frac{0.009463z - 0.009752}{z^2 - 1.922z+0.9231} ~~~~~~\text{a}~~~~~~ G_2(z) = \frac{0.05642z - 0.07695}{z^2 - 1.401z+0.4493}.
 \end{equation*}
@@ -548,7 +548,7 @@ Celkový přenos systému je
 Je zadán diskrétní systém
 \begin{equation}
 	\label{eq:diferencni}
-	3y(k) - y(k-1) + 0.5 y(k-2) = u(k-1)-u(k-2)
+	3y(k) - y(k-1) + 0.5 y(k-2) = u(k-1)-u(k-2).
 \end{equation}
 
 \subsection{~}
@@ -565,8 +565,8 @@ Vyjádřete přenos systému. \\
 
 \subsection{~}
 Rozhodněte o stabilitě systému. Rozhodnutí zdůvodněte. \\
-\textbf{Řešení:} Přenosová funkce má dva komplexně sdružené póly $ z_{1,2} = 0.1667 \pm 0.3727i$. Aby byl stabilní, musí ležet póly uvnitř jednotkové kružnice v z-rovině.
-Tento požadavek je zde zřejmě splněn, protože $\vert z_{1,2} \vert < 1 $ a systém je tedy stabiltní.
+\textbf{Řešení:} Přenosová funkce má dva komplexně sdružené póly $ z_{1,2} = 0.1667 \pm 0.3727i$. Aby byl stabilní, musí ležet póly uvnitř jednotkové kružnice v z rovině.
+Tento požadavek je zde zřejmě splněn, protože $\vert z_{1,2} \vert < 1 $ a systém je proto stabiltní.
 \subsection{~}
 Nakreslete simulinkové schéma realizace tohoto přenosu pro vstup u a výstup y a vykreslete jeho odezvu
 na jednotkový skok pro vzorkovací periodu h = 1. \\
