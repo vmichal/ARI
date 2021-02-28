@@ -1,0 +1,14 @@
+Control Systems Toolbox
+• (lti) ss, tf, zpk
+• step, impulse, initial,
+
+%Vypočtení zesílení a fáze přenosu pro danou frekvenci
+[gain, angle] = bode(transfer_function, frekvence) 
+
+Polynomial Tbx:
+• sdf, (ldf, rdf, mdf), abcd, pol
+• num, den
+
+Symbolic MathTbx:
+• symbolické výpočty
+• laplace, ilaplace
