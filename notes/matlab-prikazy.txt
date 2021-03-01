@@ -1,6 +1,7 @@
 Control Systems Toolbox
-• (lti) ss, tf, zpk
-• step, impulse, initial,
+ - (lti) ss, tf, zpk
+ - step, impulse, initial,
+ - ctrb, obsv - výpočet matice řiditelnosti a pozorovatelnosti
 
 %Vypočtení zesílení a fáze přenosu pro danou frekvenci
 [gain, angle] = bode(transfer_function, frekvence) 
