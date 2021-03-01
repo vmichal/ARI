@@ -131,21 +131,22 @@ ve směrech v pořadí uvedném výše.
 \label{sec:ukol1}
 Je tento lineární systém stabilní? Pokud ano, pak je i translunární ekvilibrium stabilní polohou. \\
 \textbf{Řešení:}
-Stabilitu vyšetřím pomocí vlastních čísel matice systému. Jsou to čísla
+Stabilitu vyšetřím pomocí vlastních čísel matice systému.
 \begin{equation*}
 	eig(\mathbf{A}) =
 	\begin{cases}
 		\pm 2.1587 & \\
 		0 \pm 1.7862i & \\
 		0 \pm 1.8626i \ &
-	\end{cases}.
+	\end{cases}
 \end{equation*}
-\begin{figure}
+\begin{figure}[hbtp]
+	\centering
 	\includegraphics{vlastni_cisla.eps}
 	\caption{Vlastní čísla matice $\mathbf{A}$}
 	\label{fig:vlastni_cisla}
 \end{figure}
-Protože $\Re(2.1587) > 0$, je alespoň jedno vlastní číslo v pravé polorovině s a systém stabilní není.
+Protože $\Re(2.1587) > 0$, je alespoň jedno vlastní číslo v pravé polorovině $s$ a systém stabilní není.
 To je očekávatelné, jinak by družice nepotřebovala motory žádné. 
 
 \section{Řiditelnost jedním vstupem}
@@ -176,11 +177,16 @@ Vypočtěte postupně pro každý vstup (tryskový motor) přenos na stav. Pozn�
 v bodu 2? \\
 \textbf{Řešení:}
 Přenos ze vstupů na stav je dán maticí 
+\begin{equation}
+	\mathbf{G}_{\text{směr}} = (s\mathbf{I}-\mathbf{A})^{-1} \mathbf{B}_{\text{směr}},
+	\label{eq:prenos_vztah}
+\end{equation}
+kde za \textit{směr} lze dosadit dílčí směry \textit{rad}, \textit{norm} a \textit{tan}.
+Pro lepší čitelnost označím
 \begin{equation*}
-	\mathbf{G}_{\text{smer}} = (s\mathbf{I}-\mathbf{A})^{-1} \mathbf{B}_{\text{smer}},
+	a(s) = (s+2.1587)(s^2+3.4694)(s-2.1587).
 \end{equation*}
-kde za \textit{smer} lze dosadit dílčí směry \textit{rad}, \textit{norm} a \textit{tan}.
-Pro lepší čitelnost označím $a(s) = (s+2.1587)(s^2+3.4694)(s-2.1587)$. Přenosy dílčích vstupů na stavy jsou
+Přenosy dílčích vstupů na stavy jsou
 \begin{equation}
 	\label{eq:prenosy}
 	\mathbf{G}_\rad(s) = \begin{bmatrix}
@@ -191,7 +197,7 @@ Pro lepší čitelnost označím $a(s) = (s+2.1587)(s^2+3.4694)(s-2.1587)$. Pře
 		\frac{1.0000s(s^2+2.1904)}{a(s)}              \\
 		\frac{-2.0000s^2}{a(s)}                         \\               
 		0                                                
-	\end{bmatrix}, ~~~~~~~~~                                                    
+	\end{bmatrix}, ~~~~                                                    
 		\mathbf{G}_\norm(s) =                       
 		\begin{bmatrix}
 			
@@ -201,7 +207,7 @@ Pro lepší čitelnost označím $a(s) = (s+2.1587)(s^2+3.4694)(s-2.1587)$. Pře
 			\frac{2.0000s^2                  }{a(s)}           \\
 			\frac{1.0000s(s+2.7168)(s-2.7168)}{a(s)}             \\              
 			0                                                     
-		\end{bmatrix}, ~~~~~~~~~
+		\end{bmatrix}, ~~~~
 		\mathbf{G}_\tan(s) = \begin{bmatrix}
 			
 			0                              \\   
@@ -212,11 +218,11 @@ Pro lepší čitelnost označím $a(s) = (s+2.1587)(s^2+3.4694)(s-2.1587)$. Pře
 			\frac{1.0000s}{s^2+3.1904}                           
 		\end{bmatrix}.
 \end{equation}
-Každý z přenosů $\mathbf{G}_\rad(s)$, $\mathbf{G}_\norm(s)$, $\mathbf{G}_\tan(s)$ obsahuje nulové řádky a není proto schopen ovlivnit 
+Každý z přenosů $\mathbf{G}_\rad(s)$, $\mathbf{G}_\norm(s)$ a $\mathbf{G}_\tan(s)$ obsahuje nulové prvky a není proto schopen ovlivnit 
 úplně všechny stavy, jak plyne již z \ref{sec:ukol2}. Pro splnění nutné podmínky úplné řiditelnosti musí být v 
 každém řádku matice přenosů alespoň jeden nenulový prvek. Toho se v našem případě dá dosáhnout
-například použitím motorů ve směru tečném a radiálním. Naopak motory radiální a normálový jsou ve smyslu ovlivnění
-stavového prostoru lineárně závislé a použití obou dvou nijak nezvětší množinu dosažitelných stavů.
+například použitím motorů ve směru tečném a radiálním. Naopak motory normálový a radiální jsou ve smyslu vlivu na
+stavový prostor lineárně závislé a použití obou dvou nijak nezvětší množinu dosažitelných stavů.
 
 \section{Řiditelnost všemi vstupy}
 \label{sec:ukol4}
@@ -233,10 +239,9 @@ je systém se všemi třemi motory úplně řiditelný.
 \label{sec:ukol5}
 Vypočtete přenosovou matici ze vstupů na stav pro celý systém.\\
 \textbf{Řešení:}
-Stejně jako v případě \ref{sec:ukol3} určím přenos $\mathbf{G}_{\text{stav}}$ ze vstupů na stav pomocí vztahu \eqref{eq:prenosy}.
-Tentokrát se však použije celá matice $\mathbf{B}$ rozměrů 6x3. Stejný výsledek dá spojení vektorů $\begin{bmatrix}
-	\mathbf{G}_\rad & \mathbf{G}_\norm & \mathbf{G}_\tan)
-\end{bmatrix}$ z rovnice \eqref{eq:prenosy}
+Stejně jako v případě \ref{sec:ukol3} určím přenos $\mathbf{G}_{\text{stav}}$ ze vstupů na stav pomocí vztahu \eqref{eq:prenos_vztah}.
+Tentokrát se však použije celá matice $\mathbf{B}$ rozměrů 6x3. Stejný výsledek dá spojení vektorů $\mathbf{G}_{\text{stav}} = 
+\begin{bmatrix} \mathbf{G}_\rad & \mathbf{G}_\norm & \mathbf{G}_\tan \end{bmatrix}$ z rovnice \eqref{eq:prenosy}.
 \begin{equation*}
 	\mathbf{G}_\text{stav} = \begin{bmatrix}
 	\frac{1.0000(s^2+2.1904)     }{a(s)} 	&\frac{2.0000s}{a(s)}                     & 0                             \\
