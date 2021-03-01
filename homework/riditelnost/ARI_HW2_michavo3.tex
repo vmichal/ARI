@@ -143,10 +143,10 @@ Stabilitu vyšetřím pomocí vlastních čísel matice systému.
 \begin{figure}[hbtp]
 	\centering
 	\includegraphics{vlastni_cisla.eps}
-	\caption{Vlastní čísla matice $\mathbf{A}$}
+	\caption{Póly systému}
 	\label{fig:vlastni_cisla}
 \end{figure}
-Protože $\Re(2.1587) > 0$, je alespoň jedno vlastní číslo v pravé polorovině $s$ a systém stabilní není.
+Protože $\Re(2.1587) > 0$, je alespoň jedno vlastní číslo - a tedy pól systému - v pravé polorovině $s$ a systém stabilní není.
 To je očekávatelné, jinak by družice nepotřebovala motory žádné. 
 
 \section{Řiditelnost jedním vstupem}
@@ -183,9 +183,10 @@ Přenos ze vstupů na stav je dán maticí
 \end{equation}
 kde za \textit{směr} lze dosadit dílčí směry \textit{rad}, \textit{norm} a \textit{tan}.
 Pro lepší čitelnost označím
-\begin{equation*}
+\begin{equation}
 	a(s) = (s+2.1587)(s^2+3.4694)(s-2.1587).
-\end{equation*}
+	\label{eq:subs}
+\end{equation}
 Přenosy dílčích vstupů na stavy jsou
 \begin{equation}
 	\label{eq:prenosy}
@@ -242,6 +243,7 @@ Vypočtete přenosovou matici ze vstupů na stav pro celý systém.\\
 Stejně jako v případě \ref{sec:ukol3} určím přenos $\mathbf{G}_{\text{stav}}$ ze vstupů na stav pomocí vztahu \eqref{eq:prenos_vztah}.
 Tentokrát se však použije celá matice $\mathbf{B}$ rozměrů 6x3. Stejný výsledek dá spojení vektorů $\mathbf{G}_{\text{stav}} = 
 \begin{bmatrix} \mathbf{G}_\rad & \mathbf{G}_\norm & \mathbf{G}_\tan \end{bmatrix}$ z rovnice \eqref{eq:prenosy}.
+S použitím substituce \eqref{eq:subs} má matice přenosu ze vstupů na stavy tvar
 \begin{equation*}
 	\mathbf{G}_\text{stav} = \begin{bmatrix}
 	\frac{1.0000(s^2+2.1904)     }{a(s)} 	&\frac{2.0000s}{a(s)}                     & 0                             \\
