@@ -143,7 +143,7 @@ Stabilitu vyšetřím pomocí vlastních čísel matice systému.
 \begin{figure}[hbtp]
 	\centering
 	\includegraphics{vlastni_cisla.eps}
-	\caption{Póly systému}
+	\caption{Poloha pólů systému}
 	\label{fig:vlastni_cisla}
 \end{figure}
 Protože $\Re(2.1587) > 0$, je alespoň jedno vlastní číslo - a tedy pól systému - v pravé polorovině $s$ a systém stabilní není.
@@ -156,7 +156,7 @@ Pokud není, zjistěte kterým vstupem (a tedy kterým tryskovým motorem) je sy
 Pro analýzu řiditelnosti sestrojím matice řiditelnosti z definice
 \begin{equation}
 	\mathbfcal{C}_\rad = \begin{bmatrix}
-		\mathbf{B}_\rad & \mathbf{A}\mathbf{B}_\rad & \mathbf{A}^2 \mathbf{B}_\rad & \cdots \mathbf{A}^5 \mathbf{B}_\rad
+		\mathbf{B}_\rad & \mathbf{A}\mathbf{B}_\rad & \mathbf{A}^2 \mathbf{B}_\rad & \cdots & \mathbf{A}^5 \mathbf{B}_\rad
 	\end{bmatrix},
 	\label{eq:riditelnost}
 \end{equation}
@@ -192,31 +192,31 @@ Přenosy dílčích vstupů na stavy jsou
 	\label{eq:prenosy}
 	\mathbf{G}_\rad(s) = \begin{bmatrix}
 		
-		\frac{1.0000(s^2+2.1904)     }{a(s)}          \\                
-		\frac{-2.0000s        }{a(s)}                   \\               
+		\frac{s^2+2.1904     }{a(s)}          \\                
+		\frac{-2s        }{a(s)}                   \\               
 		0                                    \\            
-		\frac{1.0000s(s^2+2.1904)}{a(s)}              \\
-		\frac{-2.0000s^2}{a(s)}                         \\               
+		\frac{s(s^2+2.1904)}{a(s)}              \\
+		\frac{-2s^2}{a(s)}                         \\               
 		0                                                
 	\end{bmatrix}, ~~~~                                                    
 		\mathbf{G}_\norm(s) =                       
 		\begin{bmatrix}
 			
-			\frac{2.0000s}{a(s)}                                               \\
-			\frac{1.0000(s+2.7168)(s-2.7168) }{a(s)}                \\           
+			\frac{2s}{a(s)}                                               \\
+			\frac{(s+2.7168)(s-2.7168) }{a(s)}                \\           
 			0                                        \\             
-			\frac{2.0000s^2                  }{a(s)}           \\
-			\frac{1.0000s(s+2.7168)(s-2.7168)}{a(s)}             \\              
+			\frac{2s^2                  }{a(s)}           \\
+			\frac{s(s+2.7168)(s-2.7168)}{a(s)}             \\              
 			0                                                     
 		\end{bmatrix}, ~~~~
 		\mathbf{G}_\tan(s) = \begin{bmatrix}
 			
 			0                              \\   
 			0                             \\    
-			\frac{1.0000}{s^2+3.1904}     \\       
+			\frac{1}{s^2+3.1904}     \\       
 			0                              \\
 			0                               \\   
-			\frac{1.0000s}{s^2+3.1904}                           
+			\frac{s}{s^2+3.1904}                           
 		\end{bmatrix}.
 \end{equation}
 Každý z přenosů $\mathbf{G}_\rad(s)$, $\mathbf{G}_\norm(s)$ a $\mathbf{G}_\tan(s)$ obsahuje nulové prvky a není proto schopen ovlivnit 
@@ -246,12 +246,12 @@ Tentokrát se však použije celá matice $\mathbf{B}$ rozměrů 6x3. Stejný v�
 S použitím substituce \eqref{eq:subs} má matice přenosu ze vstupů na stavy tvar
 \begin{equation*}
 	\mathbf{G}_\text{stav} = \begin{bmatrix}
-	\frac{1.0000(s^2+2.1904)     }{a(s)} 	&\frac{2.0000s}{a(s)}                     & 0                             \\
-	\frac{-2.0000s        }{a(s)}        	&\frac{1.0000(s+2.7168)(s-2.7168) }{a(s)} & 0                             \\
-	0                                    	&0                                        & \frac{1.0000}{s^2+3.1904}     \\
-	\frac{1.0000s(s^2+2.1904)}{a(s)}     	&\frac{2.0000s^2                  }{a(s)} & 0                             \\
-	\frac{-2.0000s^2}{a(s)}              	&\frac{1.0000s(s+2.7168)(s-2.7168)}{a(s)} & 0                             \\
-	0                                    	&0                                        & \frac{1.0000s}{s^2+3.1904}    
+	\frac{s^2+2.1904     }{a(s)} 	&\frac{2s}{a(s)}                     & 0                             \\
+	\frac{-2s        }{a(s)}        	&\frac{(s+2.7168)(s-2.7168) }{a(s)} & 0                             \\
+	0                                    	&0                                        & \frac{}{s^2+3.1904}     \\
+	\frac{s(s^2+2.1904)}{a(s)}     	&\frac{2s^2                  }{a(s)} & 0                             \\
+	\frac{-2s^2}{a(s)}              	&\frac{s(s+2.7168)(s-2.7168)}{a(s)} & 0                             \\
+	0                                    	&0                                        & \frac{s}{s^2+3.1904}    
 	\end{bmatrix}.
 \end{equation*}
 
