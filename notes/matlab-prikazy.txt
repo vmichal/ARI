@@ -13,3 +13,6 @@ Polynomial Tbx:
 Symbolic MathTbx:
 • symbolické výpočty
 • laplace, ilaplace
+
+who  vytiskne jména proměnných ve workspace
+whos jména proměných včetně typů atd
