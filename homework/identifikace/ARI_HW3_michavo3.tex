@@ -85,8 +85,7 @@ modelu hledejte ve tvaru
 	F(s) = \frac{k}{Ts + 1}.
 \end{equation}
 Uveďte parametry identifikovaného systému, tj. zesílení $k$ a časovou konstantu $T$, získané identifikací a
-krátký popis, jak jste při identifikaci postupovali, 
-dále obrázek obsahující originální odezvu a odezvu matematického modelu, který jste získali identifikací. \\
+krátký popis, jak jste při identifikaci postupovali. \\
 \textbf{Řešení:} Změřený časový průběh odezvy systému na jednotkový skok je zobrazen na obrázku \ref{fig:zadani1}
 v podobě syrových dat bez filtrace i po filtraci klouzavým průměrem délky tři vzorky, aby nedošlo ke znatelné deformaci odezvy.
 I bez bližší analýzy je zjevné, že časová konstanta bude vysoká (korespondující pól bude pomalý), protože časová osa
@@ -134,13 +133,15 @@ Pokuste se identifikovat model druhého řádu. Přenosovou funkci modelu hledej
 \end{equation}
 Uveďte ustálenou hodnotu výstupu, překmit a dobu ustálení, dále parametr tlumení $\zeta$,
 přirozenou frekvenci $\omega_n$ a zesílení $k$, které jste získali identifikací, a
-krátký popis, jak jste při identifikaci postupovali.
-Nakonec vložte obrázek obsahující originální odezvu generovanou funkcí a odezvu vámi získaného
-matematického modelu.
-
+krátký popis, jak jste při identifikaci postupovali. \\
 \textbf{Řešení:} Změřená odezva vykreslená na obrázku \ref{fig:zadani2} je kmitavá. Systém je tedy podtlumený a má pár komplexně sdružených pólů.
 Na první pohled lze očekávat nízký koeficient relativního tlumení $\zeta$, neboť exponenciální obálka harmonických kmitů odezvy poklesá velmi pomalu po dobu desítek sekund.
-Kvůli nízkému relativnímu tlumení bude pro frekvenci tlumených kmitů platit $\omega_d = \omega_n \cdot \sqrt{1 - \zeta^2} \approx \omega_n$.
+Kvůli nízkému relativnímu tlumení bude pro frekvenci tlumených kmitů platit
+\begin{equation}
+	\frac{\pi}{T_p} =\omega_d = \omega_n \cdot \underbrace{\sqrt{1 - \zeta^2}}_{\approx 1 \text{ pro } \zeta \lll 1} \approx \omega_n,
+	\label{eq:damped_freq}
+\end{equation}
+kde okamžik prvního maxima $T_p$ lze odečíst z časového průběhu.
 \begin{figure}[hbtp]
 	\centering
 	\includegraphics[width=\linewidth]{zadani2.eps}
@@ -156,22 +157,23 @@ Pro podtlumený systém druhého řádu platí
 	\label{eq:vztahy}
 \end{equation}
 kde overshoot $OS$ je dán vztahem $OS = \frac{\max y(t) - y(\infty)}{y(\infty)}$.
-Z časového průběhu odezvy systému lze odečíst hodnoty $T_s = 180$, $OS = \frac{1.808 - 1}{1} \approx 0.8$.
+Z časového průběhu odezvy systému lze odečíst hodnoty $T_s = 180$ s, $OS = \frac{1.808 - 1}{1} \approx 0.8$.
 Po dosazení do \eqref{eq:vztahy} získáme
 \begin{equation}
 	\begin{split}
-		\zeta &= \frac{- \ln(0.8)}{\sqrt{\pi^2 + \ln^2(0.8)}} = 0.071~\text{[-]}\\
-		\omega_n &= \frac{4}{180 \cdot 0.071} = 0.313~\text{rad/s}.
+		\zeta = \frac{- \ln(0.8)}{\sqrt{\pi^2 + \ln^2(0.8)}} = 0.071~\text{[-]} ~~~~~~~~~ \text{a} ~~~~~~~~~ \omega_n = \frac{4}{180 \cdot 0.071} = 0.313~\text{rad/s}.
 	\end{split}
+	\label{eq:coef_values}
 \end{equation}
-Dosazením za koeficienty $\zeta$ a $\omega_n$ do \eqref{eq:obecne2} vychází pro přenos identifikovaného systému vztah
+Stejný výsledek pro $\omega_n$ lze získat i z rovnice \eqref{eq:damped_freq}. Při odhadu $T_p = 10$ s vychází $\omega_n \approx \omega_d = \frac{\pi}{10} \approx 0.314$ rad/s.
+Dosazením z \eqref{eq:coef_values} do \eqref{eq:obecne2} za koeficienty $\zeta$ a $\omega_n$ vychází pro přenos identifikovaného systému vztah
 \begin{equation}
 	F(s) = k \frac{0.313^2}{s^2 + 2 \cdot 0.071 \cdot 0.313 s + 0.313^2} = \frac{0.098}{s^2 + 0.044s + 0.098}.
 \end{equation}
 Skoková odezva tohoto modelu je na obrázku \ref{fig:zaver2} porovnána se změřenými daty. Typ odezvy je identický,
-viditelné jsou drobné deviace v aplitudě odezvy modelu. Ty jsou způsobeny výraznou zaokrouhlovací chybou vnesenou
-do výpočtů používáním dvou až tří platných číslic. Nemá však smysl se snažit výpočet zpřesňovat, neboť jeho vstupem
-jsou data zatížená nepřesností manuálního odečtení z charakteristiky.
+viditelné jsou drobné deviace v aplitudě odezvy. Ty jsou způsobeny zaokrouhlovací chybou vnesenou
+do postupu používáním pohých dvou až tří platných číslic. Nemá však smysl se snažit výpočet zpřesňovat, neboť jeho vstupem
+jsou data $OS$ či $T_s$ zatížená nepřesností manuálního odečtení z charakteristiky.
 \begin{figure}[hbtp]
 	\centering
 	\includegraphics[width=\linewidth]{odezvy2.eps}
@@ -180,9 +182,6 @@ jsou data zatížená nepřesností manuálního odečtení z charakteristiky.
 \end{figure}
 
 \begin{thebibliography}{9}
-
-\bibitem{Wiki}
-	\LaTeX tutorials, \url{http://en.wikibooks.org/wiki/LaTeX/}
 
 \bibitem{motivace}
 	Gene F. Franklin, \emph{How to balance the LEGO robot in less than 90 seconds} \url{https://www.youtube.com/watch?v=BjDebmqFRuc}
