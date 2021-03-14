@@ -1,5 +1,5 @@
 Control Systems Toolbox
- - (lti) ss, tf, zpk
+ - (lti) ss, tf, zpk = spojitá přenosová funkce konstruovaná z nul, pólů a zesílení
  - step, impulse, initial,
  - ctrb, obsv - výpočet matice řiditelnosti a pozorovatelnosti
 
@@ -16,3 +16,9 @@ Symbolic MathTbx:
 
 who  vytiskne jména proměnných ve workspace
 whos jména proměných včetně typů atd
+
+polyval - Dosadí do polynomu
+bode, nyquist - Vykreslení Bodeho či Nyquistovy charakteristiky
+
+rlocus(transfer_function) - vykreslí root locus daného přenosu
+rltool(transfer_function) - sysotool k bližší analýze RL
