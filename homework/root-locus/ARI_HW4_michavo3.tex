@@ -70,27 +70,27 @@ pdfpagemode=UseNone,backref=false,colorlinks=true] {hyperref}
 \maketitle
 
 \section{Routhova tabulka}
-Nalezněte rozsah zesílení $K_p$, $K_i$ kaskádního kompenzátoru tak, aby uzavřená smyčka s kompenzátorem $K(s)$ a soustavou $G(s)$
-s předpisy
+Nalezněte rozsah zesílení $K_P$, $K_I$ kaskádního kompenzátoru tak, aby uzavřená smyčka s kompenzátorem $K(s)$ a soustavou $G(s)$
+s přenosy
 \begin{equation}
 	\begin{split}
 		\label{eq:zadani}
 		G(s) &= \frac{1}{(s+2)(s+1)} \\
-		K(s) &= \frac{K_p s + K_i}{s}
+		K(s) &= \frac{K_P s + K_I}{s}
 	\end{split}
 \end{equation}
 v přímé větvi a jednotkovou zpětnou vazbou byla stabilní. (Použijte Routh-Hurwitzovo kritérium).
 \begin{itemize}
 	\item Vysvětlete postup výpočtu a uveďte klíčové mezivýsledky.
-	\item Nakreslete (v rovině $K_p$, $K_i$) dvourozměrnou oblast hodnot zesílení, pro které je uzavřená smyčka stabilní.
+	\item Nakreslete (v rovině $K_P$, $K_I$) dvourozměrnou oblast hodnot zesílení, pro které je uzavřená smyčka stabilní.
 \end{itemize}
 \textbf{Řešení:} 
 Označme přenos v přímé větvi zpětnovazební smyčky $L(s) = K(s) \cdot G(s)$. Přenosy z rovnice \eqref{eq:zadani} 
 vyjádřím standardně jako podíly polynomů v proměnné s. 
 \begin{equation}
 	\begin{split}
-		G(s) &= \frac{b(s)}{a(s)} ~~~~~ \text{, kde} ~ b(s) = 1,~~~~ a(s) = s^2 + 3s + 2 \\
-		K(s) &= \frac{q(s)}{p(s)} ~~~~~ \text{, kde} ~ q(s) = K_p s + K_i,~~~~ p(s) = s 
+		G(s) &= \frac{b(s)}{a(s)} \text{, ~~~~~~~ kde} ~ b(s) = 1,~~~~ a(s) = s^2 + 3s + 2 \\
+		K(s) &= \frac{q(s)}{p(s)} \text{, ~~~~~~~ kde} ~ q(s) = K_P s + K_I,~~~~ p(s) = s 
 	\end{split}
 \end{equation}
 Pro přenos $T(s)$ uzavřené zpětnovazební smyčky platí
@@ -100,7 +100,7 @@ Pro přenos $T(s)$ uzavřené zpětnovazební smyčky platí
 \end{equation}
 jehož jmenovatel
 \begin{equation}
-	c(s) = a(s)p(s) + b(s)q(s) = s^3 + 3s^2 + (2+ K_p)s + K_i
+	c(s) = a(s)p(s) + b(s)q(s) = s^3 + 3s^2 + (2+ K_P)s + K_I
 	\label{eq:char_polynom}
 \end{equation}
 je charakteristický polynom uzavřené smyčky.
@@ -137,23 +137,23 @@ Po dosazení koeficientů charakteristického polynomu z rovnice \eqref{eq:char_
 \begin{centering}
 	$\begin{array}{c|cc}
 		\centering
-		s^3 & 1 & K_p + 2 \\
-		s^2 & 3 & K_i \\
-		s^1 & -\frac{K_i}{3} + 2 + K_p & 0 \\
-		s^0 & K_i &  \\
+		s^3 & 1 & K_P + 2 \\
+		s^2 & 3 & K_I \\
+		s^1 & -\frac{K_I}{3} + 2 + K_P & 0 \\
+		s^0 & K_I &  \\
 	\end{array}$. \\
 \end{centering}
 
-Routh-Hurwitzovo kritérium je postačující podmínka stability polynomu. Říká, že polynom bude mít tolik nestabilních kořenů, kolik je změn znaménka
-v prvním sloupci Routhova pole. Pakliže má být polynom $c(s)$ stabilní, musí mít všechny kořeny v otevřené levé polorovině s a počet změn znaménka v prvním sloupci
+Routh-Hurwitzovo kritérium je postačující podmínka stability polynomu. Stanovuje, že polynom bude mít právě tolik nestabilních kořenů, kolikrát se v prvním sloupci
+Routhova pole změní znaménko. Pakliže má být polynom $c(s)$ stabilní, musí ležet všechny kořeny v otevřené levé polorovině a počet změn znaménka v prvním sloupci
 Routhova pole tak musí být roven nule. Proto pro zajištění stability uzavřené smyčky musí platit
 \begin{equation}
 	\begin{split}
-		K_i &> 0, \\
-		-\frac{K_i}{3} + 2 + K_p > 0 \Rightarrow K_p &> \frac{K_i}{3} - 2.
+		K_I &> 0, \\
+		-\frac{K_I}{3} + 2 + K_P > 0 \Rightarrow K_P &> \frac{K_I}{3} - 2.
 	\end{split}
 \end{equation}
-Hodnoty koeficientů $K_p$, $K_i$ řešící tyto nerovnosti (a tedy garantující stabilní zpětnovazební smyčku) jsou vykresleny na obrázku \ref{fig:mozne_hodnoty}.
+Možné hodnoty koeficientů $K_P$, $K_I$ splňující systém nerovnic (a tedy garantující stabilní zpětnovazební smyčku) jsou vykresleny na obrázku \ref{fig:mozne_hodnoty}.
 
 \begin{figure}
 	\centering
@@ -170,11 +170,11 @@ Pro datum narození 18. února 2000 mi byla vygenerována přenosová funkce
 \end{equation}
 Pro zapojení regulátoru 
 \begin{equation}
-	K(s) = K_p + \frac{K_i}{s}
+	K(s) = K_P + \frac{K_I}{s}
 \end{equation}
 a soustavy $G(s)$ v přímé větvi s jednotkovou zpětnou vazbou
 \begin{itemize}
-	\item Navrhněte konstanty $K_p > 0$, $K_i > 0$ kompenzátoru pomocí metody root locus s využitím nástroje
+	\item Navrhněte konstanty $K_P > 0$, $K_I > 0$ kompenzátoru pomocí metody root locus s využitím nástroje
 	\textbf{rltool} Matlabu tak, aby se póly přenosu uzavřené smyčky nacházely co nejdále vlevo od
 	imaginární osy (ten nejbližší byl co nejdál), a přitom jste dodrželi hodnotu poměrného tlumení
 	$\zeta = 0.7$.
@@ -193,28 +193,29 @@ Základní cíle návrhu:
 \end{itemize}
 
 V návrhu regulátoru $K(s)$ daného typu pro přenos $G(s)$ máme dva stupně volnosti - polohu nuly a zesílení. Poloha nuly $z_1$ ovlivňuje tvar větví grafu root locus.
-Zesílení $K$ ovlivňuje skutečnou polohu pólů uzavřené zpětnovazební smyčky na větvích grafu RL pro danou polohu nuly. Je tedy přirozené nejprve aspoň přibližně umístit nulu.
-V nástroji rltool přidáme do kompenzátoru jeden integrátor (jednonásobný pól v $s= 0$) a nulu $z_1$, dále nastavíme \textit{Design requirement} na 
-zadané damping ratio $\zeta = 0.7$. Nula musí být jistě reálná, aby všechny polynomy měly reálné koeficienty a root locus tak byl symetrický podle reálné osy.
-Máme $n = 3$ pólů, ale jen $m = 1$ nul; $n-m = 2$ větve grafu RL proto směřují do nekončna pod úhlem $\pm 90°$. Pakliže umístím nulu příliš vlevo,
-poté bude jen málo ovlivňovat dynamiku systému a větve RL příslušné k pólům v $s = 0$ a $s = -2$ zůstanou blízko imaginární osy.
+Zesílení $K$ ovlivňuje skutečnou polohu pólů uzavřené zpětnovazební smyčky na větvích grafu RL pro danou polohu nuly. Je tedy přirozené nejprve alespoň přibližně umístit nulu.
+V nástroji rltool přidáme do kompenzátoru integrátor (jednonásobný pól v $s= 0$) a nulu $z_1$, dále nastavíme nový \textit{Design requirement} na 
+zadané damping ratio $\zeta = 0.7$. Nula $z_1$ musí být jistě reálná, aby všechny polynomy měly reálné koeficienty a root locus tak byl symetrický podle reálné osy.
+Přenos má $n = 3$ pólů, ale jen $m = 1$ nul, proto $n-m = 2$ větve grafu RL směřují do nekončna pod úhlem $\pm 90$°. Pakliže umístím nulu příliš vlevo,
+bude jen málo ovlivňovat dynamiku systému a větve RL příslušné k pólům v $s = 0$ a $s = -2$ zůstanou blízko imaginární osy.
 
-Pozici nuly tedy volíme tak, aby se průsečík asymptot s reálnou osou
+Pozici nuly proto volíme tak, aby se průsečík asymptot s reálnou osou
 \begin{equation}
 	\sigma_a = \frac{\sum p_i - \sum z_1}{n - m} = -13 -\frac{z_1}{2}
 \end{equation}
-posunul co nejvíce vlevo. To by ideálně vyžadovalo $z_1 > 0$ (ale to je nesmysl, protože nestabilní nula by způsobila, že by se i větve RL dostaly do nestabilní pravé poloroviny s),
-vystačíme si s $z_1 > -13$. V této oblasti potom postupným posouváním nuly doprava a sledováním větví root locus lze odhadnout, že optimální pozice bude kolem bodu $-5$.
+posunul co nejvíce vlevo. To by ideálně vyžadovalo $z_1 > 0$ (ale to je nesmysl. Nestabilní nula by zavedla mnoho špatností, větve RL by se dostaly do nestabilní pravé poloroviny s),
+vystačíme si s $z_1 \gg -13$. V této oblasti potom postupným manuálním posouváním $z_1$ doprava lze odhadnout, že optimální pozice bude $z_1 \approx -5$.
 V této oblasti jsme vlevo od dvou pólů, graf RL bude do nuly vstupovat zleva (jeden pól se s rostoucím zesílením bude přesouvat z -24 směrem k nule),
 zatímco dva dominantní póly původně umístěné v bodech 0 a -2 budou v dané oblasti s orstoucím zesílením cestovat více doleva.
 Jemným nastavováním konstant získám nastavení regulátoru
 \begin{equation}
-	K(s) = \frac{255(s+5.2)}{s} = \underbrace{255}_{K_p} + \frac{1}{s} \underbrace{1326}_{K_i},
+	K(s) = \frac{255(s+5.2)}{s} = \underbrace{255}_{K_P} + \frac{1}{s} \underbrace{1326}_{K_I},
 \end{equation}
 pro něž mají všechny tři póly uzavřené smyčky reálnou část rovnu $-8.66$.
-Hledané hodnoty konstant proto jsou $K_p = 255$ a $K_i = 1326$. Odezva na jednotkový skok reference je yvkreslena na obrázku \ref{fig:step}.
-Díky trojici rychlých pólů dojde za 539 ms k ustálení odezvy na steady state hodnotě 1. Ustálená hodnota regulační odchylky je proto nulová (viz obrázek \ref{fig:step_error}. 
-Díky pólu regulátoru vykazuje systém astatistmus prvního řádu a je schopen sledovat jednotkový skok referenčního signálu.
+
+Hledané hodnoty konstant proto jsou $K_P = 255$ a $K_I = 1326$. Odezva na jednotkový skok reference je vykreslena na obrázku \ref{fig:step}.
+Díky trojici rychlých pólů dojde za 539 ms k ustálení odezvy na steady state hodnotě 1. Ustálená hodnota regulační odchylky je nulová (viz obrázek \ref{fig:step_error}). 
+Díky pólu v regulátoru vykazuje systém astatistmus prvního řádu a je schopen sledovat jednotkový skok referenčního signálu.
 
 \begin{figure}[htbp]
 	\centering
@@ -234,7 +235,7 @@ Díky pólu regulátoru vykazuje systém astatistmus prvního řádu a je schope
 \begin{thebibliography}{9}
 
 \bibitem{motivace}
-	Robert H. Bishop, Supplementary lectures to book \emph{Modern control systems, 13th edition} \url{https://www.youtube.com/watch?v=CAyWN9ba9J8}
+	Robert H. Bishop, Supplementary lectures to book \emph{Modern control systems, 13th edition} \url{https://www.youtube.com/watch?v=w0AOGeqOnFY}
 
 \end{thebibliography}
 
