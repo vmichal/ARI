@@ -22,3 +22,5 @@ bode, nyquist - Vykreslení Bodeho či Nyquistovy charakteristiky
 
 rlocus(transfer_function) - vykreslí root locus daného přenosu
 rltool(transfer_function) - sysotool k bližší analýze RL
+
+sisotool(transfer_function) - Návrh regulátoru pro daný systém
