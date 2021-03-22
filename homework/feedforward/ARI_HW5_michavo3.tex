@@ -69,7 +69,7 @@ pdfpagemode=UseNone,backref=false,colorlinks=true] {hyperref}
 
 \maketitle
 
-Obrázky se schématy systémů jsou v zadání dostupném na adrese \cite{zadani}.
+Obrázky se schématy systémů jsou v zadání dostupném na \cite{zadani}.
 
 \section{Zpětná vazba}
 Porovnejte dva systémy, jejichž schémata jsou na obrázcích v zadání.
@@ -115,9 +115,9 @@ se proti sobě pokrátí, vnitřně však může nastat nestabilita a signál na
 \section{Přímá vazba}
 Chování systému s přenosem $P(s) = P_1(s) P_2(s)$, kde
 \begin{equation}
-	P_1(s) = \frac{s+2}{s+1}, ~~~ P_2(s) = \frac{1}{s-1}
+	P_1(s) = \frac{s+2}{s+1}, ~~~ P_2(s) = \frac{1}{s-1},
 \end{equation}
-ovlivňuje porucha, která přichází dovnitř soustavy dle obrázku v zadání.
+ovlivňuje porucha $d(s)$, která přichází dovnitř soustavy dle obrázku v zadání.
 
 Naštěstí tuto poruchu můžete před vstupem do soustavy měřit. Navrhněte přímovazební a
 zpětnovazební část regulátoru (tedy přenosy $F(s)$ a $C(s)$ dle obrázku) tak, aby porucha co nejméně
@@ -149,7 +149,14 @@ což nastane právě pro $F(s) = P_1^{-1} (s)$. Volbou
 \begin{equation}
 	F(s) = s - 1
 \end{equation}
-je tak zajištěno úplné potlačení přenosu poruchy $d(s)$ na výstup systému $y(s)$.
+je proto zajištěno úplné potlačení přenosu poruchy $d(s)$ na výstup systému $y(s)$.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics{rl.eps}
+	\caption{Root locus pro přenos $P(s)$}
+	\label{fig:rl}
+\end{figure}
 
 \subsection{Stabilita}
 Pro zajištění stability je nezbytné, aby kořeny charakteristického polynomu měly reálné části záporné.
@@ -170,12 +177,6 @@ Pro studium polohy pólů systému v závislosti na zesílení $K$ lze vykreslit
 Pomocí nástroje \textit{rltool} v Matlabu lze určit, že nestabilní pól dosáhne průsečíku s imaginární osou
 pro zesílení $K = 0.5$ a pro libovolné větší K již zůstane v otevřené levé polorovině $s$. Proto stabilitu systému zajistí libovolné $K > 0.5$.
 
-\begin{figure}
-	\centering
-	\includegraphics{rl.eps}
-	\caption{Root locus pro přenos $P(s)$}
-	\label{fig:rl}
-\end{figure}
 
 \begin{thebibliography}{9}
 
