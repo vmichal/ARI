@@ -127,8 +127,8 @@ velmi vhodně upravit jednoduchou volbou přímovazebního regulátoru. Potom na
 zpětnovazební regulátor. 
 
 \textbf{Řešení:}
-Odvoďme přenos z poruchy $d(s)$ na výstup systému $y(s)$ (pro lepší čitelnost vynechávám závorky $(s)$ u přenosů $P_1$, $P_2$, $C$ a $F$
-a signálů $d$, $y_r$ a $y$) Protože platí
+Odvoďme přenos z poruchy $d(s)$ na výstup systému $y(s)$ (pro lepší čitelnost vynechávám závorky u přenosů $P_1$, $P_2$, $C$ a $F$
+a signálů $d$, $y_r$ a $y$). Protože platí
 \begin{equation}
 	\begin{split}
 		y = P_2 (d + P_1(C (-y) - F d)) &= P_2 d - P_2 P_1 C y - P_2 P_1 F d\\
@@ -138,21 +138,44 @@ a signálů $d$, $y_r$ a $y$) Protože platí
 \end{equation}
 je přenos z poruchy na výstup soustavy roven
 \begin{equation}
-	G(s) = \frac{y(s)}{d(s)} = \frac{P_2(1-P_1 F)}{1 + P_2 P_1 C}.
+	G_{dy}(s) = \frac{y(s)}{d(s)} = \frac{P_2(1-P_1 F)}{1 + P_2 P_1 C}.
 	\label{eq:prenos}
 \end{equation}
+
+\subsection{Potlačení poruchy}
+Pro maximální potlačení poruchy musí být přenos v rovnici \eqref{eq:prenos} nulový. Toho lze dosáhnout velkým jmenovatelem
+($1 + P_2 P_1 C \rightarrow \infty$) a nebo nulovým čitatelem. Přenos soustavy $P_2(s)$ nelze vynulovat, musí tedy platit $ 1 - P_1 F = 0$,
+což nastane právě pro $F(s) = P_1^{-1} (s)$. Volbou
+\begin{equation}
+	F(s) = s - 1
+\end{equation}
+je tak zajištěno úplné potlačení přenosu poruchy $d(s)$ na výstup systému $y(s)$.
+
 \subsection{Stabilita}
-Pro zajištění stability je nezbytné, aby kořeny charakteristického polynomu měly
-reálné části záporné. Póly přenosu z rovnice \eqref{eq:prenos} jsou takové hodnoty $s$, pro které platí $1 + P_2 P_1 C = 0$. 
-Použijme PI regulátor $C(s) = Kp + \frac{K_i}{s} = \frac{K_p s + K_i}{s}$, poté
+Pro zajištění stability je nezbytné, aby kořeny charakteristického polynomu měly reálné části záporné.
+Póly přenosu z rovnice \eqref{eq:prenos} jsou takové hodnoty $s$, pro které platí $1 + P_2 P_1 C = 0$.
+Jaký regulátor bychom mohli použít? Může nám pomoci root locus -- zpětnou vazbu uzavíráme kolem
+soustavy $\frac{s+2}{s^2 - 1}$, ta má dva reálné póly a jednu reálnou nulu. Podle jednoho z pravidel
+bude procházet graf root locus po reálné ose na intervalech, které leží nalevo od lichého počtu pólů otevřené
+zpětnovazební smyčky. Protože má soustava jeden pól v nestabilním bodě 1, musíme jej vhodným výběrem regulátoru $C(s)$ stáhnout
+do stabilní levé poloroviny $s$. Na to stačí i prostý proporcionální regulátor se zesílením $K \in \mathbb{R}$.
 \begin{equation}
 	\begin{split}
-		1 + C \cdot \frac{s+2}{s+1} \frac{1}{s-1} &= 0 \\
-		(s+1)(s-1)s + (K_p s + K_i) (s+2) &= 0. \\
+		1 + \underbrace{C(s)}_{K} \cdot \frac{s+2}{s+1} \frac{1}{s-1} &= 0 \\
+		(s+1)(s-1) + K(s+2) &= 0 \\
+		s^2 +K s +2K-1 &= 0. \\
 	\end{split}
 \end{equation}
-Pro zbytek návrhu použiji nástroj \textit{rltool} v Matlabu
+Pro studium polohy pólů systému v závislosti na zesílení $K$ lze vykreslit root locus pro přenos $P(s)$ (viz obrázek \ref{fig:rl}).
+Pomocí nástroje \textit{rltool} v Matlabu lze určit, že nestabilní pól dosáhne průsečíku s imaginární osou
+pro zesílení $K = 0.5$ a pro libovolné větší K již zůstane v otevřené levé polorovině $s$. Proto stabilitu systému zajistí libovolné $K > 0.5$.
 
+\begin{figure}
+	\centering
+	\includegraphics{rl.eps}
+	\caption{Root locus pro přenos $P(s)$}
+	\label{fig:rl}
+\end{figure}
 
 \begin{thebibliography}{9}
 
