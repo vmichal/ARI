@@ -1,0 +1,178 @@
+\documentclass[twoside]{article}
+\usepackage[a4paper]{geometry}
+\geometry{verbose,tmargin=2.5cm,bmargin=2cm,lmargin=2cm,rmargin=2cm}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+% nastavení pisma a češtiny
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[czech]{babel}
+
+% odkazy
+\usepackage{url}
+
+\usepackage{float}
+% vícesloupcové tabulky
+\usepackage{multirow}
+\usepackage{amssymb}
+\usepackage{bbold}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{commath}
+
+% vnořené popisky obrázků
+\usepackage{subcaption}
+
+% automatická konverze EPS 
+\usepackage{graphicx} 
+\usepackage{epstopdf}
+\epstopdfsetup{update}
+
+\graphicspath{{./images}}
+
+% odkazy a záložky
+\usepackage[unicode=true, bookmarks=true,bookmarksnumbered=true,
+bookmarksopen=false, breaklinks=false,pdfborder={0 0 0},
+pdfpagemode=UseNone,backref=false,colorlinks=true] {hyperref}
+
+% Poznámky při překladu
+\usepackage{xkeyval}	% Inline todonotes
+\usepackage[textsize = footnotesize]{todonotes}
+\presetkeys{todonotes}{inline}{}
+
+%https://tex.stackexchange.com/questions/2783/bold-calligraphic-typeface
+\DeclareMathAlphabet\mathbfcal{OMS}{cmsy}{b}{n}
+
+% Zacni sekci slovem ukol
+\renewcommand{\thesection}{Úkol \arabic{section}}
+% enumerate zacina s pismenem
+\renewcommand{\theenumi}{\alph{enumi}}
+
+% smaz aktualni page layout
+\fancyhf{}
+% zahlavi
+\usepackage{titling}
+\fancyhf[HC]{\thetitle}
+\fancyhf[HLE,HRO]{\theauthor}
+\fancyhf[HRE,HLO]{\today}
+ %zapati
+\fancyhf[FLE,FRO]{\thepage}
+
+% údaje o autorovi
+\title{Automatické řízení: DÚ 5 -- Zpětná a přímá vazba}
+\author{Vojtěch Michal}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+Obrázky se schématy systémů jsou v zadání dostupném na adrese \cite{zadani}.
+
+\section{Zpětná vazba}
+Porovnejte dva systémy, jejichž schémata jsou na obrázcích v zadání.
+Pro jednoznačnost označím horní systém písmenem A, dolní systém písmenem B.
+Zjistěte, jaký mezi nimi může být rozdíl z hlediska stability. Rada: Najděte podmínky stability každého
+z nich, porovnejte je, a případné rozdíly vysvětlete.
+
+\textbf{Řešení:}
+O stabilitě systému rozhoduje jeho charakteristický polynom. Nalezněme přenosy pro systém A
+\begin{equation}
+	G_A(s) = \frac{r(s)}{p(s)} \cdot \frac{\frac{b(s)}{a(s)} }{1 + \frac{b(s)}{a(s)} \cdot \frac{q(s)}{p(s)}} =
+	\frac{r(s)}{p(s)} \cdot \frac{b(s) \cdot p(s)}{p(s) \cdot a(s) + b(s) \cdot q(s)}
+\end{equation}
+a pro systém B
+\begin{equation}
+	G_B(s) = r(s) \cdot \frac{\frac{b(s)}{a(s)} \cdot \frac{1}{p(s)}}{1 + \frac{b(s)}{a(s)} \cdot \frac{1}{p(s)} \cdot \frac{q(s)}{1}} =
+	r(s) \cdot \frac{b(s) }{p(s) \cdot a(s) + b(s) \cdot q(s)}.
+\end{equation}
+Pakliže má být systém stabilní (studujeme vnitřní stabilitu, nikoli jen BIBO), poté musí být stabilní oba jeho subsystémy -- předfiltr
+$\frac{r(s)}{p(s)}$ i za ním v serii zapojená zpětnovazební smyčka. Na první pohled je vidět, že rozdíl systémů je v poloze
+polynomu $p(s)$. V systému A se nalézá ve jmenovateli předfiltru, v systému B se nalézá ve jmenovateli přímé větve zpětnovazební
+smyčky. Uzavření zpětné vazby vytváří v principu nový systém; pomocí FB je možné stabilizovat nestabilní soustavy.
+Naopak seriové řazení systémů tuto vlastnost nemá. Jakmile je systém jednou nestabilní, není možné jej stabilizovat pouze 
+seriovým připojením dalšího systému (krácení pólů povede na skryté módy, které budou vybuditelné například odlišnými
+počátečními podmínkami).
+
+Matematicky lze tuto myšlenku podložit analýzou charakteristických polynomů
+\begin{equation}
+	\begin{split}
+		c_B(s) &= p(s) \cdot a(s) + b(s) \cdot q(s), \\
+		c_A(s) &= p(s) \cdot (p(s) \cdot a(s) + b(s) \cdot q(s)) = p(s) \cdot c_B(s).
+	\end{split}
+\end{equation}
+Pro stabilitu systému B je postačující, aby měly kořeny polynomu $c_B(s)$ zápornou reálnou část.
+Pro stabilitu systému A je nezbytné totéž, nad to je ale ještě potřeba, aby samotné $p(s)$ bylo stabilní,
+protože se nalézá ve jmenovateli samostatně.
+
+\textbf{Závěr:} Uzavření zpětnovazební smyčky je schopno "posunout" kořeny polynomu $p(s)$
+do stabilní oblasti. Jakmile však kolem systému FB uzavřen není, je nezbytné, aby byl sám o sobě stabilní.
+Oba systémy budou mít z hlediska vnějšího modelu stejný přenos, protože $p(s)$ v čitateli a jmenovateli přenosu $G_A(s)$
+se proti sobě pokrátí, vnitřně však může nastat nestabilita a signál na výstupu předfiltru $\frac{r(s)}{p(s)}$ poroste nade všechny meze.
+
+\section{Přímá vazba}
+Chování systému s přenosem $P(s) = P_1(s) P_2(s)$, kde
+\begin{equation}
+	P_1(s) = \frac{s+2}{s+1}, ~~~ P_2(s) = \frac{1}{s-1}
+\end{equation}
+ovlivňuje porucha, která přichází dovnitř soustavy dle obrázku v zadání.
+
+Naštěstí tuto poruchu můžete před vstupem do soustavy měřit. Navrhněte přímovazební a
+zpětnovazební část regulátoru (tedy přenosy $F(s)$ a $C(s)$ dle obrázku) tak, aby porucha co nejméně
+ovlivňovala výstup soustavy a aby celý systém byl stabilní.
+Rada: Nejprve vypočtete přenos poruchy na výstup soustavy. V tomto zvláštním případě lze tento přenos
+velmi vhodně upravit jednoduchou volbou přímovazebního regulátoru. Potom navrhněte stabilizující
+zpětnovazební regulátor. 
+
+\textbf{Řešení:}
+Odvoďme přenos z poruchy $d(s)$ na výstup systému $y(s)$ (pro lepší čitelnost vynechávám závorky $(s)$ u přenosů $P_1$, $P_2$, $C$ a $F$
+a signálů $d$, $y_r$ a $y$) Protože platí
+\begin{equation}
+	\begin{split}
+		y = P_2 (d + P_1(C (-y) - F d)) &= P_2 d - P_2 P_1 C y - P_2 P_1 F d\\
+		(1 + P_2 P_1 C)y &= P_2(1-P_1 F) d \\
+		y &= \frac{P_2(1-P_1 F)}{1 + P_2 P_1 C} d,
+	\end{split}
+\end{equation}
+je přenos z poruchy na výstup soustavy roven
+\begin{equation}
+	G(s) = \frac{y(s)}{d(s)} = \frac{P_2(1-P_1 F)}{1 + P_2 P_1 C}.
+	\label{eq:prenos}
+\end{equation}
+\subsection{Stabilita}
+Pro zajištění stability je nezbytné, aby kořeny charakteristického polynomu měly
+reálné části záporné. Póly přenosu z rovnice \eqref{eq:prenos} jsou takové hodnoty $s$, pro které platí $1 + P_2 P_1 C = 0$. 
+Použijme PI regulátor $C(s) = Kp + \frac{K_i}{s} = \frac{K_p s + K_i}{s}$, poté
+\begin{equation}
+	\begin{split}
+		1 + C \cdot \frac{s+2}{s+1} \frac{1}{s-1} &= 0 \\
+		(s+1)(s-1)s + (K_p s + K_i) (s+2) &= 0. \\
+	\end{split}
+\end{equation}
+Pro zbytek návrhu použiji nástroj \textit{rltool} v Matlabu
+
+
+\begin{thebibliography}{9}
+
+	\bibitem{zadani} Zadání domácího úkolu \url{http://www.polyx.com/_ari/du/du_05.pdf}
+
+\bibitem{motivace}
+	Robert H. Bishop, Supplementary lectures to book \emph{Modern control systems, 13th edition} \url{https://www.youtube.com/watch?v=w0AOGeqOnFY}
+
+\end{thebibliography}
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
+
