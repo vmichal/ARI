@@ -1,0 +1,203 @@
+\documentclass[twoside]{article}
+\usepackage[a4paper]{geometry}
+\geometry{verbose,tmargin=2.5cm,bmargin=2cm,lmargin=2cm,rmargin=2cm}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+% nastavení pisma a~češtiny
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[czech]{babel}
+
+% odkazy
+\usepackage{url}
+
+\usepackage{float}
+% vícesloupcové tabulky
+\usepackage{multirow}
+\usepackage{amssymb}
+\usepackage{bbold}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{commath}
+
+% vnořené popisky obrázků
+\usepackage{subcaption}
+
+% automatická konverze EPS 
+\usepackage{graphicx} 
+\usepackage{epstopdf}
+\epstopdfsetup{update}
+
+\graphicspath{{./images}}
+
+% odkazy a~záložky
+\usepackage[unicode=true, bookmarks=true,bookmarksnumbered=true,
+bookmarksopen=false, breaklinks=false,pdfborder={0 0 0},
+pdfpagemode=UseNone,backref=false,colorlinks=true] {hyperref}
+
+% Poznámky při překladu
+\usepackage{xkeyval}	% Inline todonotes
+\usepackage[textsize = footnotesize]{todonotes}
+\presetkeys{todonotes}{inline}{}
+
+%https://tex.stackexchange.com/questions/2783/bold-calligraphic-typeface
+\DeclareMathAlphabet\mathbfcal{OMS}{cmsy}{b}{n}
+
+% Zacni sekci slovem ukol
+\renewcommand{\thesection}{Úkol \arabic{section}}
+% enumerate zacina s pismenem
+\renewcommand{\theenumi}{\alph{enumi}}
+
+% smaz aktualni page layout
+\fancyhf{}
+% zahlavi
+\usepackage{titling}
+\fancyhf[HC]{\thetitle}
+\fancyhf[HLE,HRO]{\theauthor}
+\fancyhf[HRE,HLO]{\today}
+ %zapati
+\fancyhf[FLE,FRO]{\thepage}
+
+% údaje o autorovi
+\title{Automatické řízení: DÚ 6 -- PID regulátor}
+\author{Vojtěch Michal}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Umístění pólů}
+
+Pro mé datum narození 18. února 2000 vychází přenos soustavy
+\begin{equation}
+	F(s) = \frac{b(s)}{a(s)} = \frac{s+8} {s^2 + 2}.
+\end{equation}
+Pro zadaný přenos navrhněte PID regulátor, který póly výsledného systému umístí
+do poloh $-1$ a~$-0.5 \pm 0.5 i$. \\
+\textbf{Řešení:}
+Zadané poloze pólů odpovídá charakteristický polynom
+\begin{equation}
+	c_{goal}(s) = s^3 + 2s^2 + 1.5 s + 0.5.
+	\label{eq:goal}
+\end{equation}
+
+Přenos PID regulátoru je obecně dán vztahem
+\begin{equation}
+	C(s) = K_P + \frac{K_I}{s} + K_D s,
+\end{equation}
+jehož konstanty $K_P$, $K_I$ a~$K_D$ je potřeba naladit pro zajištění požadovaných vlastností uzavřené smyčky.
+Soustava $F(s)$ je řádu 2, regulátor $C(s)$ je neryzí a~řádu 1. Dohromady bude systém třetího řádu, tři stupně volnosti
+konstant regulátoru jsou proto dostatečné pro spolehlivé nastavení pólů uzavřené smyčky,
+není však možné nastavit libovolné ustálené zesílení.
+Převeďme přenos regulátoru na racionální funkci
+\begin{equation}
+	C(s) = \frac{q(s)}{p(s)} = \frac{s^2 K_D + s K_P + K_I}{s}
+\end{equation}
+a zařaďme jej kaskádně před řízenou soustavu pro získání open loop přenosu
+\begin{equation}
+	L(s) = C(s) \cdot F(s) = \frac{s^2 K_D + s K_P + K_I}{s} \cdot \frac{s+8} {s^2 + 2}.
+\end{equation}
+Uzavřeme-li kolem $L(s)$ jednotkou zpětnou vazbu, získáme přenos $T(s) = \frac{L(s)}{1 + L(s)}$, ze kterého nás však zajímá
+pouze charakteristický polynom
+\begin{equation}
+	c(s) = a(s)p(s) + b(s)q(s) =\underbrace{s}_{p(s)} \cdot \underbrace{(s^2 + 2)}_{a(s)} 
+	+ \underbrace{(s+8)}_{b(s)} \cdot \underbrace{(s^2 K_D + s K_P + K_I)}_{q(s)}.
+\end{equation}
+Charakteristický polynom roznásobme
+\begin{equation}
+	\begin{split}
+		c(s) &= \underbrace{s^3 + 2s}_{p(s)\cdot a(s)} + \underbrace{s^3 K_D + s^2 K_P + s K_I}_{s\cdot q(s)} +\underbrace{ 8 s^2 K_D + 8s K_P +8 K_I}_{8 q(s)} \\
+		c(s) &= s^3 \cdot (1 + K_D) + s^2 \cdot(K_P + 8K_D) + s \cdot(2 + K_I + 8K_P) + 1 \cdot (8K_I)
+	\end{split}
+\end{equation}
+a koeficient $\beta = 1 + K_D$ u~kubického členu vytkneme z polynomu.
+\begin{equation}
+	c(s) = (1 + K_D) \cdot( s^3 + s^2 \cdot \frac{K_P + 8K_D}{1 + K_D} + s \cdot  \frac{2 + K_I + 8K_P}{1 + K_D} + 1 \cdot \frac{8K_I}{1 + K_D})
+\end{equation}
+Porovnáme s žádaným polynomem dle rovnice \eqref{eq:goal}. Identita $c(s) = c_{goal}(s)$ musí být splněna po jednotlivých koeficientech.
+Vzniká soustava tří rovnic
+\begin{equation}
+	\begin{split}
+		\frac{K_P + 8K_D}{1 + K_D} &= 2 \\
+		\frac{2 + K_I + 8K_P}{1 + K_D} &= 1.5\\
+		\frac{8K_I}{1 + K_D} &= 0.5.
+	\end{split}
+\end{equation}
+Po převedení na lineární rovnice
+\begin{equation}
+	\begin{split}
+		K_P + 8K_D &= 2 + 2K_D \\
+		2 + K_I + 8K_P &= 1.5 + 1.5 K_D\\
+		8K_I &= 0.5 +0.5 K_D,
+	\end{split}
+\end{equation}
+přeuspořádání
+\begin{equation}
+	\begin{split}
+		6K_D + K_P &= 2 \\
+		- 1.5 K_D + 8K_P  + K_I &= -0.5\\
+		- 0.5K_D + 8K_I &= 0.5,
+	\end{split}
+\end{equation}
+převedení na maticový tvar
+\begin{equation}
+	\begin{bmatrix}
+		6 & 1 & 0 \\
+		-1.5 & 8 & 1 \\
+		-0.5 & 0 &8  
+		
+	\end{bmatrix} \cdot \begin{bmatrix}
+		K_D \\
+		K_P \\
+		K_I
+	\end{bmatrix} = \begin{bmatrix}
+		2 \\
+		-0.5 \\
+		0.5
+	\end{bmatrix}
+\end{equation}
+a vyřešení soustavy Matlabem vyjde 
+\begin{equation}
+	\begin{bmatrix}
+		K_D \\
+		K_P \\
+		K_I
+	\end{bmatrix} = 
+	\begin{bmatrix}
+		0.3350 \\
+		-0.0101 \\
+		0.0834
+	\end{bmatrix}.
+\end{equation} \\
+\textbf{Závěr:}
+Žádaný PID regulátor má přenos
+\begin{equation}
+	C(s) = -0.0101 + \frac{0.0834}{s} + 0.3350 s.
+\end{equation}
+Protože má úloha pouze tři stupně volnosti, podařilo se umístit všechny tři póly, nelze však nastavit ustálené zesílení
+uzavřené zpětnovazební smyčky. Pro jeho doladění by bylo nezbytné přidat další stupeň volnosti, například
+celé smyčce předřadit konstantní skalární zesílení.
+
+\begin{thebibliography}{9}
+
+\bibitem{motivace}
+	Robert H. Bishop, Supplementary lectures to book \emph{Modern control systems, 13th edition} \url{https://www.youtube.com/watch?v=WaM8_Bllaf0}
+
+\end{thebibliography}
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
+
