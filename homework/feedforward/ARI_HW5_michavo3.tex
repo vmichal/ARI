@@ -4,7 +4,7 @@
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 
-% nastavení pisma a češtiny
+% nastavení pisma a~češtiny
 \usepackage{lmodern}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
@@ -32,7 +32,7 @@
 
 \graphicspath{{./images}}
 
-% odkazy a záložky
+% odkazy a~záložky
 \usepackage[unicode=true, bookmarks=true,bookmarksnumbered=true,
 bookmarksopen=false, breaklinks=false,pdfborder={0 0 0},
 pdfpagemode=UseNone,backref=false,colorlinks=true] {hyperref}
@@ -61,7 +61,7 @@ pdfpagemode=UseNone,backref=false,colorlinks=true] {hyperref}
 \fancyhf[FLE,FRO]{\thepage}
 
 % údaje o autorovi
-\title{Automatické řízení: DÚ 5 -- Zpětná a přímá vazba}
+\title{Automatické řízení: DÚ 5 -- Zpětná a~přímá vazba}
 \author{Vojtěch Michal}
 \date{\today}
 
@@ -75,7 +75,7 @@ Obrázky se schématy systémů jsou v zadání dostupném na \cite{zadani}.
 Porovnejte dva systémy, jejichž schémata jsou na obrázcích v zadání.
 Pro jednoznačnost označím horní systém písmenem A, dolní systém písmenem B.
 Zjistěte, jaký mezi nimi může být rozdíl z hlediska stability. Rada: Najděte podmínky stability každého
-z nich, porovnejte je, a případné rozdíly vysvětlete.
+z nich, porovnejte je a~případné rozdíly vysvětlete.
 
 \textbf{Řešení:}
 O stabilitě systému rozhoduje jeho charakteristický polynom. Nalezněme přenosy pro systém A
@@ -89,12 +89,12 @@ a pro systém B
 	r(s) \cdot \frac{b(s) }{p(s) \cdot a(s) + b(s) \cdot q(s)}.
 \end{equation}
 Pakliže má být systém stabilní (studujeme vnitřní stabilitu, nikoli jen BIBO), poté musí být stabilní oba jeho subsystémy -- předfiltr
-$\frac{r(s)}{p(s)}$ i za ním v serii zapojená zpětnovazební smyčka. Na první pohled je vidět, že rozdíl systémů je v poloze
+$\frac{r(s)}{p(s)}$ i~za ním kaskádně zapojená zpětnovazební smyčka. Na první pohled je vidět, že rozdíl systémů je v poloze
 polynomu $p(s)$. V systému A se nalézá ve jmenovateli předfiltru, v systému B se nalézá ve jmenovateli přímé větve zpětnovazební
-smyčky. Uzavření zpětné vazby vytváří v principu nový systém; pomocí FB je možné stabilizovat nestabilní soustavy.
-Naopak seriové řazení systémů tuto vlastnost nemá. Jakmile je systém jednou nestabilní, není možné jej stabilizovat pouze 
-seriovým připojením dalšího systému (krácení pólů povede na skryté módy, které budou vybuditelné například odlišnými
-počátečními podmínkami).
+smyčky. Uzavření zpětné vazby (FB) vytváří v principu nový systém; pomocí FB je možné stabilizovat nestabilní soustavy.
+Naopak seriové řazení systémů tuto vlastnost nemá. Jakmile je systém jednou nestabilní, není možné jej stabilizovat prostým 
+seriovým připojením dalšího systému (krácení pólů povede na skryté módy, které budou vybuditelné například odlišnou konfigurací
+počátečních podmínek).
 
 Matematicky lze tuto myšlenku podložit analýzou charakteristických polynomů
 \begin{equation}
@@ -107,10 +107,10 @@ Pro stabilitu systému B je postačující, aby měly kořeny polynomu $c_B(s)$ 
 Pro stabilitu systému A je nezbytné totéž, nad to je ale ještě potřeba, aby samotné $p(s)$ bylo stabilní,
 protože se nalézá ve jmenovateli samostatně.
 
-\textbf{Závěr:} Uzavření zpětnovazební smyčky je schopno "posunout" kořeny polynomu $p(s)$
+\textbf{Závěr:} Uzavření zpětnovazební smyčky je schopno v jistém smyslu posunout kořeny polynomu $p(s)$
 do stabilní oblasti. Jakmile však kolem systému FB uzavřen není, je nezbytné, aby byl sám o sobě stabilní.
-Oba systémy budou mít z hlediska vnějšího modelu stejný přenos, protože $p(s)$ v čitateli a jmenovateli přenosu $G_A(s)$
-se proti sobě pokrátí, vnitřně však může nastat nestabilita a signál na výstupu předfiltru $\frac{r(s)}{p(s)}$ poroste nade všechny meze.
+Oba systémy budou mít z hlediska vnějšího modelu stejný přenos, protože $p(s)$ v čitateli a~jmenovateli přenosu $G_A(s)$
+se proti sobě pokrátí, vnitřně však může nastat nestabilita a~signál na výstupu předfiltru $\frac{r(s)}{p(s)}$ poroste nade všechny meze.
 
 \section{Přímá vazba}
 Chování systému s přenosem $P(s) = P_1(s) P_2(s)$, kde
@@ -120,15 +120,15 @@ Chování systému s přenosem $P(s) = P_1(s) P_2(s)$, kde
 ovlivňuje porucha $d(s)$, která přichází dovnitř soustavy dle obrázku v zadání.
 
 Naštěstí tuto poruchu můžete před vstupem do soustavy měřit. Navrhněte přímovazební a
-zpětnovazební část regulátoru (tedy přenosy $F(s)$ a $C(s)$ dle obrázku) tak, aby porucha co nejméně
-ovlivňovala výstup soustavy a aby celý systém byl stabilní.
+zpětnovazební část regulátoru (tedy přenosy $F(s)$ a~$C(s)$ dle obrázku) tak, aby porucha co nejméně
+ovlivňovala výstup soustavy a~aby celý systém byl stabilní.
 Rada: Nejprve vypočtete přenos poruchy na výstup soustavy. V tomto zvláštním případě lze tento přenos
 velmi vhodně upravit jednoduchou volbou přímovazebního regulátoru. Potom navrhněte stabilizující
 zpětnovazební regulátor. 
 
 \textbf{Řešení:}
-Odvoďme přenos z poruchy $d(s)$ na výstup systému $y(s)$ (pro lepší čitelnost vynechávám závorky u přenosů $P_1$, $P_2$, $C$ a $F$
-a signálů $d$, $y_r$ a $y$). Protože platí
+Odvoďme přenos z poruchy $d(s)$ na výstup systému $y(s)$ (pro lepší čitelnost vynechávám explicitní zmínky závislosti
+přenosů $P_1$, $P_2$, $C$ a~$F$ a signálů $d$, $y_r$ a~$y$ na komplexní frekvenci $s$). Protože platí
 \begin{equation}
 	\begin{split}
 		y = P_2 (d + P_1(C (-y) - F d)) &= P_2 d - P_2 P_1 C y - P_2 P_1 F d\\
@@ -144,8 +144,8 @@ je přenos z poruchy na výstup soustavy roven
 
 \subsection{Potlačení poruchy}
 Pro maximální potlačení poruchy musí být přenos v rovnici \eqref{eq:prenos} nulový. Toho lze dosáhnout velkým jmenovatelem
-($1 + P_2 P_1 C \rightarrow \infty$) a nebo nulovým čitatelem. Přenos soustavy $P_2(s)$ nelze vynulovat, musí tedy platit $ 1 - P_1 F = 0$,
-což nastane právě pro $F(s) = P_1^{-1} (s)$. Volbou
+($1 + P_2 P_1 C \rightarrow \infty$) a~nebo nulovým čitatelem. Nedává smysl snažit se vynulovat přenos soustavy $P_2(s)$,
+musí tedy platit $ 1 - P_1 F = 0$, což nastane právě pro $F(s) = P_1^{-1} (s)$. Volbou
 \begin{equation}
 	F(s) = s - 1
 \end{equation}
@@ -162,10 +162,10 @@ je proto zajištěno úplné potlačení přenosu poruchy $d(s)$ na výstup syst
 Pro zajištění stability je nezbytné, aby kořeny charakteristického polynomu měly reálné části záporné.
 Póly přenosu z rovnice \eqref{eq:prenos} jsou takové hodnoty $s$, pro které platí $1 + P_2 P_1 C = 0$.
 Jaký regulátor bychom mohli použít? Může nám pomoci root locus -- zpětnou vazbu uzavíráme kolem
-soustavy $\frac{s+2}{s^2 - 1}$, ta má dva reálné póly a jednu reálnou nulu. Podle jednoho z pravidel
+soustavy $\frac{s+2}{s^2 - 1}$, ta má dva reálné póly a~jednu reálnou nulu. Podle jednoho z pravidel
 bude procházet graf root locus po reálné ose na intervalech, které leží nalevo od lichého počtu pólů otevřené
-zpětnovazební smyčky. Protože má soustava jeden pól v nestabilním bodě 1, musíme jej vhodným výběrem regulátoru $C(s)$ stáhnout
-do stabilní levé poloroviny $s$. Na to stačí i prostý proporcionální regulátor se zesílením $K \in \mathbb{R}$.
+zpětnovazební smyčky. Protože má soustava jeden pól v nestabilním bodě $s = 1$, musíme jej vhodným výběrem regulátoru $C(s)$ stáhnout
+do stabilní levé poloroviny $s$. Na to stačí i~prostý proporcionální regulátor se zesílením $K \in \mathbb{R}$.
 \begin{equation}
 	\begin{split}
 		1 + \underbrace{C(s)}_{K} \cdot \frac{s+2}{s+1} \frac{1}{s-1} &= 0 \\
@@ -173,9 +173,9 @@ do stabilní levé poloroviny $s$. Na to stačí i prostý proporcionální regu
 		s^2 +K s +2K-1 &= 0. \\
 	\end{split}
 \end{equation}
-Pro studium polohy pólů systému v závislosti na zesílení $K$ lze vykreslit root locus pro přenos $P(s)$ (viz obrázek \ref{fig:rl}).
+Pro studium polohy pólů systému v závislosti na zesílení $K$ lze vykreslit root locus pro přenos $P(s)$ (viz obrázek~\ref{fig:rl}).
 Pomocí nástroje \textit{rltool} v Matlabu lze určit, že nestabilní pól dosáhne průsečíku s imaginární osou
-pro zesílení $K = 0.5$ a pro libovolné větší K již zůstane v otevřené levé polorovině $s$. Proto stabilitu systému zajistí libovolné $K > 0.5$.
+pro zesílení $K = 0.5$ a~pro libovolné větší $K$ již zůstane v otevřené levé polorovině $s$. Proto stabilitu systému zajistí libovolné $K > 0.5$.
 
 
 \begin{thebibliography}{9}
@@ -183,7 +183,7 @@ pro zesílení $K = 0.5$ a pro libovolné větší K již zůstane v otevřené 
 	\bibitem{zadani} Zadání domácího úkolu \url{http://www.polyx.com/_ari/du/du_05.pdf}
 
 \bibitem{motivace}
-	Robert H. Bishop, Supplementary lectures to book \emph{Modern control systems, 13th edition} \url{https://www.youtube.com/watch?v=w0AOGeqOnFY}
+	Robert H. Bishop, Supplementary lectures to book \emph{Modern control systems, 13th edition} \url{https://www.youtube.com/watch?v=HanTvyEQI7U}
 
 \end{thebibliography}
 
