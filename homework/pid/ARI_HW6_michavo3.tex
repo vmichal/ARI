@@ -77,6 +77,7 @@ Pro mé datum narození 18. února 2000 vychází přenos soustavy
 \end{equation}
 Pro zadaný přenos navrhněte PID regulátor, který póly výsledného systému umístí
 do poloh $-1$ a~$-0.5 \pm 0.5 i$. \\
+\\
 \textbf{Řešení:}
 Zadané poloze pólů odpovídá charakteristický polynom
 \begin{equation}
@@ -86,63 +87,63 @@ Zadané poloze pólů odpovídá charakteristický polynom
 
 Přenos PID regulátoru je obecně dán vztahem
 \begin{equation}
-	C(s) = K_P + \frac{K_I}{s} + K_D s,
+	C(s) = K_\text{P} + \frac{K_\text{I}}{s} + K_\text{D} s,
 \end{equation}
-jehož konstanty $K_P$, $K_I$ a~$K_D$ je potřeba naladit pro zajištění požadovaných vlastností uzavřené smyčky.
+jehož konstanty $K_\text{P}$, $K_\text{I}$ a~$K_\text{D}$ je potřeba naladit pro zajištění požadovaných vlastností uzavřené smyčky.
 Soustava $F(s)$ je řádu 2, regulátor $C(s)$ je neryzí a~řádu 1. Dohromady bude systém třetího řádu, tři stupně volnosti
 konstant regulátoru jsou proto dostatečné pro spolehlivé nastavení pólů uzavřené smyčky,
 není však možné nastavit libovolné ustálené zesílení.
-Převeďme přenos regulátoru na racionální funkci
+Převeďme přenos regulátoru na~racionální funkci
 \begin{equation}
-	C(s) = \frac{q(s)}{p(s)} = \frac{s^2 K_D + s K_P + K_I}{s}
+	C(s) = \frac{q(s)}{p(s)} = \frac{s^2 K_\text{D} + s K_\text{P} + K_\text{I}}{s}
 \end{equation}
 a zařaďme jej kaskádně před řízenou soustavu pro získání open loop přenosu
 \begin{equation}
-	L(s) = C(s) \cdot F(s) = \frac{s^2 K_D + s K_P + K_I}{s} \cdot \frac{s+8} {s^2 + 2}.
+	L(s) = C(s) \cdot F(s) = \frac{s^2 K_\text{D} + s K_\text{P} + K_\text{I}}{s} \cdot \frac{s+8} {s^2 + 2}.
 \end{equation}
 Uzavřeme-li kolem $L(s)$ jednotkou zpětnou vazbu, získáme přenos $T(s) = \frac{L(s)}{1 + L(s)}$, ze kterého nás však zajímá
 pouze charakteristický polynom
 \begin{equation}
 	c(s) = a(s)p(s) + b(s)q(s) =\underbrace{s}_{p(s)} \cdot \underbrace{(s^2 + 2)}_{a(s)} 
-	+ \underbrace{(s+8)}_{b(s)} \cdot \underbrace{(s^2 K_D + s K_P + K_I)}_{q(s)}.
+	+ \underbrace{(s+8)}_{b(s)} \cdot \underbrace{(s^2 K_\text{D} + s K_\text{P} + K_\text{I})}_{q(s)}.
 \end{equation}
 Charakteristický polynom roznásobme
 \begin{equation}
 	\begin{split}
-		c(s) &= \underbrace{s^3 + 2s}_{p(s)\cdot a(s)} + \underbrace{s^3 K_D + s^2 K_P + s K_I}_{s\cdot q(s)} +\underbrace{ 8 s^2 K_D + 8s K_P +8 K_I}_{8 q(s)} \\
-		c(s) &= s^3 \cdot (1 + K_D) + s^2 \cdot(K_P + 8K_D) + s \cdot(2 + K_I + 8K_P) + 1 \cdot (8K_I)
+		c(s) &= \underbrace{s^3 + 2s}_{p(s)\cdot a(s)} + \underbrace{s^3 K_\text{D} + s^2 K_\text{P} + s K_\text{I}}_{s\cdot q(s)} +\underbrace{ 8 s^2 K_\text{D} + 8s K_\text{P} +8 K_\text{I}}_{8 q(s)} \\
+		c(s) &= s^3 \cdot (1 + K_\text{D}) + s^2 \cdot(K_\text{P} + 8K_\text{D}) + s \cdot(2 + K_\text{I} + 8K_\text{P}) + 1 \cdot (8K_\text{I})
 	\end{split}
 \end{equation}
-a koeficient $\beta = 1 + K_D$ u~kubického členu vytkneme z polynomu.
+a koeficient $\beta = 1 + K_\text{D}$ u~kubického členu vytkneme z~polynomu.
 \begin{equation}
-	c(s) = (1 + K_D) \cdot( s^3 + s^2 \cdot \frac{K_P + 8K_D}{1 + K_D} + s \cdot  \frac{2 + K_I + 8K_P}{1 + K_D} + 1 \cdot \frac{8K_I}{1 + K_D})
+	c(s) = (1 + K_\text{D}) \cdot( s^3 + s^2 \cdot \frac{K_\text{P} + 8K_\text{D}}{1 + K_\text{D}} + s \cdot  \frac{2 + K_\text{I} + 8K_\text{P}}{1 + K_\text{D}} + 1 \cdot \frac{8K_\text{I}}{1 + K_\text{D}})
 \end{equation}
 Porovnáme s žádaným polynomem dle rovnice \eqref{eq:goal}. Identita $c(s) = c_{goal}(s)$ musí být splněna po jednotlivých koeficientech.
 Vzniká soustava tří rovnic
 \begin{equation}
 	\begin{split}
-		\frac{K_P + 8K_D}{1 + K_D} &= 2 \\
-		\frac{2 + K_I + 8K_P}{1 + K_D} &= 1.5\\
-		\frac{8K_I}{1 + K_D} &= 0.5.
+		\frac{K_\text{P} + 8K_\text{D}}{1 + K_\text{D}} &= 2 \\
+		\frac{2 + K_\text{I} + 8K_\text{P}}{1 + K_\text{D}} &= 1.5\\
+		\frac{8K_\text{I}}{1 + K_\text{D}} &= 0.5.
 	\end{split}
 \end{equation}
-Po převedení na lineární rovnice
+Po převedení na~lineární rovnice
 \begin{equation}
 	\begin{split}
-		K_P + 8K_D &= 2 + 2K_D \\
-		2 + K_I + 8K_P &= 1.5 + 1.5 K_D\\
-		8K_I &= 0.5 +0.5 K_D,
+		K_\text{P} + 8K_\text{D} &= 2 + 2K_\text{D} \\
+		2 + K_\text{I} + 8K_\text{P} &= 1.5 + 1.5 K_\text{D}\\
+		8K_\text{I} &= 0.5 +0.5 K_\text{D},
 	\end{split}
 \end{equation}
 přeuspořádání
 \begin{equation}
 	\begin{split}
-		6K_D + K_P &= 2 \\
-		- 1.5 K_D + 8K_P  + K_I &= -0.5\\
-		- 0.5K_D + 8K_I &= 0.5,
+		6K_\text{D} + K_\text{P} &= 2 \\
+		- 1.5 K_\text{D} + 8K_\text{P}  + K_\text{I} &= -0.5\\
+		- 0.5K_\text{D} + 8K_\text{I} &= 0.5,
 	\end{split}
 \end{equation}
-převedení na maticový tvar
+převedení na~maticový tvar
 \begin{equation}
 	\begin{bmatrix}
 		6 & 1 & 0 \\
@@ -150,9 +151,9 @@ převedení na maticový tvar
 		-0.5 & 0 &8  
 		
 	\end{bmatrix} \cdot \begin{bmatrix}
-		K_D \\
-		K_P \\
-		K_I
+		K_\text{D} \\
+		K_\text{P} \\
+		K_\text{I}
 	\end{bmatrix} = \begin{bmatrix}
 		2 \\
 		-0.5 \\
@@ -162,9 +163,9 @@ převedení na maticový tvar
 a vyřešení soustavy Matlabem vyjde 
 \begin{equation}
 	\begin{bmatrix}
-		K_D \\
-		K_P \\
-		K_I
+		K_\text{D} \\
+		K_\text{P} \\
+		K_\text{I}
 	\end{bmatrix} = 
 	\begin{bmatrix}
 		0.3350 \\
