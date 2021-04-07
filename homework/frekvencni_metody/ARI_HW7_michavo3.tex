@@ -1,0 +1,159 @@
+\documentclass[twoside]{article}
+\usepackage[a4paper]{geometry}
+\geometry{verbose,tmargin=2.5cm,bmargin=2cm,lmargin=2cm,rmargin=2cm}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+% nastavení pisma a~češtiny
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[czech]{babel}
+
+% odkazy
+\usepackage{url}
+
+\usepackage{float}
+% vícesloupcové tabulky
+\usepackage{multirow}
+\usepackage{amssymb}
+\usepackage{bbold}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{commath}
+
+% vnořené popisky obrázků
+\usepackage{subcaption}
+
+% automatická konverze EPS 
+\usepackage{graphicx} 
+\usepackage{epstopdf}
+\epstopdfsetup{update}
+
+\graphicspath{{./images}}
+
+% odkazy a~záložky
+\usepackage[unicode=true, bookmarks=true,bookmarksnumbered=true,
+bookmarksopen=false, breaklinks=false,pdfborder={0 0 0},
+pdfpagemode=UseNone,backref=false,colorlinks=true] {hyperref}
+
+% Poznámky při překladu
+\usepackage{xkeyval}	% Inline todonotes
+\usepackage[textsize = footnotesize]{todonotes}
+\presetkeys{todonotes}{inline}{}
+
+%https://tex.stackexchange.com/questions/2783/bold-calligraphic-typeface
+\DeclareMathAlphabet\mathbfcal{OMS}{cmsy}{b}{n}
+
+% Zacni sekci slovem ukol
+\renewcommand{\thesection}{Úkol \arabic{section}}
+% enumerate zacina s pismenem
+\renewcommand{\theenumi}{\alph{enumi}}
+
+% smaz aktualni page layout
+\fancyhf{}
+% zahlavi
+\usepackage{titling}
+\fancyhf[HC]{\thetitle}
+\fancyhf[HLE,HRO]{\theauthor}
+\fancyhf[HRE,HLO]{\today}
+ %zapati
+\fancyhf[FLE,FRO]{\thepage}
+
+% údaje o autorovi
+\title{Automatické řízení: DÚ 7 -- FRekvenční metody}
+\author{Vojtěch Michal}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Nastavení zesílení regulátoru na požadovaný překmit}
+Uvažujte soustavu s přenosem otevřené smyčky
+\begin{equation}
+	L(s) = \frac{K}{s(s+50)(s+100)}
+\end{equation}
+a) použijte frekvenční metody k návrhu zesílení tak, aby měl výsledný zpětnovazební systém
+(uzavřená smyčka) překmit na skok reference 20%. \\
+b) Výsledek ověřte simulací. \\
+\textbf{Řešení:}
+Zadaný maximální překmit nám určuje minimální damping ratio
+\begin{equation}
+	\zeta = \frac{-\ln(\text{\%OS}/100)}{\sqrt{\pi^2 + \ln^2(\text{\%OS}/100)}} = 0.45595,
+\end{equation}
+které lze převést na požadovanou fázovou jistotu (\textit{phase margin})
+\begin{equation}
+	\text{PM} = \text{arctg} \frac{ 2 \zeta}{-2\zeta^2 + \sqrt{1 + 4 \zeta^4}} = 0.8403~\text{rad} = 48.148~\deg.
+\end{equation}
+
+Vykresleme Bodeho frekvenční charakteristiku pro open loop přenos $L(s)$, kde zatím neznámé zesílení regulátoru
+nahradíme jedničkou. Charakteristika je na obrázku \ref{fig:bode_unity_gain}.
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{bode_unity_gain.eps}
+	\caption{Bodeho char $L(s)$ pro $K=1$}
+	\label{fig:bode_unity_gain}
+\end{figure}
+
+
+Tento výsledek je očekávatelný. Otevřená smyčka je kompletně bez nul a dva póly má výrazně dál
+vlevo než dominantní pól v počátku. Díky tomu je pro nízké frekvence konstatní fáze -90°,
+dále poklesá až od cca 5 rad/s, protože druhý nejbližší pól je na frekvenci 50 rad/s.
+Je tak očekávatelné, že se na fázový posun -180° dostaneme až na relativně velké frekvenci,
+kdy již bude modul zatlumený. Regulátor proto musí velmi výrazně zvednout zesílení otevřené smyčky,
+aby se uzavřená smyčka chovala podle požadavků.
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{bode_crossover.eps}
+	\caption{Bodeho char. $L(s)$ na nové přechodové frekvenci}
+	\label{fig:bode_crossover}
+\end{figure}
+
+Jak moc je možné zesílit? Potřebujeme phase margin vypočtený výše, takže na \textit{gain crossover frequency} $\omega_c$
+musí být fáze open loop přenosu rovna $\varphi = -180 + \text{PM} = -131.852$. Odečtením z 
+amplitudové char. na obrázku \ref{fig:bode_crossover} zjistíme, že
+nová zlomová frekvence je $\omega_c \approx 25$rad/s a že je tehdy modul 
+přenosu roven $|L(s)| = -103$ dB. Je tedy nezbytné použít zesílení $K = 10^\frac{103}{20} = 141253$.
+
+Bodeho charakteristika pro otevřenou smyčku s tak silným regulátorem je na obrázku \ref{fig:bode_regulator}.
+Po uzavření zpětné vazby získáme přenos $T(s) =\frac{L(s)}{1+L(s)}$, jehož odezva na jednotkový skok je na obrázku \ref{fig:step_response}.
+
+\begin{figure}[htbp]
+    \centering % <-- added
+\begin{subfigure}{0.48\textwidth}
+  \includegraphics[width=\linewidth]{bode_novy.eps}
+  \caption{Bodeho charakteristika po přidání regulátoru}
+  \label{fig:bode_regulator}
+\end{subfigure}\hfil % <-- added
+\begin{subfigure}{0.48\textwidth}
+	\includegraphics[width=\linewidth]{step_response.eps}
+	\caption{Odezva uzavřené smyčky na skok}
+	\label{fig:step_response}
+\end{subfigure}
+\end{figure}
+
+\section{Charakteristiky ustáleného stavu v Bodeho grafu}
+Jsem narozen 18. února, proto volím zadání za (b).
+Na následujícím obrázku jsou frekvenční charakteristiky systému $L(j\omega)$. 
+Pro vaše zadání z grafu určete
+1) Typ systému, tj. řád astatismu
+2) Konstanty ustáleného stavu 2 $K_p$, $K_v$, $K_a$.
+3) Ustálené odchylky na skok, rampu a parabolu referenčního signálu.
+Poznámky: Vždy musí být poznat, jak jste k řešení dospěli. Proto do zadaných charakteristik
+přikreslete čáry, ze kterých to bude zřejmé. \\
+\textbf{Řešení:}
+
+
+\begin{thebibliography}{9}
+
+\bibitem{motivace}
+	Robert H. Bishop, Supplementary lectures to book \emph{Modern control systems, 13th edition} 
+		\url{https://www.youtube.com/watch?v=WaM8_Bllaf0}
+
+\end{thebibliography}
+
+
+
+\end{document}
+
