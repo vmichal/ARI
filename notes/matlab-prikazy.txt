@@ -2,13 +2,18 @@ Control Systems Toolbox
  - (lti) ss, tf, zpk = spojitá přenosová funkce konstruovaná z nul, pólů a zesílení
  - step, impulse, initial,
  - ctrb, obsv - výpočet matice řiditelnosti a pozorovatelnosti
-
+ - place(A, B, [póly]), acker((A, B, [póly]) - umístí póly systému, případně hledá regulátor Ackermannovým vzorcem
 %Vypočtení zesílení a fáze přenosu pro danou frekvenci
 [gain, angle] = bode(transfer_function, frekvence) 
 
 Polynomial Tbx:
 • sdf, (ldf, rdf, mdf), abcd, pol
 • num, den
+mvalue(polynom, matice)- dosazení matice do polynomu
+
+pro polynom a platí
+	a{i} ... i-tý (zero based) koeficient polynomu a
+	a{start:step:end} ... slice koeficientů, například a{2:-1:0} dá [a_2 a_1 a_0]
 
 Symbolic MathTbx:
 • symbolické výpočty
@@ -24,3 +29,4 @@ rlocus(transfer_function) - vykreslí root locus daného přenosu
 rltool(transfer_function) - sysotool k bližší analýze RL
 
 sisotool(transfer_function) - Návrh regulátoru pro daný systém
+margin(transfer_fun) - vypočítá fázovou a amplitudovou jistotu
