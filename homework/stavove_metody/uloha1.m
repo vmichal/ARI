@@ -30,7 +30,15 @@ poles = roots(c)';
 
 %Two different ways of obtaining the regulator elements
 K = acker(A, B, poles)
-K2 = [0 0 1] * inv(ctrb(A, B)) * mvalue(c, A)
+%K2 = [0 0 1] * inv(ctrb(A, B)) * mvalue(c, A)
+
+%New system matrix
+Anew = A - B * K;
+% New transfer function
+Gnew = C * inv(s*eye(3) - Anew) * B;
+
+%,step(Gnew);
+%title('Skoková odezva systému se stavovou zpìtnou vazbou');
 
 
 
