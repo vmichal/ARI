@@ -85,7 +85,7 @@ odpovídajícím bezpříznakovému pacientu dán rovnicemi
 			\dot{T^{*}} \\
 			\dot{\nu}
 		\end{bmatrix} &= \underbrace{\begin{bmatrix}
-			-004167 & 0 & -0.0058 \\
+			-0.04167 & 0 & -0.0058 \\
 			0.0217 & -0.24 & 0.0058 \\
 			0 & 100 & -2.4
 		\end{bmatrix}}_{\mathbf{A}} \underbrace{\begin{bmatrix}
@@ -116,12 +116,13 @@ Navrhněte řízení pomocí stavové zpětné vazby se specifikacemi: $e_{ss,st
 Přitom volte variantu zajišťující nulovou ustálenou odchylku robustně, tedy integrální řízení. \\
 \\
 \textbf{Řešení:}
-V rovnici \eqref{eq:zadani} jsou pojmenovány jednotlivé matice stavového modelu pomocí standardního značení $\mathbf{A}$, $\mathbf{B}$, $\mathbf{C}$,
-dále vektor stavů označíme $\vec{x}$. Nejprve se zaměřím na splnění požadavků na dynamiku systému ztělesněných v maximálním overshootu a době ustálení.
+V rovnici \eqref{eq:zadani} jsou pojmenovány matice stavového modelu pomocí standardního značení $\mathbf{A}$, $\mathbf{B}$, $\mathbf{C}$.
+Vektor stavů $T$, $T^{*}$ a $\nu$, označíme $\vec{x}$.
+Nejprve se zaměřím na splnění požadavků na dynamiku systému zadaných pomocí maximálního overshootu a doby ustálení.
 
-Samotná soustava má přenos
+Samotná soustava je zřejmě třetího řádu a má přenos
 \begin{equation}
-	G(s) = C (sI - A)^{-1} B =  \frac{-520(s+0.0200)}{(s+2.6433)(s+0.0192+0.0658i)(s+0.0192-0.0658i)}.
+	G(s) = \mathbf{C} (sI - \mathbf{A})^{-1} \mathbf{B} =  \frac{-520(s+0.0200)}{(s+2.6433)(s+0.0192+0.0658i)(s+0.0192-0.0658i)}.
 \end{equation}
 
 \subsection{Požadavky na dynamiku}
@@ -131,18 +132,21 @@ dám dostatečně daleko vlevo od dominantní dvojice. Zadaný maximální přek
 \begin{equation}
 	\zeta = \frac{- \text{ln}(OS\%/100)}{\sqrt{\pi^2 + \text{ln}^2(OS\%/100)}} = 0.5912.
 \end{equation}
-Pomocí relativního tlumení a požadovaného času ustálení pod dvě procenta lze vypočíst přirozenou frekvenci
+Předpokládejme, že ustálení má nastat na dvě procenta.
+S pomocí relativního tlumení a požadovaného času ustálení lze vypočíst přirozenou frekvenci
 \begin{equation}
-	\omega_n =  -\frac{\text{ln}(0.02 \cdot \frac{\sqrt{1-\zeta^2}}{\zeta})}{\zeta \cdot T_s} = 0.0609~\text{rad} \cdot \text{den}^{-1} = 7.0506 \cdot 10^{-7} \text{rad} \cdot \text{s}^{-1}.
+	\omega_n =  -\frac{\text{ln}(0.02 \cdot \frac{\sqrt{1-\zeta^2}}{\zeta})}{\zeta \cdot T_s}
+	 = 0.0609~\text{rad} \cdot \text{den}^{-1} = 7.0509 \cdot 10^{-7} \text{rad} \cdot \text{s}^{-1}.
 \end{equation}
 Protože pro dominantní póly platí $Re(p) = \omega_n \zeta$ a $Im(p) = \omega_n \sqrt{1-\zeta^2}$, nalézají se v bodech 
 \begin{equation}
 	p_{1,2} = (-4.1682 \pm 5.6870i) \cdot 10^{-7}.
 \end{equation}
-Jejich vliv proto velmi výrazně (o pět dekád) dominuje nad vlivem nuly v bodě $z = -0.02$ a použití vzorců pro systém řádu 2 nezanáší do návrhu chybu.
+Jejich vliv proto velmi výrazně (o pět dekád) dominuje nad vlivem nuly v bodě $z = -0.02$ a použití vzorců pro 
+systém řádu 2 nezanáší do návrhu podstatnou chybu.
 Nulu $z$ pokrátíme posledním zbylým pólem. Cílem návrhu je dát uzavřené ZV smyčce charakteristický polynom
 \begin{equation}
-	c(s) = (s+4.1682 -5.6870i)(s + 4.1682 +5.6870i) \cdot \left(10^{-7}\right)^2 (s+0.02).
+	c(s) = (s^2 + 2\omega_n \zeta s + \omega_n^2) (s+0.02).
 \end{equation}
 Před hledáním regulátoru jsem ověřil, že $\text{rank}(\mathcal{C}) = \text{rank}(\mathbf{A})$ a systém je tedy úplně řiditelný.
 Pro nalezení regulátoru použiji Ackermannův vzorec
@@ -152,33 +156,94 @@ Pro nalezení regulátoru použiji Ackermannův vzorec
 	\end{bmatrix} \mathcal{C}^{-1}  c(\mathbf{A}) = \begin{bmatrix}
 		-0.0042 & 0.5077 & -0.0122
 	\end{bmatrix},
+	\label{eq:acker}
 \end{equation}
-v němž figuruje inverze matice řiditelnosti $\mathcal{C}$ a dosazení matice systému $\mathbf{A}$ do žádaného char. polynomu $c(s)$.
-Uzavřeném stavové zpětné vazby s regulátorem $K$ vytváří nový systém s maticí $A_{new} = A - BK$.
-Na obrázku \ref{fig:wrong_gain} je výsledek simulace odezvy uzavřené smyčky na jednotkový skok.
+v němž figuruje inverze matice řiditelnosti $\mathcal{C}$ a $c(\mathbf{A})$ je dosazení matice 
+systému do nového žádaného char. polynomu $c(s)$.
+
+Uzavřením stavové zpětné vazby s regulátorem $K$ vzniká nový systém s maticí 
+\begin{equation}
+	\mathbf{A}_{new} = \mathbf{A} - \mathbf{B}K = \begin{bmatrix}
+		-0.02 &   -2.64 &    0.0576 \\
+		3.4694 \cdot 10^{-18}  &   2.4  &  -0.0576   \\
+			 0  & 100  &  -2.4
+	\end{bmatrix}.
+\end{equation}
+Na obrázku \ref{fig:wrong_gain} je výsledek simulace odezvy uzavřené smyčky na jednotkový skok. Již na první pohled je patrné,
+že matice systému je extrémně blízko signulárnosti (prvek $\mathbf{A}_{new_{21}}$ je již na hranici numerických chyb)
+a bude tak potřeba se systémem dále hýbat.
+
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=\linewidth]{skokova_odezva.eps}
 	\caption{Simulace odezvy soustavy po zavedení stavové zpětné vazby}
 	\label{fig:wrong_gain}
 \end{figure}
-Překmit odezvy skutečně nepřesahuje 10\ a ustálení nastane po $100 \times 24 \times 3600 = 8640000$ sekundách.
+Překmit odezvy skutečně nepřesahuje 10\% a ustálení nastane po $100 \times 24 \times 3600 = 8640000$ sekundách.
 Požadavky na dynamiku systému jsou splněny, jenom ta amplituda v řádu $10^{14}$ není v pořádku.
 
 \subsection{Nastavení ustálené odchylky}
 Uzavřená smyčka stavové zpětné vazby není schopna asymptoticky sledovat jednotkový skok. Použití feedforwardu pro nastavení
-statického zesílení není přípustné s ohledem na robustnost, je tak nezbytné použít integrální řízení. Předraďme soustavě integrátor
-a uzavřeme kolem celého seriového zapojení novou jednotkovou zpětnou vazbu. Vzniká systém řádu 4 s rovnicí
+statického zesílení není přípustné s ohledem na robustnost, je tak nezbytné použít integrální řízení.
+Vzniká systém řádu 4 se stavovým modelem
+\begin{equation}
+	\begin{split}
+		\begin{bmatrix}
+			\dot{\vec{x}} \\ \dot{x_I}
+		\end{bmatrix} &= \underbrace{ \begin{bmatrix}
+			\mathbf{A} & 0 \\
+			-\mathbf{C} & 0
+		\end{bmatrix}}_{\mathbf{A}_{big}} \underbrace{ \begin{bmatrix}
+			\vec{x} \\ x_I
+		\end{bmatrix}}_{\vec{x_{big}}} + \underbrace{\begin{bmatrix}
+			\mathbf{B} \\ 0
+		\end{bmatrix}}_{\mathbf{B}_{big}} r \\
+		y &= \underbrace{\begin{bmatrix}
+			\mathbf{C} & 0
+		\end{bmatrix}}_{\mathbf{C}_{new}} \begin{bmatrix}
+			\vec{x} \\ x_I
+		\end{bmatrix}.
+	\end{split}
+\end{equation}
 
+Nasazením Ackermannova vzorce podobně jako v \eqref{eq:acker} pro něj nalezneme regulátor
+\begin{equation}
+	K_{final} = \begin{bmatrix}
+		K & \mid & K_I
+	\end{bmatrix} = \begin{bmatrix}
+		-0.0042 &  -18.7231 &   0.4493 & \mid &  9.5607 \cdot 10^{-14}
+	\end{bmatrix}.
+\end{equation}
 
-\begin{thebibliography}{9}
+Zavedením zpětné vazby kolem regulátoru získáme nový systém s modelem
+\begin{equation}
+	\begin{split}
+		\mathbf{A}_{final} &= \begin{bmatrix}
+			\mathbf{A}-\mathbf{B}K & -\mathbf{B}K_I \\
+			-\mathbf{C} & 0
+		\end{bmatrix} \\
+		\mathbf{B}_{final} &= \begin{bmatrix}
+			\vec{0} \\ 1
+		\end{bmatrix} \\
+\mathbf{C}_{final} &= \begin{bmatrix}
+	\mathbf{C} & 0
+\end{bmatrix},
+	\end{split}
+\end{equation}
+jehož odezva na jednotkový skok je vykreslena na obrázku \ref{fig:good_gain}.
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=\linewidth]{skokova_po_integraci.eps}
+	\caption{Simulace odezvy soustavy po zavedení integrálního řízení}
+	\label{fig:good_gain}
+\end{figure}
 
-\bibitem{motivace}
-	Robert H. Bishop, Supplementary lectures to book \emph{Modern control systems, 13th edition} 
-		\url{https://youtu.be/uLeAot4Zrxo?t=13}
-
-\end{thebibliography}
-
+Simulace potvrzuje dostatečné splnění stanovených požadavků na dynamiku systému a na nulovou ustálenou odchylku
+odezvy na jednotkový skok. Vlivem numerických chyb během výpočtů (aritmetika s čísly o deset a víc řádů od sebe)
+a dále chyby zaokrouhlování je peak overshoot o desetinu procenta vyšší, než povoleno. Tohoto nedostatku se dá
+snadno zbavit například provedením výpočtu pro nižší povolený overshoot. Protože se jedná o lékařskou aplikaci a je v sázce
+lidský život, rovněž by šlo relaxovat požadavek na stodenní ustálení a tím ještě více snížit overshoot použitím pozvolnějšího
+časového průběhu (celkově tak zpomalit systém).
 
 
 \end{document}

@@ -10,7 +10,7 @@ C = [0 0 1];
 
 % System transfer function
 G = C * inv(s*eye(3) - A) * B;
-zeros = roots(G.num); %we will want to cancel these out.
+nuly = roots(G.num); %we will want to cancel these out.
 
 %Požadavky na dynamiku:
 OS = 0.1; % max pøekmit 10%
@@ -25,7 +25,7 @@ sigma = damping * nat_freq;
 damped_freq = nat_freq * sqrt(1-damping^2);
 
 %Desired characteristic polynomial
-c = (s + sigma + i *damped_freq) * (s+sigma - i*damped_freq) * (s- zeros(1));
+c = (s^2 + nat_freq* 2 * s * damping + nat_freq^2) * (s- nuly(1));
 poles = roots(c)';
 
 %Two different ways of obtaining the regulator elements
@@ -34,11 +34,26 @@ K = acker(A, B, poles)
 
 %New system matrix
 Anew = A - B * K;
-% New transfer function
-Gnew = C * inv(s*eye(3) - Anew) * B;
 
-%,step(Gnew);
-%title('Skoková odezva systému se stavovou zpìtnou vazbou');
+%Lets add integral control
 
+% Matrices of the big system 
+Abig = [A, zeros(3,1); -C, 0]
+Bbig = [B;0]
+
+%desired char. polynomial
+c_big = c * (s+100)
+poles_big = roots(c_big)'
+
+Kbig = acker(Abig, Bbig, poles_big)
+
+Afinal = [A-B*Kbig(1:3), -B*Kbig(4); -C , 0]
+Bfinal = [zeros(3,1);1]
+Cfinal = [C , 0]
+
+Gfinal = Cfinal * inv(s*eye(length(Afinal)) - Afinal) * Bfinal
+
+step(Gfinal)
+title('Skoková odezva systému s integrálním øízením')
 
 
