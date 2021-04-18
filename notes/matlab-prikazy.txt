@@ -22,6 +22,8 @@ Symbolic MathTbx:
 who  vytiskne jména proměnných ve workspace
 whos jména proměných včetně typů atd
 
+fit - prokládání dat křivkou
+
 polyval - Dosadí do polynomu
 bode, nyquist - Vykreslení Bodeho či Nyquistovy charakteristiky
 
