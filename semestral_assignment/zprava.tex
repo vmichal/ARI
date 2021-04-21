@@ -18,7 +18,7 @@
 \title{Automatické řízení - semestrální úloha}
 
 \author{\IEEEauthorblockN{Vojtěch Michal}
-vojta.michall@email.cz}
+michavo3@fel.cvut.cz}
 
 \maketitle
 
@@ -96,15 +96,24 @@ Pomocí analýzy geometrie úlohy lze určit Lagrangián a jeho derivováním po
 následně pro soustavu sestavit obecné pohybové rovnice \eqref{eq:pohyb1}, \eqref{eq:pohyb2} a \eqref{eq:pohyb3}.
 
 \begin{equation}
-    \left[(2m + M) R^2 + 2 J_w + 2n^2 J_m\right] \ddot{\theta} + (MLR \text{cos} \psi - 2n^2 J_m) \ddot{\psi} - MLR\dot{\psi}^2 \text{sin} \psi = F_\theta
+    \begin{aligned}
+        &\left[(2m + M) R^2 + 2 J_w + 2n^2 J_m\right] \ddot{\theta} + \\
+        &+ (MLR \text{cos} \psi - 2n^2 J_m) \ddot{\psi} - MLR\dot{\psi}^2 \text{sin} \psi = F_\theta
+    \end{aligned}
     \label{eq:pohyb1}
 \end{equation}
 \begin{equation}
-    (MLR \text{cos} \psi - 2n^2 J_m) \ddot{\theta} + (ML^2 + J_\psi + 2n^2 J_m) \ddot{\psi} - MgL\text{sin}\psi - ML^2\dot{\varPhi}^2 \text{sin} \psi \text{cos} \psi = F_\psi
+    \begin{aligned}
+        & (MLR \text{cos} \psi - 2n^2 J_m) \ddot{\theta} + (ML^2 + J_\psi + 2n^2 J_m) \ddot{\psi} - \\
+        & - MgL\text{sin}\psi - ML^2\dot{\varPhi}^2 \text{sin} \psi \text{cos} \psi = F_\psi
+    \end{aligned}
     \label{eq:pohyb2}
 \end{equation}
 \begin{equation}
-    \left[ \frac{1}{2} mW^2  + J_\varPhi + \frac{W^2}{2R^2}\left( J_w + n^2 J_m \right) + ML^2 \text{sin}^2 \psi \right] \ddot{\varPhi} + 2ML^2 \dot{\psi} \dot{\varPhi} \text{sin}\psi \text{cos} \psi = F_\varPhi
+    \begin{aligned}
+        &\left[ \frac{1}{2} mW^2  + J_\varPhi + \frac{W^2}{2R^2}\left( J_w + n^2 J_m \right) + ML^2 \text{sin}^2 \psi \right] \ddot{\varPhi} + \\
+        &+ 2ML^2 \dot{\psi} \dot{\varPhi} \text{sin}\psi \text{cos} \psi = F_\varPhi
+    \end{aligned}
     \label{eq:pohyb3}
 \end{equation}
 
@@ -144,18 +153,24 @@ Toto zjednodušení má vliv na rovnice \eqref{eq:motor1} a \eqref{eq:motor2}.
 Protože je cílem řízení robota po rovné čáře, je nezbytné udržovat informaci o uražené vzdálenosti $d(t)$.
 Protože platí vztah 
 \begin{equation}
-    d(t) = \int_{-\infty}^t v(t) \text{d}t = \int_ {-\infty}^t \dot{\theta}(t) \cdot R \text{d}t = R \cdot \theta(t),
+    d(t) = \int_{-\infty}^t v(t) \text{d}t = \int_ {-\infty}^t \dot{\theta}(t) R \text{d}t = R \theta(t),
     \label{eq:vzdalenost}
 \end{equation}
 není nezbytné přidávat vzdálenost $d$ jako další stav robota, neboť je lineární funkcí již existujícícho stavu $\theta$.
 
 Nová sada rovnic popisujících systém má tvar
 \begin{equation}
-    \left[(2m + M) R^2 + 2 J_w + 2n^2 J_m\right] \ddot{\theta} + (MLR \text{cos} \psi - 2n^2 J_m) \ddot{\psi} - MLR\dot{\psi}^2 \text{sin} \psi = F_\theta
+    \begin{aligned}
+        &\left[(2m + M) R^2 + 2 J_w + 2n^2 J_m\right] \ddot{\theta} + \\
+        &+ (MLR \text{cos} \psi - 2n^2 J_m) \ddot{\psi} - MLR\dot{\psi}^2 \text{sin} \psi = F_\theta
+    \end{aligned}
     \label{eq:pohyb1_easy}
 \end{equation}
 \begin{equation}
-    (MLR \text{cos} \psi - 2n^2 J_m) \ddot{\theta} + (ML^2 + J_\psi + 2n^2 J_m) \ddot{\psi} - MgL\text{sin}\psi = F_\psi
+    \begin{aligned}
+        & (MLR \text{cos} \psi - 2n^2 J_m) \ddot{\theta} + \\
+        & + (ML^2 + J_\psi + 2n^2 J_m) \ddot{\psi} - MgL\text{sin}\psi = F_\psi
+    \end{aligned}
     \label{eq:pohyb2_easy}
 \end{equation}
 
@@ -218,18 +233,30 @@ druhé derivace veličin $\theta$ a $\psi$. Analytické řešení vede na vztahy
     \end{split}
 \end{equation}
 které lze dále zjednodušit sdružením kostantních parametrů. Označením
-\begin{equation}
-    \begin{split}
-        a_1 &= \frac{2\beta (k_2 + k_3)}{k_1 k_3 - k_2^2} \\
-        a_2 &= -\frac{2 \beta k_2 + c_1 k_3}{k_1 k_3 - k_2^2} \\
-        a_3 &= -\frac{k_2 k_4}{k_1 k_3 - k_2^2} \\
-        a_4 &= \frac{2 \alpha (k_2 + k_3)}{k_1 k_3 - k_2^2} \\
-        a_5 &= -\frac{2 \beta (k_1 + k_2)}{k_1 k_3 - k_2^2} \\
-        a_6 &= \frac{2 \beta k_1 + c_1 k_2}{k_1 k_3 - k_2^2} \\
-        a_7 &= \frac{ k_1 k_4 }{k_1 k_3 - k_2^2} \\
-        a_8 &= -\frac{2 \alpha (k_1 + k_2)}{k_1 k_3 - k_2^2} \\
-    \end{split}
-\end{equation}
+\begin{equation*}
+    a_1 = \frac{2\beta (k_2 + k_3)}{k_1 k_3 - k_2^2} \\
+\end{equation*}
+\begin{equation*}
+    a_2 = -\frac{2 \beta k_2 + c_1 k_3}{k_1 k_3 - k_2^2} \\
+\end{equation*}
+\begin{equation*}
+    a_3 = -\frac{k_2 k_4}{k_1 k_3 - k_2^2} \\
+\end{equation*}
+\begin{equation*}
+    a_4 = \frac{2 \alpha (k_2 + k_3)}{k_1 k_3 - k_2^2} \\
+\end{equation*}
+\begin{equation*}
+    a_5 = -\frac{2 \beta (k_1 + k_2)}{k_1 k_3 - k_2^2} \\
+\end{equation*}
+\begin{equation*}
+    a_6 = \frac{2 \beta k_1 + c_1 k_2}{k_1 k_3 - k_2^2} \\
+\end{equation*}
+\begin{equation*}
+    a_7 = \frac{ k_1 k_4 }{k_1 k_3 - k_2^2} \\
+\end{equation*}
+\begin{equation*}
+    a_8 = -\frac{2 \alpha (k_1 + k_2)}{k_1 k_3 - k_2^2} \\
+\end{equation*}
 se rovnice \eqref{eq:druhe_derivace} zjednoduší na
 \begin{equation}
     \begin{split}
@@ -313,7 +340,7 @@ Tím je modelování systému hotovo.
 \begin{thebibliography}{9}
 
     \bibitem{model_based_design}
-    Yorihisa Yamamoto , Supplementary lectures to book \emph{NXTway-GS Model-Based Design} 
+    Yorihisa Yamamoto, \emph{NXTway-GS Model-Based Design} 
     \end{thebibliography}
 
 \end{document}
