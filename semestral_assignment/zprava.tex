@@ -38,13 +38,13 @@ Segway je dvoukolové vozítko. Protože je těžiště umístěno nad osou otá
 ekvilibriu aktivně udržovat pomocí řízení. Cílem úlohy je analyzovat model segwaye a navrhnout pro něj řízení. 
 
 \begin{figure}[htbp]
-    \centerline{\includegraphics[width=\linewidth]{segway_shora.png}}
+    \centerline{\includegraphics[width=0.9\linewidth]{segway_shora.png}}
     \caption{Nákres segwaye shora, zapůjčeno z \cite{model_based_design}}
     \label{fig:segway_shora}        
 \end{figure}
 
 \begin{figure}[htbp]
-    \centerline{\includegraphics[width=\linewidth]{segway_bok.png}}
+    \centerline{\includegraphics[width=0.9\linewidth]{segway_bok.png}}
     \caption{Nákres segwaye z boku, zapůjčeno z \cite{model_based_design}}
     \label{fig:segway_bok}        
 \end{figure}
@@ -336,7 +336,41 @@ Pomocí hodnot konstant uvedených v tabulce \ref{tab:konstanty} je možné vyč
     \end{equation}
 Tím je nalezena lineární náhrada obecně nelineárního systému v okolí pracovního bodu a modelování systému je hotovo.
 
+\section{Identifikace systému}
 
+\subsection{Statické nelinearity}
+Vozítko segway disponuje dvěma stejnosměrnými motory, které jsou řízeny pulsní šířkovou
+modulací z baterie o nominálním napětí 8 \si{V}. Tento fakt vnáší první statickou nelinearitu:
+hodnota akčního zásahu je saturována na interval $u \in [-8, 8]$ \si{V}.
+
+Dále lze na motorech identifikovat pásmo necitlivosti při aplikaci napětí blízkého nule. Při velmi nízké hodnotě
+akčního zásahu není schopen kroutivý moment motorů překonat statické tření v motoru.
+Šířku pásma necitlivosti lze určit připojením napěťové rampy a sledováním závislosti úhlové rychlosti kol na napětí.
+Opakováním pro rampu s kladnou a zápornou derivací lze určit šířku pásma necitlivosti na obě strany od nuly.
+
+\begin{figure}[htbp]
+    \centerline{\includegraphics[width=\linewidth]{deadzone_motory_vpred.eps}}
+    \caption{Měření reakce soustavy na malé kladné hodnoty akčního zásahu}
+    \label{fig:deadzone_vpred}        
+\end{figure}
+\begin{figure}[htbp]
+    \centerline{\includegraphics[width=\linewidth]{deadzone_motory_vzad.eps}}
+    \caption{Měření reakce soustavy na malé záporné hodnoty akčního zásahu}
+    \label{fig:deadzone_vzad}        
+\end{figure}
+
+Odezva na rostoucí rampu napětí je vykreslena v grafu \ref{fig:deadzone_vpred}. Odečtením lze určit,
+že pásmo necitlivosti je široké 0.3 \si{V} ve směru kladných napětí odpovídajících jízdě robota dopředu. 
+Jízdě dozadu odpovídá deadzone vykreslený na grafu \ref{eq:deadzone_vzad}, ze kterého
+lze odečíst šířka pásma necitlivosti přibližně 0.22 \si{V}. Motory jsou tedy necitlivé
+na akční zásah
+\begin{equation}
+    u_{deadzone} \in [-0.22, 0.3] ~\si{V}.
+\end{equation}
+
+\section{Návrh řízení}
+
+\section{Závěr}
 
 \begin{thebibliography}{9}
 
