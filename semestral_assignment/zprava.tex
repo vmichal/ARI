@@ -6,6 +6,7 @@
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
+\usepackage{siunitx}
 
 \graphicspath{{./images}}
 
@@ -50,13 +51,13 @@ ekvilibriu aktivně udržovat pomocí řízení. Cílem úlohy je analyzovat mod
 
 \section{Matematický model}
 Na obrázcích \ref{fig:segway_bok} a \ref{fig:segway_shora} je zaveden souřadný systém a vyznačen význam dalších veličin
-nezbytných pro matematický popis segwaye. Celý matematický model je založen na \cite{model_based_design}.
-Uvažujeme tři zobecnělé souřadnice
+nezbytných pro matematický popis segwaye. Odvození matematického modelu je založeno na \cite{model_based_design}.
+Uvažujeme tři zobecněné souřadnice
 \begin{equation*}
     \begin{split}
-        \frac{\theta_l + \theta_r}{2} = \theta &\cdots \text{Průměrný úhel levého a pravého kola} \\
-        \psi &\cdots \text{Náklon segwaye (osa otáčení v ose koleček)} \\
-        \varPhi &\cdots \text{Azimut segwaye (osa otáčení ve svislém směru).}
+        \frac{\theta_l + \theta_r}{2} = \theta~ [\si{rad}] &\cdots \text{Průměrný úhel levého a pravého kola} \\
+        \psi ~[\si{rad}] &\cdots \text{Náklon segwaye (osa otáčení v ose koleček)} \\
+        \varPhi~[\si{rad}] &\cdots \text{Azimut segwaye (osa otáčení ve svislém směru).}
     \end{split}
 \end{equation*}
 
@@ -67,21 +68,21 @@ Tabulka \ref{tab:konstanty} shrnuje všechny konstantní parametry použité př
     \begin{tabular}[t]{|c|c|c|}
         \hline
         symbol & valikost & veličina \\\hline
-        $ g $ & 9.81 m/s & Gravitační zrychlení \\\hline
-        $ m $ & 0.03 kg & Hmotnost kolečka \\\hline
-        $ R $ & 0.04 m & Poloměr kolečka \\\hline
-        $ J_w $ & $\frac{mR^2}{2}$ kg . m 2 & Moment setrvačnosti kolečka \\\hline
-        $ M $ & 0.6 kg & Hmotnost segwaye \\\hline
-        $ W $ & 0.14 m & Šířka segwaye (délka ve směru osy rotace kol) \\\hline
-        $ D $ & 0.04 m & Tloušťka segwaye (délka ve směru pohybu) \\\hline
-        $ H $ & 0.144m & Výška  segwaye \\\hline
-        $ L $ & $\frac{H}{2}$ m & Vzdálenost těžiště segwaye od osy kol \\\hline
-        $ J_\psi $ & $\frac{ML^2}{3}$ kg . m 2 & Moment setrvačnosti náklonu segwaye\\\hline
-        $ J_\varPhi $ & $\frac{M(W^2 + D^2)}{12}$ kg . m 2 & Moment setrvačnosti rotace segwaye \\\hline
-        $ J_m $ & $10^{-5}$ kg . m 2 & Moment setrvačnosti motoru \\\hline
+        $ g $ & 9.81 \si{m/s} & Gravitační zrychlení \\\hline
+        $ m $ & 0.03 \si{kg} & Hmotnost kolečka \\\hline
+        $ R $ & 0.04 \si{m }& Poloměr kolečka \\\hline
+        $ J_w $ & $\frac{mR^2}{2}$ \si{kg . m^2} & Moment setrvačnosti kolečka \\\hline
+        $ M $ & 0.6   \si{kg} & Hmotnost segwaye \\\hline
+        $ W $ & 0.14  \si{ m} & Šířka segwaye (délka ve směru osy rotace kol) \\\hline
+        $ D $ & 0.04  \si{ m} & Tloušťka segwaye (délka ve směru pohybu) \\\hline
+        $ H $ & 0.144 \si{m }& Výška  segwaye \\\hline
+        $ L $ & $\frac{H}{2}$ \si{m} & Vzdálenost těžiště segwaye od osy kol \\\hline
+        $ J_\psi $ & $\frac{ML^2}{3}$ \si{kg . m^2} & Moment setrvačnosti náklonu segwaye\\\hline
+        $ J_\varPhi $ & $\frac{M(W^2 + D^2)}{12}$ \si{kg . m^2} & Moment setrvačnosti rotace segwaye \\\hline
+        $ J_m $ & $10^{-5}$ \si{kg . m^2} & Moment setrvačnosti motoru \\\hline
         $ R_m $ & 6.69 $\Omega$ & Odpor motoru \\\hline
-        $ K_b $ & 0.468 V.s/rad & EMF kontanta motoru \\\hline
-        $ K_t $ & 0.317 Nm/A & Konstanta kroutivého momentu motoru \\\hline
+        $ K_b $ & 0.468 \si{V.s/rad} & EMF kontanta motoru \\\hline
+        $ K_t $ & 0.317 \si{Nm/A} & Konstanta kroutivého momentu motoru \\\hline
         $ n $ & 1 [-] & Převodní poměr převodovky \\\hline
         $ f_m $ & 0.0022 [-] & Koeficient tření mezi motorem a segwayem \\\hline
         $ f_w $ & 0 [-] & Koeficient tření mezi kolem a podložkou \\\hline
@@ -98,26 +99,26 @@ následně pro soustavu sestavit obecné pohybové rovnice \eqref{eq:pohyb1}, \e
 \begin{equation}
     \begin{aligned}
         &\left[(2m + M) R^2 + 2 J_w + 2n^2 J_m\right] \ddot{\theta} + \\
-        &+ (MLR \text{cos} \psi - 2n^2 J_m) \ddot{\psi} - MLR\dot{\psi}^2 \text{sin} \psi = F_\theta
+        &+ (MLR \text{cos} \psi - 2n^2 J_m) \ddot{\psi} - MLR\dot{\psi}^2 \text{sin} \psi = F_\theta,
     \end{aligned}
     \label{eq:pohyb1}
 \end{equation}
 \begin{equation}
     \begin{aligned}
         & (MLR \text{cos} \psi - 2n^2 J_m) \ddot{\theta} + (ML^2 + J_\psi + 2n^2 J_m) \ddot{\psi} - \\
-        & - MgL\text{sin}\psi - ML^2\dot{\varPhi}^2 \text{sin} \psi \text{cos} \psi = F_\psi
+        & - MgL\text{sin}\psi - ML^2\dot{\varPhi}^2 \text{sin} \psi \text{cos} \psi = F_\psi,
     \end{aligned}
     \label{eq:pohyb2}
 \end{equation}
 \begin{equation}
     \begin{aligned}
         &\left[ \frac{1}{2} mW^2  + J_\varPhi + \frac{W^2}{2R^2}\left( J_w + n^2 J_m \right) + ML^2 \text{sin}^2 \psi \right] \ddot{\varPhi} + \\
-        &+ 2ML^2 \dot{\psi} \dot{\varPhi} \text{sin}\psi \text{cos} \psi = F_\varPhi
+        &+ 2ML^2 \dot{\psi} \dot{\varPhi} \text{sin}\psi \text{cos} \psi = F_\varPhi.
     \end{aligned}
     \label{eq:pohyb3}
 \end{equation}
 
-Zobecnělé síly na pravé straně rovnic lze vyjádřit jako
+Zobecněné síly na pravé straně rovnic lze vyjádřit jako
 \begin{equation}
     F_\theta = \alpha(v_l + v_r) - 2(\beta + f_w) \dot{\theta} + 2\beta\dot{\psi}
     \label{eq:motor1}
@@ -142,7 +143,7 @@ kde symboly $\alpha$ a $\beta$ jsou substitucemi za následující výrazy
 \subsection{Základní úpravy modelu}
 S ohledem na charakter úlohy popsané v sekci \ref{sec:uvod} si lze dovolit dvě základní zjednodušení. Protože segway
 má pouze balancovat nebo jezdit po rovné čáře, bude jeho azimut $\varPhi$ vždy konstantní. 
-Bez újmy na obecnosti lez postavit dokonce $\varPhi = 0$ (odtud i $\dot{\varPhi} = \ddot{\varPhi} = 0$),
+Bez újmy na obecnosti lze postavit dokonce $\varPhi = 0$ (odtud i $\dot{\varPhi} = \ddot{\varPhi} = 0$),
 čímž se z modelu úplně eliminuje rovnice \eqref{eq:pohyb3}
 a rovnice \eqref{eq:pohyb2} se zjednoduší vynulováním jednoho sčítance. Zároveň již není potřeba pracovat se silou $F_\varPhi$
 a rovnice \eqref{eq:motor3} tak též může být odstraněna.
@@ -191,7 +192,7 @@ Platí pro něj $\psi_p = 0$. Na konkrétní úhel natočení koleček $\theta_p
 protože úloha je translačně invariantní a fyzika segwaye nezávisí na tom, jakou vzdálenost již urazil.
 Bez újmy na obecnosti lze zvolit $\theta_p = 0$, protože se tento stav stejně v žádné rovnici přímo nevyskytuje.
 
-V okolí pracovního bodu lze provést aproximaci $\text{cos}(\psi) \to 1$, $\text{sin}(\psi) \to \psi$. Rovněž výraz $\dot{\psi}^2$ se bude limitně blížit nule,
+V okolí pracovního bodu lze provést aproximaci $\text{cos}(\psi) \approx 1$, $\text{sin}(\psi) \approx \psi$. Rovněž výraz $\dot{\psi}^2$ se bude limitně blížit nule,
 protože pro stabilní systém není žádoucí velká úhlová rychlost. Rovnice \eqref{eq:pohyb1_easy} a \eqref{eq:pohyb2_easy} se zjednoduší na
 \begin{equation}
     \left[(2m + M) R^2 + 2 J_w + 2n^2 J_m\right] \ddot{\theta} + (MLR - 2n^2 J_m) \ddot{\psi} = F_\theta
@@ -234,33 +235,33 @@ druhé derivace veličin $\theta$ a $\psi$. Analytické řešení vede na vztahy
 \end{equation}
 které lze dále zjednodušit sdružením kostantních parametrů. Označením
 \begin{equation*}
-    a_1 = \frac{2\beta (k_2 + k_3)}{k_1 k_3 - k_2^2} \\
+    a_1 = \frac{2\beta (k_2 + k_3)}{k_1 k_3 - k_2^2}, \\
 \end{equation*}
 \begin{equation*}
-    a_2 = -\frac{2 \beta k_2 + c_1 k_3}{k_1 k_3 - k_2^2} \\
+    a_2 = -\frac{2 \beta k_2 + c_1 k_3}{k_1 k_3 - k_2^2}, \\
 \end{equation*}
 \begin{equation*}
-    a_3 = -\frac{k_2 k_4}{k_1 k_3 - k_2^2} \\
+    a_3 = -\frac{k_2 k_4}{k_1 k_3 - k_2^2}, \\
 \end{equation*}
 \begin{equation*}
-    a_4 = \frac{2 \alpha (k_2 + k_3)}{k_1 k_3 - k_2^2} \\
+    a_4 = \frac{2 \alpha (k_2 + k_3)}{k_1 k_3 - k_2^2}, \\
 \end{equation*}
 \begin{equation*}
-    a_5 = -\frac{2 \beta (k_1 + k_2)}{k_1 k_3 - k_2^2} \\
+    a_5 = -\frac{2 \beta (k_1 + k_2)}{k_1 k_3 - k_2^2}, \\
 \end{equation*}
 \begin{equation*}
-    a_6 = \frac{2 \beta k_1 + c_1 k_2}{k_1 k_3 - k_2^2} \\
+    a_6 = \frac{2 \beta k_1 + c_1 k_2}{k_1 k_3 - k_2^2}, \\
 \end{equation*}
 \begin{equation*}
-    a_7 = \frac{ k_1 k_4 }{k_1 k_3 - k_2^2} \\
+    a_7 = \frac{ k_1 k_4 }{k_1 k_3 - k_2^2}, \\
 \end{equation*}
 \begin{equation*}
-    a_8 = -\frac{2 \alpha (k_1 + k_2)}{k_1 k_3 - k_2^2} \\
+    a_8 = -\frac{2 \alpha (k_1 + k_2)}{k_1 k_3 - k_2^2}, \\
 \end{equation*}
 se rovnice \eqref{eq:druhe_derivace} zjednoduší na
 \begin{equation}
     \begin{split}
-        \ddot{\theta} & = a_1 \dot{\psi} + a_2  \dot{\theta} + a_3  \psi + a_4  v \\
+        \ddot{\theta} & = a_1 \dot{\psi} + a_2  \dot{\theta} + a_3  \psi + a_4  v, \\
         \ddot{\psi} &= a_5  \dot{\psi} + a_6  \dot {\theta} + a_7  \psi + a_8  v.
         \label{eq:druhe_derivace_easy}
     \end{split}
@@ -294,7 +295,7 @@ Spolu s triviálními rovnicemi pro stavy $x_1$ a $x_2$ vzniká kompletní syst�
 \end{equation}
 jejž lze převést do maticové podoby
 \begin{equation}
-    \dot{\vec{x}} = \mathbf{A} \vec{x} + \mathbf{B} u, \\
+    \dot{\vec{x}} = \mathbf{A} \Delta \vec{x} + \mathbf{B} \Delta u, \\
 \end{equation}
 kde matice systému a matice vstupní mají tvar
 \begin{equation}
@@ -311,14 +312,13 @@ kde matice systému a matice vstupní mají tvar
 \subsection{Vyčíslení v pracovním bodě}
 
 Pracovní bod zvolený již v sekci \ref{sec:linearizace} odpovídá nestabilnímu ekvilibriu ve svislé pozici segwaye.
-K tomuto rovnovážnému bodu přísluší stavový vektor
+Ve stavovém prostoru přísluší tomuto rovnovážnému bodu vektor 
 \begin{equation}
-    \vec{x_p} = \begin{bmatrix}
-        \theta_p \\
-        \psi_p \\
-        \dot{\theta}_p \\
-        \dot{\psi}_p
-    \end{bmatrix} = \vec{o}.
+    P = \begin{bmatrix}
+        \theta_p &    \psi_p &     \dot{\theta}_p &     \dot{\psi}_p & u_p
+    \end{bmatrix} = \begin{bmatrix}
+        0 & 0 & 0 & 0 & 0
+    \end{bmatrix}.
 \end{equation}
 Pomocí hodnot konstant uvedených v tabulce \ref{tab:konstanty} je možné vyčíslit prvky matic $\mathbf{A}$ a $\mathbf{B}$ stavového modelu. Platí
 \begin{equation}
@@ -334,7 +334,8 @@ Pomocí hodnot konstant uvedených v tabulce \ref{tab:konstanty} je možné vyč
             0 \\ 0 \\ 315.1597 \\ -151.9152
         \end{bmatrix}.
     \end{equation}
-Tím je modelování systému hotovo.
+Tím je nalezena lineární náhrada obecně nelineárního systému v okolí pracovního bodu a modelování systému je hotovo.
+
 
 
 \begin{thebibliography}{9}
