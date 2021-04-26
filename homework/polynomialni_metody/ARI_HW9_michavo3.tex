@@ -1,0 +1,190 @@
+\documentclass[twoside]{article}
+\usepackage[a4paper]{geometry}
+\geometry{verbose,tmargin=2.5cm,bmargin=2cm,lmargin=2cm,rmargin=2cm}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+% nastavení pisma a~češtiny
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[czech]{babel}
+
+% odkazy
+\usepackage{url}
+
+\usepackage{float}
+% vícesloupcové tabulky
+\usepackage{multirow}
+\usepackage{amssymb}
+\usepackage{gensymb}
+\usepackage{bbold}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{commath}
+
+% vnořené popisky obrázků
+\usepackage{subcaption}
+
+% automatická konverze EPS 
+\usepackage{graphicx} 
+\usepackage{epstopdf}
+\epstopdfsetup{update}
+
+\graphicspath{{./images}}
+
+% odkazy a~záložky
+\usepackage[unicode=true, bookmarks=true,bookmarksnumbered=true,
+bookmarksopen=false, breaklinks=false,pdfborder={0 0 0},
+pdfpagemode=UseNone,backref=false,colorlinks=true] {hyperref}
+
+% Poznámky při překladu
+\usepackage{xkeyval}	% Inline todonotes
+\usepackage[textsize = footnotesize]{todonotes}
+\presetkeys{todonotes}{inline}{}
+
+%https://tex.stackexchange.com/questions/2783/bold-calligraphic-typeface
+\DeclareMathAlphabet\mathbfcal{OMS}{cmsy}{b}{n}
+
+% Zacni sekci slovem ukol
+\renewcommand{\thesection}{Úkol \arabic{section}}
+% enumerate zacina s pismenem
+\renewcommand{\theenumi}{\alph{enumi}}
+
+% smaz aktualni page layout
+\fancyhf{}
+% zahlavi
+\usepackage{titling}
+\fancyhf[HC]{\thetitle}
+\fancyhf[HLE,HRO]{\theauthor}
+\fancyhf[HRE,HLO]{\today}
+ %zapati
+\fancyhf[FLE,FRO]{\thepage}
+
+% údaje o autorovi
+\title{Automatické řízení: DÚ 9 -- Polynomiální metody}
+\author{Vojtěch Michal}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+Jsem narozen 18. února 2000. Proto volím $d = 1$, $r = 2$, $m = 2$.
+
+\section{Diofantická rovnice}
+
+Řešte polynomiální rovnici
+\begin{equation}
+	\label{eq:zadani}
+	\underbrace{(2 + 3s + s^2)}_{=a(s)}x(s) + \underbrace{(1 + s)}_{=b(s)}y(s) = \underbrace{5 + 8s + 4s^2 + s^3}_{=c(s)}
+\end{equation}
+\begin{itemize}
+	\item Rovnici řešte pomocí Sylvestrovy matice a elementárními operacemi. Najděte obecné řešení.
+	\item Najděte řešení minimálního stupně v x.
+	\item Najděte řešení minimálního stupně v y.
+	\item Nakonec řešte přímo funkcí \textit{axbyc} Polynomial Toolboxu, a to pro všechny typy řešení
+	minimálních stupňů.
+\end{itemize}
+
+\textbf{Řešení:}
+Jsou dány polynomy
+\begin{equation}
+	\begin{align}
+		a(s) &= s^2 + 3s + 2 = (s+1)(s+2), \\
+		b(s) &= s + 1, \\
+		c(s) &= s^3 + 4s^2 + 8s + 5 = (s+1)(s^2 + 3s + 5).
+	\end{align}
+\end{equation} \\
+Bude se mi hodit znát hodnotu
+\begin{equation}
+	g(s) = \text{gcd}(a(s), b(s)) = s + 1
+\end{equation}
+a od něj odvozených
+\begin{equation}
+	\begin{align}
+		\bar{a}(s) &= \frac{a(s)}{g(s)} = s + 2 \\
+		\bar{b}(s) &= \frac{b(s)}{g(s)} = 1 \\
+	\end{align}
+\end{equation}
+
+\subsection{Řešitelnost}
+Diofantická rovnice v polynomech bude mít řešení právě tehdy, když $\text{gcd}(a(s), b(s))$ dělí beze zbytku $c(s)$. Protože polynom $c(s)$ má kořen -1,
+je beze zbytku dělitelný polynomem $g(s)$ a řešení Diofantické rovnice tedy má smysl hledat.
+
+\subsection{Sylvestrova matice}
+Pro řešení polynomiální Diofantické rovnice
+\begin{equation}
+	a(s)x(s) + b(s)y(s) = c(s)
+\end{equation}
+je potřeba odhadnout stupeň polynomů $x(s)$, $y(s)$ a následně sestavit Sylvestrovu matici $\mathbf{S}$.
+
+Protože $\text{deg }c(s)$ = 3 a min(deg $a(s)$, deg $b(s)$) = 1, odhaduji  $x(s) = x_2 s^2 + x_1 s + x_0$,  $y(s) = y_2 s^2 + y_1 s + y_0$.
+Odtud se problém řešení Diofantické rovnice převádí na řešení rovnice
+\begin{equation}
+	\begin{bmatrix}
+		x_0 & y_0 & x_1 & y_1 & x_2 & y_2
+	\end{bmatrix}
+	\underbrace{\begin{bmatrix}
+		2  &   3  &   1  &   0   &  0 \\
+		1  &   1  &   0  &   0   &  0 \\
+		0  &   2  &   3  &   1   &  0 \\
+		0  &   1  &   1  &   0   &  0 \\
+		0  &   0  &   2  &   3   &  1 \\
+		0   &  0   &  1   &  1    & 0
+	\end{bmatrix}}_{=S} = \begin{bmatrix}
+		5 & 8 & 4 &1 & 0
+	\end{bmatrix}.
+\end{equation}
+
+Z posledního sloupce matice je patrné, že $x_2 = 0$. Rozepsání zbytku soustavy na jednotlivé rovnice
+pro dílčí koeficienty polynomů $x(s)$, $y(s)$ dává rovnice
+\begin{equation}
+	\begin{align}
+		2x_0 + y_0 &= 5 \\
+		3x_0 + y_0 + 2x_1 + y_1 &= 8 \\
+		x_0 + 3x_1 + y_1 + y_2 &= 4 \\
+		x_1 + y_2 &= 1 \\
+	\end{align}
+\end{equation}
+
+\subsection{Řešení minimální v x}
+\textit{Řešení minimální v x} je takové, pro které platí deg $x(s)$ < deg $\bar{b}(s)$. Protože je ale $\bar{b}(s)$
+polynom stupně nula (je to nenulová konstanta), plyne rovnou $x(s) = 0$, protože neexistuje jiný polynom se stupněm nižším než nula.
+
+\subsection{Řešení minimální v y}
+\textit{Řešení minimální v x} je takové, pro které platí deg $y(s)$ < deg $\bar{a}(s)$. Platí deg $\bar{a}(s) = 1$,
+proto hledám polynom $y(s)$ jako nenulovou konstantu. Zadaná rovnice $ax + by = c$ má obecné řešení
+\begin{equation}
+	\begin{align}
+		x &= x_p - \bar{b} \cdot t, \\
+		y &= y_p + \bar{a} \cdot t,
+	\end{align}
+\end{equation}
+kde $t(s)$ je libovolný polynomiální parametr.
+
+\subsection{Řešení funkcí \textit{axbyc}}
+Volání Matlabovské funkce \textit{axbyc} s polynomy $a(s)$, $b(s)$, $c(s)$ vrací následující výsledky:
+\begin{itemize}
+	\item Pro \textit{axbyc}(a, b, c,\textbf{'minx'}) jsou nalezené polynomy $x(s) = 0$, $y(s) = s^2 + 3s + 5$.
+	\item Pro \textit{axbyc}(a, b, c,\textbf{'miny'}) jsou nalezené polynomy $x(s) = s+1$, $y(s) = 3$.
+\end{itemize}
+
+\section{Asymptotické sledování}
+Pro soustavu s přenosem
+\begin{equation}
+	\label{eq:prenos}
+	G(s) = \frac{b(s)}{a(s)} = \frac{s+2}{s(s-1)}
+\end{equation}
+
+\begin{itemize}
+	\item  Navrhněte polynomiálními metodami regulátor se dvěma stupni volnosti, který zajistí asymptotické
+	sledování ramp. Póly výsledného systému umístěte do poloh $s_{1,2} = -2 \pm j$. Bude-li potřeba 3. pól, vykraťte
+	jím nulu soustavy.
+ 	\item Vypočtěte přenos výsledného systému z reference na výstup soustavy. Překontrolujte, zda odpovídá
+	požadavkům.
+	\item Vykreslete odezvu výsledného systému na skok reference a na rampu reference
+\end{itemize}
+
+\end{document}
+
