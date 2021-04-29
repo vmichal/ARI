@@ -120,22 +120,22 @@ následně pro soustavu sestavit obecné pohybové rovnice \eqref{eq:pohyb1}, \e
 
 Zobecněné síly na pravé straně rovnic lze vyjádřit jako
 \begin{equation}
-    F_\theta = \alpha(v_l + v_r) - 2(\beta + f_w) \dot{\theta} + 2\beta\dot{\psi}
+    F_\theta = \alpha(v_l + v_r) - 2(\beta + f_w) \dot{\theta} + 2\beta\dot{\psi},
     \label{eq:motor1}
 \end{equation}
 \begin{equation}
-    F_\psi = -\alpha(v_l + v_r) + 2\beta \dot{\theta} - 2\beta \dot{\psi}
+    F_\psi = -\alpha(v_l + v_r) + 2\beta \dot{\theta} - 2\beta \dot{\psi},
     \label{eq:motor2}
 \end{equation}
 \begin{equation}
-    F_\varPhi = \frac{W}{2R} \alpha (v_l - v_r) - \frac{W^2}{2R^2}(\beta + f_w) \dot{\varPhi}
+    F_\varPhi = \frac{W}{2R} \alpha (v_l - v_r) - \frac{W^2}{2R^2}(\beta + f_w) \dot{\varPhi},
     \label{eq:motor3}
 \end{equation}
-kde symboly $\alpha$ a $\beta$ jsou substitucemi za následující výrazy
+kde symboly $\alpha$ a $\beta$ jsou substitucemi za výrazy
 \begin{equation}
     \begin{split}
-        \alpha &= \frac{n \cdot K_t} {R_m}  \\
-        \beta &= \frac{n \cdot K_t \cdot K_b} {R_m} + f_m 
+        \alpha &= \frac{n \cdot K_t} {R_m},  \\
+        \beta &= \frac{n \cdot K_t \cdot K_b} {R_m} + f_m .
     \end{split}
     \label{eq:motor_substituce}
 \end{equation}
@@ -163,24 +163,24 @@ Nová sada rovnic popisujících systém má tvar
 \begin{equation}
     \begin{aligned}
         &\left[(2m + M) R^2 + 2 J_w + 2n^2 J_m\right] \ddot{\theta} + \\
-        &+ (MLR \text{cos} \psi - 2n^2 J_m) \ddot{\psi} - MLR\dot{\psi}^2 \text{sin} \psi = F_\theta
+        &+ (MLR \text{cos} \psi - 2n^2 J_m) \ddot{\psi} - MLR\dot{\psi}^2 \text{sin} \psi = F_\theta,
     \end{aligned}
     \label{eq:pohyb1_easy}
 \end{equation}
 \begin{equation}
     \begin{aligned}
         & (MLR \text{cos} \psi - 2n^2 J_m) \ddot{\theta} + \\
-        & + (ML^2 + J_\psi + 2n^2 J_m) \ddot{\psi} - MgL\text{sin}\psi = F_\psi
+        & + (ML^2 + J_\psi + 2n^2 J_m) \ddot{\psi} - MgL\text{sin}\psi = F_\psi,
     \end{aligned}
     \label{eq:pohyb2_easy}
 \end{equation}
 
 \begin{equation}
-    F_\theta = 2v \alpha - 2(\beta + f_w) \dot{\theta} + 2\beta\dot{\psi}
+    F_\theta = 2v \alpha - 2(\beta + f_w) \dot{\theta} + 2\beta\dot{\psi},
     \label{eq:motor1_easy}
 \end{equation}
 \begin{equation}
-    F_\psi = - 2v \alpha + 2\beta \dot{\theta} - 2\beta \dot{\psi}
+    F_\psi = - 2v \alpha + 2\beta \dot{\theta} - 2\beta \dot{\psi},
     \label{eq:motor2_easy}
 \end{equation}
 
@@ -195,11 +195,11 @@ Bez újmy na obecnosti lze zvolit $\theta_p = 0$, protože se tento stav stejně
 V okolí pracovního bodu lze provést aproximaci $\text{cos}(\psi) \approx 1$, $\text{sin}(\psi) \approx \psi$. Rovněž výraz $\dot{\psi}^2$ se bude limitně blížit nule,
 protože pro stabilní systém není žádoucí velká úhlová rychlost. Rovnice \eqref{eq:pohyb1_easy} a \eqref{eq:pohyb2_easy} se zjednoduší na
 \begin{equation}
-    \left[(2m + M) R^2 + 2 J_w + 2n^2 J_m\right] \ddot{\theta} + (MLR - 2n^2 J_m) \ddot{\psi} = F_\theta
+    \left[(2m + M) R^2 + 2 J_w + 2n^2 J_m\right] \ddot{\theta} + (MLR - 2n^2 J_m) \ddot{\psi} = F_\theta,
     \label{eq:pohyb1_lin}
 \end{equation}
 \begin{equation}
-    (MLR - 2n^2 J_m) \ddot{\theta} + (ML^2 + J_\psi + 2n^2 J_m) \ddot{\psi} - MgL \psi = F_\psi
+    (MLR - 2n^2 J_m) \ddot{\theta} + (ML^2 + J_\psi + 2n^2 J_m) \ddot{\psi} - MgL \psi = F_\psi.
     \label{eq:pohyb2_lin}
 \end{equation}
 
@@ -211,12 +211,12 @@ je možné sdružit konstantní koeficienty do nových
         k_2 &= MLR - 2n^2 J_m \\
         k_3 &= ML^2 + J_\psi + 2n^2 J_m \\
         k_4 &= MgL \\
-        c_1 &= 2(\beta + f_w),
+        c_1 &= 2(\beta + f_w).
     \end{split}
 \end{equation}
-s tímto označením mají linearizované rovnice tvar
+S tímto označením mají linearizované rovnice tvar
 \begin{equation}
-    k_1 \ddot{\theta} + k_2 \ddot{\psi} = 2v \alpha - c_1 \dot{\theta} + 2\beta\dot{\psi}
+    k_1 \ddot{\theta} + k_2 \ddot{\psi} = 2v \alpha - c_1 \dot{\theta} + 2\beta\dot{\psi},
     \label{eq:pohyb1_lin_simple}
 \end{equation}
 \begin{equation}
@@ -233,7 +233,7 @@ druhé derivace veličin $\theta$ a $\psi$. Analytické řešení vede na vztahy
         \label{eq:druhe_derivace}
     \end{split}
 \end{equation}
-které lze dále zjednodušit sdružením kostantních parametrů. Označením
+které lze dále zjednodušit sdružením kostantních parametrů. Zavedením označení
 \begin{equation*}
     a_1 = \frac{2\beta (k_2 + k_3)}{k_1 k_3 - k_2^2}, \\
 \end{equation*}
@@ -361,7 +361,7 @@ Opakováním pro rampu s kladnou a zápornou derivací lze určit šířku pásm
 
 Odezva na rostoucí rampu napětí je vykreslena v grafu \ref{fig:deadzone_vpred}. Odečtením lze určit,
 že pásmo necitlivosti je široké 0.3 \si{V} ve směru kladných napětí odpovídajících jízdě robota dopředu. 
-Jízdě dozadu odpovídá deadzone vykreslený na grafu \ref{eq:deadzone_vzad}, ze kterého
+Jízdě dozadu odpovídá deadzone vykreslený na grafu \ref{fig:deadzone_vzad}, ze kterého
 lze odečíst šířka pásma necitlivosti přibližně 0.22 \si{V}. Motory jsou tedy necitlivé
 na akční zásah
 \begin{equation}
