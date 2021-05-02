@@ -56,12 +56,19 @@ Uvažujeme tři zobecněné souřadnice
 \begin{equation*}
     \begin{split}
         \frac{\theta_l + \theta_r}{2} = \theta~ [\si{rad}] &\cdots \text{Průměrný úhel levého a pravého kola} \\
-        \psi ~[\si{rad}] &\cdots \text{Náklon segwaye (osa otáčení v ose koleček)} \\
-        \varPhi~[\si{rad}] &\cdots \text{Azimut segwaye (osa otáčení ve svislém směru).}
+        \psi ~[\si{rad}] &\cdots \text{Náklon segwaye (otáčení v ose koleček)} \\
+        \varPhi~[\si{rad}] &\cdots \text{Azimut segwaye (svislá osa otáčení).}
     \end{split}
 \end{equation*}
 
+
+
 Tabulka \ref{tab:konstanty} shrnuje všechny konstantní parametry použité při modelování systému včetně jejich hodnot.
+Některé konkrétní hodnoty jsou převzaty z \cite{model_based_design}, část hodnot ovšem bylo možno experimentálně ověřit.
+Hmotnost koleček $m$, hmotnost segwaye $M$, šířka vozítka $W$, tloušťka $D$ i výška $H$ se trochu liší od modelu
+představeného v \cite{model_based_design}. Rovněž byl zkontrolován poloměr koleček $R$, jehož hodnota ovšem souhlasí.
+Dále je v tabulce \ref{tab:konstanty} zanesena i hodnota maximálního napětí baterie $U_{max}$ po plném nabití
+a minimální hodnota .
 
 \begin{table}[htbp]
     \centering
@@ -86,12 +93,15 @@ Tabulka \ref{tab:konstanty} shrnuje všechny konstantní parametry použité př
         $ n $ & 1 [-] & Převodní poměr převodovky \\\hline
         $ f_m $ & 0.0022 [-] & Koeficient tření mezi motorem a segwayem \\\hline
         $ f_w $ & 0 [-] & Koeficient tření mezi kolem a podložkou \\\hline
+        $ U_{max} $ & 8.3 \si{V} & Maximální mapětí napájecí baterie \\\hline
+        $ R_{in} $ & 0.65 \si{\ohm} & Vnitřní odpor baterie \\\hline
         
     \end{tabular}
     \caption{Konstantní parametry modelu segwaye}
     \label{tab:konstanty}
 \end{table}
 
+\pagebreak
 \subsection{Nelineární rovnice}
 Pomocí analýzy geometrie úlohy lze určit Lagrangián a jeho derivováním podle zobecnělých souřadnic 
 následně pro soustavu sestavit obecné pohybové rovnice \eqref{eq:pohyb1}, \eqref{eq:pohyb2} a \eqref{eq:pohyb3}.
@@ -207,10 +217,10 @@ Pro zjednodušení rovnic \eqref{eq:pohyb1_lin}, \eqref{eq:pohyb2_lin}, \eqref{e
 je možné sdružit konstantní koeficienty do nových 
 \begin{equation}
     \begin{split}
-        k_1 &= (2m + M) R^2 + 2 J_w + 2n^2 J_m \\
-        k_2 &= MLR - 2n^2 J_m \\
-        k_3 &= ML^2 + J_\psi + 2n^2 J_m \\
-        k_4 &= MgL \\
+        k_1 &= (2m + M) R^2 + 2 J_w + 2n^2 J_m, \\
+        k_2 &= MLR - 2n^2 J_m, \\
+        k_3 &= ML^2 + J_\psi + 2n^2 J_m, \\
+        k_4 &= MgL, \\
         c_1 &= 2(\beta + f_w).
     \end{split}
 \end{equation}
@@ -228,7 +238,7 @@ Pro získání stavových rovnic je nezbytné osamostatnit z \eqref{eq:pohyb1_li
 druhé derivace veličin $\theta$ a $\psi$. Analytické řešení vede na vztahy
 \begin{equation}
     \begin{split}
-        \ddot{\theta} & = \frac{2\beta (k_2 + k_3) \dot{\psi}  - (2 \beta k_2 + c_1 k_3) \dot{\theta} - k_2 k_4 \psi + 2 \alpha (k_2 + k_3) v}{k_1 k_3 - k_2^2} \\
+        \ddot{\theta} & = \frac{2\beta (k_2 + k_3) \dot{\psi}  - (2 \beta k_2 + c_1 k_3) \dot{\theta} - k_2 k_4 \psi + 2 \alpha (k_2 + k_3) v}{k_1 k_3 - k_2^2}, \\
         \ddot{\psi} &= \frac{- 2 \beta (k_1 + k_2) \dot{\psi} + (2 \beta k_1 + c_1 k_2)\dot{\theta}  + k_1 k_4 \psi - 2 \alpha (k_1 + k_2) v}{k_1 k_3 - k_2^2},
         \label{eq:druhe_derivace}
     \end{split}
@@ -304,9 +314,9 @@ kde matice systému a matice vstupní mají tvar
         0 & 0 & 0 & 1 \\
         0 & a_3 & a_2 & a_1 \\
         0 & a_7 & a_6 & a_5
-    \end{bmatrix} ~~~~ \mathbf{B} = \begin{bmatrix}
+    \end{bmatrix}, ~~~~ \mathbf{B} = \begin{bmatrix}
         0 \\ 0 \\a_4 \\a_8
-    \end{bmatrix}
+    \end{bmatrix}.
 \end{equation}
 
 \subsection{Vyčíslení v pracovním bodě}
@@ -361,7 +371,7 @@ Opakováním pro rampu s kladnou a zápornou derivací lze určit šířku pásm
 
 Odezva na rostoucí rampu napětí je vykreslena v grafu \ref{fig:deadzone_vpred}. Odečtením lze určit,
 že pásmo necitlivosti je široké 0.3 \si{V} ve směru kladných napětí odpovídajících jízdě robota dopředu. 
-Jízdě dozadu odpovídá deadzone vykreslený na grafu \ref{fig:deadzone_vzad}, ze kterého
+Jízdě dozadu odpovídá pásmo necitlivosti vykreslené na grafu \ref{fig:deadzone_vzad}, ze kterého
 lze odečíst šířka pásma necitlivosti přibližně 0.22 \si{V}. Motory jsou tedy necitlivé
 na akční zásah
 \begin{equation}
