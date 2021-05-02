@@ -7,13 +7,13 @@
 g = 9.81;						% gravity acceleration [m/sec^2]
 
 % NXTway-GS Parameters
-m = 0.03;						% wheel weight [kg]
+m = 0.012;						% wheel weight [kg]
 R = 0.04;						% wheel radius [m]
 Jw = m * R^2 / 2;				% wheel inertia moment [kgm^2]
-M = 0.6;						% body weight [kg]
-W = 0.14;						% body width [m]
-D = 0.04;						% body depth [m]
-H = 0.144;						% body height [m]
+M = 0.58;						% body weight [kg]
+W = 0.17;						% body width [m]
+D = 0.055;						% body depth [m]
+H = 0.16;						% body height [m]
 L = H / 2;						% distance of the center of mass from the wheel axle [m]
 Jpsi = M * L^2 / 3;				% body pitch inertia moment [kgm^2]
 Jphi = M * (W^2 + D^2) / 12;	% body yaw inertia moment [kgm^2]

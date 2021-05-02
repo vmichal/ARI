@@ -76,13 +76,13 @@ a minimální hodnota .
         \hline
         symbol & valikost & veličina \\\hline
         $ g $ & 9.81 \si{m/s} & Gravitační zrychlení \\\hline
-        $ m $ & 0.03 \si{kg} & Hmotnost kolečka \\\hline
+        $ m $ & 0.012 \si{kg} & Hmotnost kolečka \\\hline
         $ R $ & 0.04 \si{m }& Poloměr kolečka \\\hline
         $ J_w $ & $\frac{mR^2}{2}$ \si{kg . m^2} & Moment setrvačnosti kolečka \\\hline
-        $ M $ & 0.6   \si{kg} & Hmotnost segwaye \\\hline
-        $ W $ & 0.14  \si{ m} & Šířka segwaye (délka ve směru osy rotace kol) \\\hline
-        $ D $ & 0.04  \si{ m} & Tloušťka segwaye (délka ve směru pohybu) \\\hline
-        $ H $ & 0.144 \si{m }& Výška  segwaye \\\hline
+        $ M $ & 0.58   \si{kg} & Hmotnost segwaye \\\hline
+        $ W $ & 0.17  \si{ m} & Šířka segwaye (délka ve směru osy rotace kol) \\\hline
+        $ D $ & 0.055  \si{ m} & Tloušťka segwaye (délka ve směru pohybu) \\\hline
+        $ H $ & 0.16 \si{m }& Výška  segwaye \\\hline
         $ L $ & $\frac{H}{2}$ \si{m} & Vzdálenost těžiště segwaye od osy kol \\\hline
         $ J_\psi $ & $\frac{ML^2}{3}$ \si{kg . m^2} & Moment setrvačnosti náklonu segwaye\\\hline
         $ J_\varPhi $ & $\frac{M(W^2 + D^2)}{12}$ \si{kg . m^2} & Moment setrvačnosti rotace segwaye \\\hline
@@ -333,15 +333,15 @@ Ve stavovém prostoru přísluší tomuto rovnovážnému bodu vektor
 Pomocí hodnot konstant uvedených v tabulce \ref{tab:konstanty} je možné vyčíslit prvky matic $\mathbf{A}$ a $\mathbf{B}$ stavového modelu. Platí
 \begin{equation}
         \mathbf{A} = \begin{bmatrix}
-            0 & 0 & 1 & 0 \\
-            0 & 0 & 0 & 1 \\
-            0 & -409.7184 & -162.1273 & 162.1273 \\
-            0 & 269.6273 & 78.1496 & -78.1496
-        \end{bmatrix}
+            0 &        0 &    1.0000 &        0 \\
+            0 &        0 &         0 &   1.0000 \\
+            0 &-513.8877 & -204.0077 & 204.0077 \\
+            0 & 281.4627 &   85.1844 & -85.1844
+        \end{bmatrix},
     \end{equation}
     \begin{equation}
         \mathbf{B} = \begin{bmatrix}
-            0 \\ 0 \\ 315.1597 \\ -151.9152
+            0 \\ 0 \\   396.5711 \\-165.5902
         \end{bmatrix}.
     \end{equation}
 Tím je nalezena lineární náhrada obecně nelineárního systému v okolí pracovního bodu a modelování systému je hotovo.
