@@ -6,6 +6,8 @@ Control Systems Toolbox
 %Vypočtení zesílení a fáze přenosu pro danou frekvenci
 [gain, angle] = bode(transfer_function, frekvence) 
 
+gprops - možnosti a nastavení polynomial toolboxu
+
 Polynomial Tbx:
 • sdf, (ldf, rdf, mdf), abcd, pol
 • num, den
@@ -24,6 +26,8 @@ whos jména proměných včetně typů atd
 
 fit - prokládání dat křivkou
 
+ldiv - long division
+
 polyval - Dosadí do polynomu
 bode, nyquist - Vykreslení Bodeho či Nyquistovy charakteristiky
 
@@ -32,3 +36,6 @@ rltool(transfer_function) - sysotool k bližší analýze RL
 
 sisotool(transfer_function) - Návrh regulátoru pro daný systém
 margin(transfer_fun) - vypočítá fázovou a amplitudovou jistotu
+
+[g, U] = gld, grd - GCD pro matice zleva/zprava, pro skaláry je to totéž; umí vrátit i matici U s polynomy v, w, p, q
+ldiv, rdiv - Dělení polynomů (obecně matic) zleva/zprava
