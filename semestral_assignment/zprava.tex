@@ -54,11 +54,11 @@ Na obrázcích \ref{fig:segway_bok} a \ref{fig:segway_shora} je zaveden souřadn
 nezbytných pro matematický popis segwaye. Odvození matematického modelu je založeno na \cite{model_based_design}.
 Uvažujeme tři zobecněné souřadnice
 \begin{equation*}
-    \begin{split}
-        \frac{\theta_l + \theta_r}{2} = \theta~ [\si{rad}] &\cdots \text{Průměrný úhel levého a pravého kola} \\
-        \psi ~[\si{rad}] &\cdots \text{Náklon segwaye (otáčení v ose koleček)} \\
+    \begin{aligned}
+        \frac{\theta_l + \theta_r}{2} = \theta~ [\si{rad}] &\cdots \text{Průměrný úhel levého a pravého kola,} \\
+        \psi ~[\si{rad}] &\cdots \text{Náklon segwaye (otáčení v ose koleček),} \\
         \varPhi~[\si{rad}] &\cdots \text{Azimut segwaye (svislá osa otáčení).}
-    \end{split}
+    \end{aligned}
 \end{equation*}
 
 
@@ -75,7 +75,7 @@ a minimální hodnota .
     \begin{tabular}[t]{|c|c|c|}
         \hline
         symbol & valikost & veličina \\\hline
-        $ g $ & 9.81 \si{m/s} & Gravitační zrychlení \\\hline
+        g  & 9.81 \si{m/s} & Gravitační zrychlení \\\hline
         $ m $ & 0.012 \si{kg} & Hmotnost kolečka \\\hline
         $ R $ & 0.04 \si{m }& Poloměr kolečka \\\hline
         $ J_w $ & $\frac{mR^2}{2}$ \si{kg . m^2} & Moment setrvačnosti kolečka \\\hline
@@ -305,7 +305,7 @@ Spolu s triviálními rovnicemi pro stavy $x_1$ a $x_2$ vzniká kompletní syst�
 \end{equation}
 jejž lze převést do maticové podoby
 \begin{equation}
-    \dot{\vec{x}} = \mathbf{A} \Delta \vec{x} + \mathbf{B} \Delta u, \\
+    \Delta \dot{\vec{x}} = \mathbf{A} \Delta \vec{x} + \mathbf{B} \Delta u, \\
 \end{equation}
 kde matice systému a matice vstupní mají tvar
 \begin{equation}
@@ -350,33 +350,56 @@ Tím je nalezena lineární náhrada obecně nelineárního systému v okolí pr
 
 \subsection{Statické nelinearity}
 Vozítko segway disponuje dvěma stejnosměrnými motory, které jsou řízeny pulsní šířkovou
-modulací z baterie o nominálním napětí 8 \si{V}. Tento fakt vnáší první statickou nelinearitu:
-hodnota akčního zásahu je saturována na interval $u \in [-8, 8]$ \si{V}.
+modulací. Zařízení je napájeno baterií o nominálním napětí 7.4 \si{V}.
 
-Dále lze na motorech identifikovat pásmo necitlivosti při aplikaci napětí blízkého nule. Při velmi nízké hodnotě
-akčního zásahu není schopen kroutivý moment motorů překonat statické tření v motoru.
-Šířku pásma necitlivosti lze určit připojením napěťové rampy a sledováním závislosti úhlové rychlosti kol na napětí.
-Opakováním pro rampu s kladnou a zápornou derivací lze určit šířku pásma necitlivosti na obě strany od nuly.
+\begin{figure}[htbp]
+    \centerline{\includegraphics[width=\linewidth]{pwm_saturace.eps}}
+    \caption{Saturace akčního zásahu vlivem konečného napětí baterie}
+    \label{fig:pwm_saturace}        
+\end{figure}
+
+Na obrázku \ref{fig:pwm_saturace} je patrná první statická nelinearita: saturace akčního zásahu do soustavy,
+jenž je omezen na interval $u \in [-U_{bat}, U_{bat}]$, kde $U_{bat}$ je okamžité napětí baterie.
+Protože je použitá baterie dostatečně tvrdý zdroj a řízení motorů nevyžaduje příliš velký výkon, 
+lze bez velké chyby postavit $U_{bat}$ = 8 \si{V}. Ve standardních podmínkách bude činnost segwaye ukončena dříve,
+než baterie stihne poklesnout na napěťovou hladinu 8 \si{V}.
 
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=\linewidth]{deadzone_motory_vpred.eps}}
     \caption{Měření reakce soustavy na malé kladné hodnoty akčního zásahu}
     \label{fig:deadzone_vpred}        
 \end{figure}
+
+Dále lze na motorech identifikovat pásmo necitlivosti při aplikaci napětí blízkého nule. Při velmi nízké hodnotě
+akčního zásahu není schopen kroutivý moment motorů překonat statické tření v motoru.
+Šířku pásma necitlivosti lze určit připojením napěťové rampy a sledováním závislosti úhlové rychlosti kol na napětí.
+Opakováním pro rampu s kladnou a zápornou derivací lze určit šířku pásma necitlivosti na obě strany od nuly.
+
+Odezva na rostoucí rampu napětí je vykreslena v grafu \ref{fig:deadzone_vpred}. Odečtením lze určit,
+že pásmo necitlivosti je široké 0.3 \si{V} ve směru kladných napětí odpovídajících jízdě robota dopředu. 
+
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=\linewidth]{deadzone_motory_vzad.eps}}
     \caption{Měření reakce soustavy na malé záporné hodnoty akčního zásahu}
     \label{fig:deadzone_vzad}        
 \end{figure}
 
-Odezva na rostoucí rampu napětí je vykreslena v grafu \ref{fig:deadzone_vpred}. Odečtením lze určit,
-že pásmo necitlivosti je široké 0.3 \si{V} ve směru kladných napětí odpovídajících jízdě robota dopředu. 
 Jízdě dozadu odpovídá pásmo necitlivosti vykreslené na grafu \ref{fig:deadzone_vzad}, ze kterého
 lze odečíst šířka pásma necitlivosti přibližně 0.22 \si{V}. Motory jsou tedy necitlivé
 na akční zásah
 \begin{equation}
     u_{deadzone} \in [-0.22, 0.3] ~\si{V}.
 \end{equation}
+
+Ze stavových proměnných soustavy může být saturováno $x_2$ odpovídající úhlu náklonu od svislice $\psi$.
+Hodnoty $\varphi = \pm \frac{\pi}{2}$ odpovídají stavu, kdy robot spadne a položí se na plocho na konstrukci těla.
+Jedná se o stabilní ekvilibria, z hlediska řešení úlohy ale nemají význam. Pakliže je cílem udržet segway ve svislé poloze,
+musí se soustava těmto dvěma stavům vyhnout za každou cenu.
+
+Proměnná $x_1$ odpovídající úhlu koleček ani stavy $x_{3,4}$ odpovídající úhlovým rychlostem $\dot{\theta}$ a $\dot{\psi}$
+obecně nemohou být saturovány. Úhlová dráha uražená kolečky je obecně neomezená, stejnětak obě úhlové rychlosti.
+
+//TODO saturace na vzdálenost k překážce > 0
 
 \section{Návrh řízení}
 
