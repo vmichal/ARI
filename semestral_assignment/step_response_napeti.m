@@ -1,5 +1,7 @@
 close all
 %It is expected that you have already run a simulink external simulation
+%This script is useless since the nxt cube cannot stream data with
+%sufficient speed.
 
 time = signal_theta.time; %shared time of all simulations
 
