@@ -3,6 +3,12 @@
 
 % Copyright 2011 The MathWorks, Inc.
 
+%moje konstanty
+U_max = 8.3;
+I_max = 0.3;
+R_in = 0.65;
+U_dropoff = R_in * I_max;
+
 % Physical Constant
 g = 9.81;						% gravity acceleration [m/sec^2]
 

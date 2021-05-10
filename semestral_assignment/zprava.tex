@@ -67,8 +67,8 @@ Tabulka \ref{tab:konstanty} shrnuje všechny konstantní parametry použité př
 Některé konkrétní hodnoty jsou převzaty z \cite{model_based_design}, část hodnot ovšem bylo možno experimentálně ověřit.
 Hmotnost koleček $m$, hmotnost segwaye $M$, šířka vozítka $W$, tloušťka $D$ i výška $H$ se trochu liší od modelu
 představeného v \cite{model_based_design}. Rovněž byl zkontrolován poloměr koleček $R$, jehož hodnota ovšem souhlasí.
-Dále je v tabulce \ref{tab:konstanty} zanesena i hodnota maximálního napětí baterie $U_{max}$ po plném nabití
-a minimální hodnota .
+Dále jsou v tabulce \ref{tab:konstanty} zaneseny změřené hodnoty maximálního napětí baterie $U_{max}$ po plném nabití,
+vnitřního odpor baterie $R_{in}$ a velikosti napájecího proudu při plném výkonu motorů $I_{max}$. 
 
 \begin{table}[htbp]
     \centering
@@ -95,6 +95,7 @@ a minimální hodnota .
         $ f_w $ & 0 [-] & Koeficient tření mezi kolem a podložkou \\\hline
         $ U_{max} $ & 8.3 \si{V} & Maximální mapětí napájecí baterie \\\hline
         $ R_{in} $ & 0.65 \si{\ohm} & Vnitřní odpor baterie \\\hline
+        $ I_{max} $ & 300 \si{\milli\ampere} & Špičkový napájecí proud \\\hline
         
     \end{tabular}
     \caption{Konstantní parametry modelu segwaye}
@@ -358,11 +359,12 @@ modulací. Zařízení je napájeno baterií o nominálním napětí 7.4 \si{V}.
     \label{fig:pwm_saturace}        
 \end{figure}
 
-Na obrázku \ref{fig:pwm_saturace} je patrná první statická nelinearita: saturace akčního zásahu do soustavy,
-jenž je omezen na interval $u \in [-U_{bat}, U_{bat}]$, kde $U_{bat}$ je okamžité napětí baterie.
-Protože je použitá baterie dostatečně tvrdý zdroj a řízení motorů nevyžaduje příliš velký výkon, 
-lze bez velké chyby postavit $U_{bat}$ = 8 \si{V}. Ve standardních podmínkách bude činnost segwaye ukončena dříve,
-než baterie stihne poklesnout na napěťovou hladinu 8 \si{V}.
+Na obrázku \ref{fig:pwm_saturace} je patrná první statická nelinearita -- při plné střídě PWM lze na motory přiložit nejvýše $\pm U_{bat}$,
+kde $U_{bat}$ je okamžité napětí baterie. Velikost akčního zásahu je tak omezena na interval $u \in [-U_{bat}, U_{bat}]$.
+S ohledem na změřené parametry $U_{max}$, $I_{max}$ a $R_{in}$ napájecího zdroje zanesené v tabulce \ref{tab:konstanty} lze určit,
+že maximální úbytek napětí na vnitřním odporu baterie bude $U_{drop} = R_{in} \cdot I_{max} = 195 \si{\milli\volt}$.
+Protože se bude segway provozovat vždy jen krátce po plném nabití, lze bez velké chyby pesimisticky odhadnout $U_{bat} = 8$ \si{V}.
+Ve standardních podmínkách bude činnost segwaye ukončena dříve, než výstupní napětí baterie stihne poklesnout na napěťovou hladinu 8 \si{V}.
 
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=\linewidth]{deadzone_motory_vpred.eps}}
