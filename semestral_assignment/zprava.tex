@@ -391,6 +391,7 @@ lze odečíst šířka pásma necitlivosti přibližně 0.22 \si{V}. Motory jsou
 na akční zásah
 \begin{equation}
     u_{deadzone} \in [-0.22, 0.3] ~\si{V}.
+    \label{eq:deadzone}
 \end{equation}
 
 Ze stavových proměnných soustavy může být saturováno $x_2$ odpovídající úhlu náklonu od svislice $\psi$.
@@ -401,7 +402,32 @@ musí se soustava těmto dvěma stavům vyhnout za každou cenu. Proto není tat
 Proměnná $x_1$ odpovídající úhlu koleček $\theta$, ani stavy $x_{3,4}$ odpovídající úhlovým rychlostem $\dot{\theta}$ a $\dot{\psi}$,
 nemohou být saturovány. Úhlová dráha uražená kolečky je obecně neomezená, stejnětak obě úhlové rychlosti.
 
-//TODO saturace na vzdálenost k překážce > 0
+//TODO saturace na vzdálenost k překážce $\ge 0$.
+\pagebreak
+\section{Porovnání modelu a systému}
+
+Rovnice \eqref{eq:pohyb1_easy} až \eqref{eq:motor2_easy} byly implementovány jako simulinkový model. Při simulaci byl nelineární i linearizovaný model
+vystaven jednotkovému skoku vstupního napětí $u$ v čase 1 \si{\second}. Výstupy simulace jsou zobrazeny na obrázku \ref{fig:porovnani_skok},
+pro přehlednost není zobrazen průběh stavu $x_1$ (úhel koleček $\theta$), neboť jeho hodnota není pro úlohu balancování důležitá.
+\begin{figure}[htbp]
+    \centerline{\includegraphics[width=\linewidth]{porovnani_skok.eps}}
+    \caption{Simulace odezvy na skok napětí}
+    \label{fig:porovnani_skok}        
+\end{figure}
+Oba modely mají stejný charakter časových průběhů, jsou velmi nestabilní, a rychle divergují.
+V nelineárním modelu je zohledněna saturace náklonu $\psi$ na interval $[-\frac{\pi}{2}, \frac{\pi}{2}]$ rad. V čase $1.6 \si{\second}$ nastane pád robota na zem.
+Nelineární systém dále setrvává ve stabilním ekvilibriu.
+Pakliže zůstanou dodrženy podmínky linearizace na blízkost pracovnímu bodu, odpovídá linearizovaný model modelu nelineárnímu.
+
+V případě připojení rampy na vstup $u$ soustavy se projeví pásmo necitlivosti na motorech. Na obrázku \ref{fig:porovnani_rampa} jsou pro porovnání
+vykresleny odezvy na rampu se sklonem 1. 
+\begin{figure}[htbp]
+    \centerline{\includegraphics[width=\linewidth]{porovnani_rampa.eps}}
+    \caption{Simulace odezvy na rampu napětí}
+    \label{fig:porovnani_rampa}        
+\end{figure}
+Lineární model nerespektuje psámo necitlivosti popsané v rovnici \eqref{eq:deadzone}, pročež se jeho stav začne měnit bezprostředně po startu,
+zatímco nelineární systém je v klidu až do času $300$ \si{\milli\second}, kdy napětí $u$ překoná hranici pásma necitlivosti $300$ \si{\milli\volt}.
 
 \section{Návrh řízení}
 
