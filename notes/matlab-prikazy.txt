@@ -1,5 +1,8 @@
 Control Systems Toolbox
- - (lti) ss, tf, zpk = spojitá přenosová funkce konstruovaná z nul, pólů a zesílení
+ - (lti) ss = převod přenosu na stavový model, konstrukce modelu systému z matic A, B, C, D (a sample time)
+  - tf = spojitá přenosová funkce, zpk = spojitá přenosová funkce konstruovaná z nul, pólů a zesílení; případně převod na takový tvar.
+  - margin(sys) vypočte PM, GM a crossover frekvence (buďto je vrátí, nebo vykreslí)
+  - allmargin(system) vypočte všechny marginy včetně delay marginu a vrací je jako strukturu
  - step, impulse, initial,
  - ctrb, obsv - výpočet matice řiditelnosti a pozorovatelnosti
  - place(A, B, [póly]), acker((A, B, [póly]) - umístí póly systému, případně hledá regulátor Ackermannovým vzorcem
@@ -12,6 +15,12 @@ Polynomial Tbx:
 • sdf, (ldf, rdf, mdf), abcd, pol
 • num, den
 mvalue(polynom, matice)- dosazení matice do polynomu
+coprime - pokrácení zlomků na základní tvar (nutné pro následné numerické dosazování pro zjištění DC gainu)
+value(coprime(G_z), 1), value(coprime(G_s), 0) = výpočet DC gainu systému.
+
+Konstrukce PolynomialTbx polynomu - lop/pol ... záleží na pořadí koeficientů. poly(kořeny) vrací koeficienty v pořadí [a_0, a_1, a_2 ...]
+c_z = lop(poly(vector_discrete_poles), degree, z);
+c_s = lop(poly(vector_cont_poles), degree, s);
 
 pro polynom a platí
 	a{i} ... i-tý (zero based) koeficient polynomu a
@@ -29,9 +38,10 @@ fit - prokládání dat křivkou
 ldiv - long division
 
 polyval - Dosadí do polynomu
-bode, nyquist - Vykreslení Bodeho či Nyquistovy charakteristiky
+bode, nyquist, nichols - Vykreslení Bodeho, Nyquistovy či Nicholsovy charakteristiky
 
 rlocus(transfer_function) - vykreslí root locus daného přenosu
+zgrid, sgrid - přidá souřadné osy do obrázku RL (vhodné pro s rovinu nebo pro diskrétní z rovinu)
 rltool(transfer_function) - sysotool k bližší analýze RL
 
 sisotool(transfer_function) - Návrh regulátoru pro daný systém
@@ -39,3 +49,8 @@ margin(transfer_fun) - vypočítá fázovou a amplitudovou jistotu
 
 [g, U] = gld, grd - GCD pro matice zleva/zprava, pro skaláry je to totéž; umí vrátit i matici U s polynomy v, w, p, q
 ldiv, rdiv - Dělení polynomů (obecně matic) zleva/zprava
+
+Nalezení stabilní části polynomu umí i polynomiální toolbox (hledání f^-)
+
+Simulink:
+PMF blok (polynomial matrix fraction) - jako transfer function, ale nacpou se jí rovnou polynomy
