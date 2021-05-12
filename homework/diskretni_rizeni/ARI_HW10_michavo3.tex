@@ -17,6 +17,7 @@
 % vícesloupcové tabulky
 \usepackage{multirow}
 \usepackage{listings}
+\usepackage{xcolor}
 \usepackage{amssymb}
 \usepackage{gensymb}
 \usepackage{bbold}
@@ -39,6 +40,7 @@
 \usepackage[unicode=true, bookmarks=true,bookmarksnumbered=true,
 bookmarksopen=false, breaklinks=false,pdfborder={0 0 0},
 pdfpagemode=UseNone,backref=false,colorlinks=true] {hyperref}
+
 
 % Poznámky při překladu
 \usepackage{xkeyval}	% Inline todonotes
@@ -66,6 +68,33 @@ pdfpagemode=UseNone,backref=false,colorlinks=true] {hyperref}
 \author{Vojtěch Michal}
 \date{\today}
 
+%customize code listing
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
 \begin{document}
 
 \maketitle
@@ -83,35 +112,37 @@ soustavy je omezen na $-1.5 \le u \le 1.5$. Požadavky na regulaci:
 	\item Regulátor pracuje s výstupem systému, nezná všechny jeho stavy.
 	\item Regulátor zajistí nulovou ustálenou regulační odchylku při odezvě na skok.
 	\item Maximální překmit odezvy na skok je $OS = 30$ \%.
-	\item Doba ustálení na $\pm 5$\% od požadované hodnoty odezvy na skok je nejvýše $3$ \si{\second}.
+	\item Doba ustálení na $\pm 5$ \% od požadované hodnoty odezvy na skok je nejvýše $3$ \si{\second}.
 	\item Pokud použijete integrační složku, musí být implementován anti-windup.
 \end{enumerate}
 
-\section{Výběr metody regulace}
 
-Po diskretizaci soustavy Tustinovou metodou s krokem $h$ získám diskrétní přenos druhého řádu
+\textbf{Řešení:} Po diskretizaci soustavy Tustinovou metodou s krokem $h$ získám diskrétní přenos druhého řádu
 \begin{equation}
 	G(z) = \frac{  0.02731 z^2 + 0.01003 z - 0.01728}{  z^2 - 1.79 z + 0.777},
 \end{equation}
-jehož odezva na jednotkový skok je vykreslena na obrázku \ref{fig:porovnani}. Diskretizace je zřejmě věrná,
-oba přenosy $G(s)$ i $G(z)$ jsou nestabilní a divergují do nekonečna. Na základě požadavků zadavatele na dynamiku
-uzavřené zpětnovazební smyčky je možné rovnou vyřadit návrh stavové zpětné vazby. Dále protože je požadováno
-asymptotické sledování skoku, jsou vhodnými kandidáty regulátor se dvěma stupni volnosti a nebo regulátor z rodiny PID.
+jehož odezva na jednotkový skok je vykreslena na obrázku \ref{fig:porovnani}. 
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=.8\linewidth]{porovnani_nestabilni.eps}
+	\includegraphics[width=.75\linewidth]{porovnani_nestabilni.eps}
 	\caption{Ověření věrohodnosti diskretizace Tustinovou metodou}
 	\label{fig:porovnani}
 \end{figure}
 
+Diskretizace je zřejmě věrná,
+oba přenosy $G(s)$ i $G(z)$ jsou nestabilní a divergují do nekonečna. Na základě požadavků zadavatele na dynamiku
+uzavřené zpětnovazební smyčky je možné rovnou vyřadit návrh stavové zpětné vazby. Dále protože je požadováno
+asymptotické sledování skoku, jsou vhodnými kandidáty regulátor se dvěma stupni volnosti a nebo regulátor z rodiny PID.
+
+
 Protože 2DOF není v tomto případě nezbytný, zatímco PID je dostačující (regulovaná soustava je druhého řádu), volím jej.
 Pro začátek návrhu vynechám derivační složku a navrhuji jen diskrétní PI regulátor (též nazýván PS regulátor).
-Opět ji uvážím jen kdyby nebylo možné systém snadno stabilizovat.
+Složku D opět uvážím jen kdyby nebylo možné systém snadno stabilizovat.
 
 Pomocí nástroje Matlabu \textit{PIDTuner} pro diskrétní přenosou funkci $G(z)$ ladím regulátor pro splnění zadaných
 požadavků v časové oblasti. Požadavek na $OS$ lze volbou agresivního regulátoru splnit velice rychle (doba ustálení pod 1 \si{\second}),
-ovšem takováto regulace by vyžadovala velkou hodnotu akčního zásahu. S vědomím, že akční zásah do soustavy je saturován, se snažím
+ovšem takováto regulace by vyžadovala velkou hodnotu akčního zásahu. S vědomím, že akční zásah do soustavy bude saturován, se snažím
 maximálně zpomalit regulaci, což zajistí pozvolnější přeběhy a tedy menší absolutní hodnoty akčního zásahu $u(z)$, jež nebudou trpět na saturaci. 
 
 
@@ -119,19 +150,20 @@ Výstupem je paralelní PS regulátor
 \begin{equation}
 	C(z) = \underbrace{4.8}_{=K_\text{P}} + \underbrace{4.83}_{=K_\text{I}} \frac{h}{z-1},
 \end{equation}
-jehož zapojení do zpětné vazby s dikrétní soustavou vede na skokovou odezvu vykreslenou na obrázku \ref{fig:stabilizace}.
+jehož integrační složka byla diskretizována standardně dopřednou diferencí.
+Zapojení regulátoru do zpětné vazby s dikrétní soustavou vede na skokovou odezvu vykreslenou na obrázku \ref{fig:stabilizace}.
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=.6\linewidth]{stabilizovany_diskretni.eps}
+	\includegraphics[width=.8\linewidth]{stabilizovany_diskretni.eps}
 	\caption{Diskrétní systém po stabilizaci zpětnou vazbou}
 	\label{fig:stabilizace}
 \end{figure}
 
-Je patrno, že regulátor je stabilizující alespoň pro diskrétní náhradu soustavy a že jsou splněny požadavky na regulaci.
-Do přiloženého .m souboru je regulátor implementován následujícím blokem kódu
+Zdá se, že regulátor je stabilizující alespoň pro diskrétní náhradu soustavy a že jsou splněny požadavky na regulaci.
+Do přiloženého .m souboru je regulátor implementován následujícím blokem kódu.
 
-\begin{lstlisting}
+\begin{lstlisting}[language=Matlab]
     %constants of the regulator:
     Kp = 4.8; Ki = 4.83;
     
@@ -145,12 +177,16 @@ Do přiloženého .m souboru je regulátor implementován následujícím blokem
     end
 \end{lstlisting}
 
+Pro integral anti-windup bylo zvoleno řešení potlačující vliv integrační složky v čase, kdy je akční zásah saturován.
+S touto metodou platí, že pakliže bude $u(k)$ saturováno, poté musela být vysoká odchylka a působí jen proporcionální složka.
+Teprve když začne velikost regulační odchylky poklesat, je aktivována integrační složka, jež zajistí asymptotické sledování reference.
+
 Simulace provedená skriptem potvrzuje splnění požadavků na dynamiku zpětnovazební smyčky.
-Dosažený překmit je 19.4 \%, doba ustálení je 1.4 \si{\second}.
+Maximální překmit je 19.4 \%, doba ustálení je 1.4 \si{\second}.
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=.6\linewidth]{odezva_spojity.eps}
+	\includegraphics[width=\linewidth]{odezva_spojity.eps}
 	\caption{Průběh signálů v uzavřené zpětnovazební smyčce}
 	\label{fig:vysledek}
 \end{figure}
