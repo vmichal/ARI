@@ -3,6 +3,8 @@
 
 % Copyright 2011 The MathWorks, Inc.
 
+d_ref = 50; %cm
+
 %moje konstanty
 U_max = 8.3;
 I_max = 0.3;
@@ -13,7 +15,7 @@ U_dropoff = R_in * I_max;
 g = 9.81;						% gravity acceleration [m/sec^2]
 
 % NXTway-GS Parameters
-m = 0.012;						% wheel weight [kg]
+m = 0.03;						% wheel weight [kg]
 R = 0.04;						% wheel radius [m]
 Jw = m * R^2 / 2;				% wheel inertia moment [kgm^2]
 M = 0.58;						% body weight [kg]
