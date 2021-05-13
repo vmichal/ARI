@@ -349,7 +349,8 @@ Tím je nalezena lineární náhrada obecně nelineárního systému v okolí pr
 
 \section{Identifikace systému}
 
-\subsection{Statické nelinearity}
+\subsection{Saturace akčního zásahu}
+\label{sec:ubat}
 Vozítko segway disponuje dvěma stejnosměrnými motory, které jsou řízeny pulsní šířkovou
 modulací. Zařízení je napájeno baterií o nominálním napětí 7.4 \si{V}.
 
@@ -372,7 +373,8 @@ Ve standardních podmínkách bude činnost segwaye ukončena dříve, než výs
     \label{fig:deadzone_vpred}        
 \end{figure}
 
-Dále lze na motorech identifikovat pásmo necitlivosti při aplikaci napětí blízkého nule. Při velmi nízké hodnotě
+\subsection{Pásmo necitlivosti}
+Na motorech lze identifikovat pásmo necitlivosti při aplikaci napětí blízkého nule. Při velmi nízké hodnotě
 akčního zásahu není schopen kroutivý moment motorů překonat statické tření v motoru.
 Šířku pásma necitlivosti lze určit připojením napěťové rampy a sledováním závislosti úhlové rychlosti kol na napětí.
 Opakováním pro rampu s kladnou a zápornou derivací lze určit šířku pásma necitlivosti na obě strany od nuly.
@@ -394,6 +396,8 @@ na akční zásah
     \label{eq:deadzone}
 \end{equation}
 
+\subsection{Saturace stavů systému}
+
 Ze stavových proměnných soustavy může být saturováno $x_2$ odpovídající úhlu náklonu od svislice $\psi$.
 Hodnoty $\psi = \pm \frac{\pi}{2}$ odpovídají stavu, kdy robot spadne a položí se na plocho na konstrukci těla.
 Jedná se o stabilní ekvilibria, z hlediska řešení úlohy jsou ale silně nežádoucí. Pakliže je cílem udržet segway ve svislé poloze,
@@ -402,8 +406,60 @@ musí se soustava těmto dvěma stavům vyhnout za každou cenu. Proto není tat
 Proměnná $x_1$ odpovídající úhlu koleček $\theta$, ani stavy $x_{3,4}$ odpovídající úhlovým rychlostem $\dot{\theta}$ a $\dot{\psi}$,
 nemohou být saturovány. Úhlová dráha uražená kolečky je obecně neomezená, stejnětak obě úhlové rychlosti.
 
+
+
 //TODO saturace na vzdálenost k překážce $\ge 0$.
-\pagebreak
+
+\subsection{Dynamika motorů}
+
+Pro identifikaci parametrů motorů byl na vstup motorů přiložen skok napětí z $0$ na $60$ \% střídy PWM.
+Při uvážení $U_{bat}$ dle \ref{sec:ubat} to odpovídá vstupnímu napětí $U_{in} = \frac{60}{100} U_{bar} = 4.8$ \si{\volt}.
+Změřená odezva je vykreslena na obrázku \ref{fig:motor_skok}.
+
+\begin{figure}[htbp]
+    \centerline{\includegraphics[width=\linewidth]{motor_skok.eps}}
+    \caption{Odezva motoru na skok}
+    \label{fig:motor_skok}        
+\end{figure}
+
+Tvar odezvy poukazuje na soustavu druhého řádu typu jedna bez nul, jejíž přenos má tvar
+\begin{equation}
+    G(s) = \frac{k}{s(Ts+1)},
+    \label{eq:servo_prenos}
+\end{equation}
+kterému v časové oblasti přísluší průběh odezvy na skok
+\begin{equation}
+    h(t) = \underbrace{k(t-T)}_{\text{asymptota pro t $\to \infty$}} + \underbrace{Tk e^{\frac{-t}{T}}}_{\text{přechodový děj}},
+    \label{eq:servo_odezva}
+\end{equation}
+kde směrnici asymptoty $k$, a časovou konstantu $T$ lze dále konkretizovat metodou \textit{grey box}.
+Směrnice asymptoty
+\begin{equation}
+    k_{60\%} = \frac{\Delta y}{\Delta x} = \frac{0.35521}{0.037} = 9.6 \text{\si{\radian\per\second}}
+\end{equation}
+odpovídá úhlové rychlosti otáčení motoru při použité střídě $60$ \%. V čase $T$ musí mít asymptota nulovou hodnotu -- odečtením z grafu je vidět $T = 0.037$ \si{\second}.
+Protože testovací vstupní signál neměl jednotkovou amplitudu, je potřeba nalezené parametry ještě přeškálovat vydělením $U_{in}$. 
+Identifikované přenosy servo motoru z řídicího napětí $u$ na úhel natočení $\theta$ a úhlovou rychlost $\dot{\theta}$ koleček mají tvar
+\begin{equation}
+    \begin{aligned}
+        G_{u\to\theta}(s) &= \frac{1}{U_{in}} \frac{9.6}{s(0.037s + 1)}   &=  \frac{54.0541}{s(s+27.0270)}, \\
+        G_{u\to\dot{\theta}}(s) &= sG_{u\to\theta}(s) &= \frac{54.0541}{s+27.0270}.
+    \end{aligned}
+\end{equation} 
+
+Dynamika motorů je stabilní a ve srovnání s dynamikou zbytku soustavy diktovanou póly
+\begin{equation*}
+	\text{eig}(\mathbf{A}) =
+	\begin{cases}
+        0 \\
+        -6.4178 \\
+        7.2604 \\
+        -231.6811
+    \end{cases}
+\end{equation*}
+zanedbatelná. Integrační charakter pólu v počátku i poloha kolem bodu $-6$ je několikrát pomalejší než pól v bodě $-27$ a dynamika
+motorů tak nebude zásadně ovlivňovat soustavu.
+
 \section{Porovnání modelu a systému}
 
 Rovnice \eqref{eq:pohyb1_easy} až \eqref{eq:motor2_easy} byly implementovány jako simulinkový model. Při simulaci byl nelineární i linearizovaný model
