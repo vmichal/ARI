@@ -6,6 +6,8 @@
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
+\usepackage{url}
+\usepackage[czech]{babel}
 \usepackage{siunitx}
 
 \graphicspath{{./images}}
@@ -68,7 +70,7 @@ Některé konkrétní hodnoty jsou převzaty z \cite{model_based_design}, část
 Hmotnost koleček $m$, hmotnost segwaye $M$, šířka vozítka $W$, tloušťka $D$ i výška $H$ se trochu liší od modelu
 představeného v \cite{model_based_design}. Rovněž byl zkontrolován poloměr koleček $R$, jehož hodnota ovšem souhlasí.
 Dále jsou v tabulce \ref{tab:konstanty} zaneseny změřené hodnoty maximálního napětí baterie $U_{max}$ po plném nabití,
-vnitřního odpor baterie $R_{in}$ a velikosti napájecího proudu při plném výkonu motorů $I_{max}$. 
+vnitřního odpor baterie $R_{in}$ a velikosti napájecího proudu při plném výkonu motorů $I_{max}$.
 
 \begin{table}[htbp]
     \centering
@@ -330,6 +332,7 @@ Ve stavovém prostoru přísluší tomuto rovnovážnému bodu vektor
     \end{bmatrix} = \begin{bmatrix}
         0 & 0 & 0 & 0 & 0
     \end{bmatrix}.
+    \label{eq:prac_bod}
 \end{equation}
 Pomocí hodnot konstant uvedených v tabulce \ref{tab:konstanty} je možné vyčíslit prvky matic $\mathbf{A}$ a $\mathbf{B}$ stavového modelu. Platí
 \begin{equation}
@@ -447,18 +450,8 @@ Identifikované přenosy servo motoru z řídicího napětí $u$ na úhel natoč
     \end{aligned}
 \end{equation} 
 
-Dynamika motorů je stabilní a ve srovnání s dynamikou zbytku soustavy diktovanou póly
-\begin{equation*}
-	\text{eig}(\mathbf{A}) =
-	\begin{cases}
-        0 \\
-        -6.4178 \\
-        7.2604 \\
-        -231.6811
-    \end{cases}
-\end{equation*}
-zanedbatelná. Integrační charakter pólu v počátku i poloha kolem bodu $-6$ je několikrát pomalejší než pól v bodě $-27$ a dynamika
-motorů tak nebude zásadně ovlivňovat soustavu.
+Dynamika motorů je stabilní a ve srovnání s dynamikou zbytku soustavy diktovanou póly vypsanými v rovnici \eqref{eq:unstable_poles} zanedbatelná.
+Integrační charakter pólu v počátku i poloha kolem bodu $-6$ je několikrát pomalejší než pól v bodě $-27$ a dynamika motorů tak nebude zásadně ovlivňovat soustavu.
 
 \section{Porovnání modelu a systému}
 
@@ -486,6 +479,48 @@ Lineární model nerespektuje psámo necitlivosti popsané v rovnici \eqref{eq:d
 zatímco nelineární systém je v klidu až do času $300$ \si{\milli\second}, kdy napětí $u$ překoná hranici pásma necitlivosti $300$ \si{\milli\volt}.
 
 \section{Návrh řízení}
+Matice soustavy $\textbf{A}$ má vlastní čísla 
+\begin{equation}
+	\text{eig}(\mathbf{A}) =
+	\begin{cases}
+        0 \\
+        -6.4178 \\
+        7.2604 \\
+        -231.6811
+    \end{cases},
+    \label{eq:unstable_poles}
+\end{equation}
+z nichž jedno je nestabilní. Za účelem plnění požadavků na chování bude potřeba před soustavu zařadit regulátor
+
+\subsection{Balancování}
+Pro úlohu balancování nám nezáleží na vzdálenosti od překážky $d$. Bez újmy na obecnosti tak lze položit $d = 0$
+a uvažovat čistě proporcionální regulátor $K$ generující akční zásah $u$ čistě jako lineární kombinaci stavů soustavy $\vec{x}$.
+Stavová zpětná vazba nevnáší do soustavy další dynamiku (je pouze proporcionální). Protože platí
+\begin{equation}
+    \text{rank}(\text{ctrb}(\mathbf{A}, \mathbf{B})) = 4,
+\end{equation}
+je soustava plně řiditelná a stavová zpětná vazba umístí všechny čtyři póly.
+Stanovený cíle na dynamiku -- čas ustálení $T_s = 1.5$ \si{\second} a maximální překmit $OS = 20$ \% -- splňuje komplexně sdružená
+dvojice pólů $-0.0267 \pm 0.0521i$. Zbylé dva póly jsou ponechány na svém místě v bodech $-231$ a $0$.
+Toto umístění pólů zajistí stavový regulátor
+\begin{equation*}
+    K = \begin{bmatrix}
+        0 & -11.1715  & -0.8910  & -2.1115
+    \end{bmatrix},
+\end{equation*}
+jehož zapojení do obvodu je vidět na schématu \ref{fig:stavova_zv} zapůjčeném z \cite{img:full_state_feedback}.
+
+
+
+\begin{figure}[htbp]
+    \centerline{\includegraphics[width=\linewidth]{full_state_feedback_schematic.png}}
+    \caption{Blokové schéma zapojení stavové zpětné vazby}
+    \label{fig:stavova_zv}        
+\end{figure}
+
+
+
+\subsection{Sledování vzdálenosti od překážky}
 
 \section{Závěr}
 
@@ -493,6 +528,8 @@ zatímco nelineární systém je v klidu až do času $300$ \si{\milli\second}, 
 
     \bibitem{model_based_design}
     Yorihisa Yamamoto, \emph{NXTway-GS Model-Based Design} 
-    \end{thebibliography}
-
+    
+    \bibitem{img:full_state_feedback} G. Goodwin, S. Graebe, M. Salgado, \emph{Control system design}, supplementary materials to book \url{http://www.csd.elo.utfsm.cl/simulations/pend_sim5.html}
+    
+\end{thebibliography}
 \end{document}
