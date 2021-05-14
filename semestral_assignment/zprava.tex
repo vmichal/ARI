@@ -4,6 +4,9 @@
 \usepackage{cite}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{caption}
+\usepackage{subcaption}
 \usepackage{textcomp}
 \usepackage{xcolor}
 \usepackage{url}
@@ -164,13 +167,13 @@ a rovnice \eqref{eq:motor3} tak též může být odstraněna.
 Další zjednodušní plyne z rozhodnutí řídit levý i pravý motor stejným napětím $v_l = v_r = v$.
 Toto zjednodušení má vliv na rovnice \eqref{eq:motor1} a \eqref{eq:motor2}.
 
-Protože je cílem řízení robota po rovné čáře, je nezbytné udržovat informaci o uražené vzdálenosti $d(t)$.
-Protože platí vztah 
+Součástí druhé úlohy je rovněž regulace vzdálenosti od překážky $d(t)$.
+Protože vzdálenost svazuje s proměnnou $\theta(t)$ bijektivní vztah
 \begin{equation}
-    d(t) = \int_{-\infty}^t v(t) \text{d}t = \int_ {-\infty}^t \dot{\theta}(t) R \text{d}t = R \theta(t),
+    d(t) \approx R \theta(t),
     \label{eq:vzdalenost}
 \end{equation}
-není nezbytné přidávat vzdálenost $d$ jako další stav robota, neboť je lineární funkcí již existujícícho stavu $\theta$.
+není nezbytné přidávat vzdálenost $d$ jako další stav robota, neboť se jedná o lineární funkci již existujícícho stavu $\theta$.
 
 Nová sada rovnic popisujících systém má tvar
 \begin{equation}
@@ -347,6 +350,7 @@ Pomocí hodnot konstant uvedených v tabulce \ref{tab:konstanty} je možné vyč
         \mathbf{B} = \begin{bmatrix}
             0 \\ 0 \\   396.5711 \\-165.5902
         \end{bmatrix}.
+        \label{eq:matice_linearizovane}
     \end{equation}
 Tím je nalezena lineární náhrada obecně nelineárního systému v okolí pracovního bodu a modelování systému je hotovo.
 
@@ -366,7 +370,7 @@ modulací. Zařízení je napájeno baterií o nominálním napětí 7.4 \si{V}.
 Na obrázku \ref{fig:pwm_saturace} je patrná první statická nelinearita -- při plné střídě PWM lze na motory přiložit nejvýše $\pm U_{bat}$,
 kde $U_{bat}$ je okamžité napětí baterie. Velikost akčního zásahu je tak omezena na interval $u \in [-U_{bat}, U_{bat}]$.
 S ohledem na změřené parametry $U_\text{max}$, $I_\text{max}$ a $R_\text{in}$ napájecího zdroje zanesené v tabulce \ref{tab:konstanty} lze určit,
-že maximální úbytek napětí na vnitřním odporu baterie bude $U_{drop} = R_\text{in} \cdot I_\text{max} = 195 \si{\milli\volt}$.
+že maximální úbytek napětí na vnitřním odporu baterie bude $U_{drop} = R_\text{in} \cdot I_\text{max} = 195~\si{\milli\volt}$.
 Protože se bude segway provozovat vždy jen krátce po plném nabití, lze bez velké chyby pesimisticky odhadnout $U_{bat} = 8$ \si{V}.
 Ve standardních podmínkách bude činnost segwaye ukončena dříve, než výstupní napětí baterie stihne poklesnout na napěťovou hladinu 8 \si{V}.
 
@@ -409,15 +413,16 @@ musí se soustava těmto dvěma stavům vyhnout za každou cenu. Proto není tat
 Proměnná $x_1$ odpovídající úhlu koleček $\theta$, ani stavy $x_{3,4}$ odpovídající úhlovým rychlostem $\dot{\theta}$ a $\dot{\psi}$,
 nemohou být saturovány. Úhlová dráha uražená kolečky je obecně neomezená, stejnětak obě úhlové rychlosti.
 
-
-
-//TODO saturace na vzdálenost k překážce $\ge 0$.
+Saturovatelná je rovněž vzdálenost od překážky $d$. Ultrazvukový senzor vzdálenosti má rozlišení 8 bitů s krokem 1 \si{\centi\metre},
+hodnota $d$ tak bude v každý okamžik saturována na interval $d \in \left[0, 255\right]$. Tato saturace však není pro návrh řízení podstatná --
+pakliže je totiž překážka více jak $2.5 \text{\si{\metre}}$ daleko, nezáleží již příliš na přesné vzdálenosti.
 
 \subsection{Dynamika motorů}
 
 Pro identifikaci parametrů motorů byl na vstup motorů přiložen skok napětí z $0$ na $60$ \% střídy PWM.
 Při uvážení $U_{bat}$ dle sekce \ref{sec:ubat} to odpovídá vstupnímu napětí $U_\text{in} = \frac{60}{100} U_{bar} = 4.8$ \si{\volt}.
-Změřená odezva je vykreslena na obrázku \ref{fig:motor_skok}.
+Změřená odezva je vykreslena na obrázku \ref{fig:motor_skok}. V průběhu měření vypadla část vzorků mezi časy $250~\text{\si{\milli\second}}$ 
+a $380~\text{\si{\milli\second}}$. Pro identifikaci je tak potřeba uvážit jen validní část průběhu.
 
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=\linewidth]{motor_skok.eps}}
@@ -460,28 +465,32 @@ Integrační charakter pólu v počátku i poloha kolem bodu $-6$ je několikrá
 
 \section{Porovnání modelu a systému}
 
-Rovnice \eqref{eq:pohyb1_easy} až \eqref{eq:motor2_easy} byly implementovány jako simulinkový model. Při simulaci byl nelineární i linearizovaný model
-vystaven jednotkovému skoku vstupního napětí $u$ v čase 1 \si{\second}. Výstupy simulace jsou zobrazeny na obrázku \ref{fig:porovnani_skok},
-pro přehlednost není zobrazen průběh stavu $x_1$ (úhel koleček $\theta$), neboť jeho hodnota není pro úlohu balancování důležitá.
+Rovnice \eqref{eq:pohyb1_easy} až \eqref{eq:motor2_easy} byly implementovány jako simulinkový model vyobrazený v sekci \ref{sec:simulink_nelin_model}.
+V nelineárním modelu je zohledněna saturace náklonu $\psi$ na interval $[-\frac{\pi}{2}, \frac{\pi}{2}]$ rad, stejnětak i pásmo necitlivosti motorů $u_{deadzone}$.
+Paralelně byl zařazen blok \textit{State space} obsahující linearizovaný model představovaný maticemi dle rovnice \eqref{eq:matice_linearizovane}.
+\subsection{Odezva na skok}
+Při první simulaci byl nelineární i linearizovaný model
+vystaven jednotkovému skoku vstupního napětí $u$ v čase 1 \si{\second}. Průběhy stavových veličin jsou zobrazeny na obrázku \ref{fig:porovnani_skok}.
+Pro přehlednost není zobrazen průběh stavu $x_1$ (úhel koleček $\theta$), neboť jeho hodnota není pro úlohu balancování důležitá.
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=\linewidth]{porovnani_skok.eps}}
     \caption{Simulace odezvy na skok napětí}
     \label{fig:porovnani_skok}        
 \end{figure}
-Oba modely mají stejný charakter časových průběhů, jsou velmi nestabilní, a rychle divergují.
-V nelineárním modelu je zohledněna saturace náklonu $\psi$ na interval $[-\frac{\pi}{2}, \frac{\pi}{2}]$ rad. V čase $1.6 \si{\second}$ nastane pád robota na zem.
-Nelineární systém dále setrvává ve stabilním ekvilibriu.
+Oba modely mají stejný charakter časových průběhů, jsou velmi nestabilní a rychle divergují.
+V čase cca. $1.6~\si{\second}$ nastane modelově pád robota na zem a hodnota $\psi$ je dále neměnná -- reálný nelineární systém by setrvával ve stabilním ekvilibriu.
 Pakliže zůstanou dodrženy podmínky linearizace na blízkost pracovnímu bodu, odpovídá linearizovaný model modelu nelineárnímu.
 
+\subsection{Odezva na rampu}
 V případě připojení rampy na vstup $u$ soustavy se projeví pásmo necitlivosti na motorech. Na obrázku \ref{fig:porovnani_rampa} jsou pro porovnání
-vykresleny odezvy na rampu se sklonem 1. 
+vykresleny odezvy na rampu vstupního signálu s předpisem $u(t) = t$ (sklon 1). 
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=\linewidth]{porovnani_rampa.eps}}
     \caption{Simulace odezvy na rampu napětí}
     \label{fig:porovnani_rampa}        
 \end{figure}
 Lineární model nerespektuje psámo necitlivosti popsané v rovnici \eqref{eq:deadzone}, pročež se jeho stav začne měnit bezprostředně po startu,
-zatímco nelineární systém je v klidu až do času $300$ \si{\milli\second}, kdy napětí $u$ překoná hranici pásma necitlivosti $300$ \si{\milli\volt}.
+zatímco nelineární systém je v klidu až do okamžiku, kdy napětí $u$ překoná hranici pásma necitlivosti.
 
 \section{Návrh řízení}
 Matice soustavy $\textbf{A}$ má vlastní čísla 
@@ -495,9 +504,32 @@ Matice soustavy $\textbf{A}$ má vlastní čísla
     \end{cases},
     \label{eq:unstable_poles}
 \end{equation}
-z nichž jedno je nestabilní. Za účelem plnění požadavků na chování bude potřeba před soustavu zařadit regulátor
+jedno je tedy nestabilní a jedno je na mezi stability. Za účelem splnění požadavků na chování bude potřeba před soustavu zařadit regulátor generující
+akční zásah $u$.
+\subsection{Kompenzace nelinearit}
+ Pro částečnou kompenzaci pásma necitlivosti motorů dle \eqref{eq:deadzone} je mezi výstup regulátoru a vstup soustavy
+zařazen blok \textit{Coulombic and visous friction} s parametry $\text{Offset} = 0.3$, $\text{Gain} = 1$. Velikost offsetu byla laděna
+experimentálně s cílem zajistit plynulé průběhy akčního zásahu. Na obrázku \ref{fig:bez_kompenzace_treni} jsou vidět body, v nichž nejsou průběhy stavů hladké.
+\begin{figure}[htbp]
+    \centerline{\includegraphics[width=\linewidth]{regulace_bez_kompenzace_treni.eps}}
+    \caption{Neexistence derivace stavových proměnných v některých bodech kvůli nekompenzovanému statickému tření}
+    \label{fig:bez_kompenzace_treni}        
+\end{figure}
+Příliš nízký offset (či žádná kompenzace pásma necitlivosti) vedl segway k oscilacím, neboť
+se akční zásah mohl projevit až od jisté velikosti. Offset vyšší jak $0.4$ způsoboval oscilace, neboť malá regulační odchylka stavových proměnných
+vygenerovala velkou hodnotu akčního zásahu, která přestřelila stabilní polohu.
+Tím byl vytyčen interval přípustných hodnot offsetu a další ladění probíhalo iteračně aproximační metodou. 
+Zásadním problémem pro přesnější určení optimálního offsetu je asymetrie pásma necitlivosti patrná z \eqref{eq:deadzone}.
+S použitím kompenzace o výše uvedených parametrech byly průběhy signálů vyhlazeny, jak je patrno na obrázku \ref{fig:kompenzace_treni}. 
 
-\subsection{Balancování}
+
+\begin{figure}[htbp]
+    \centerline{\includegraphics[width=\linewidth]{regulace_kompenzace_treni.eps}}
+    \caption{Vyhlazené průběhy stavových proměnných díky kompenzaci tření}
+    \label{fig:kompenzace_treni}        
+\end{figure}
+
+\subsection{Balancování stavovou zpětnou vazbou}
 Pro úlohu balancování nám nezáleží na vzdálenosti od překážky $d$. Bez újmy na obecnosti tak lze položit $d = 0$
 a uvažovat čistě proporcionální regulátor $K$ generující akční zásah $u$ čistě jako lineární kombinaci stavů soustavy $\vec{x}$.
 Stavová zpětná vazba nevnáší do soustavy další dynamiku (je pouze proporcionální). Protože platí
@@ -508,27 +540,28 @@ je soustava plně řiditelná a stavová zpětná vazba umístí všechny čtyř
 Stanovený cíle na dynamiku -- čas ustálení $T_s = 1.5$ \si{\second} a maximální překmit $OS = 20$ \% -- splňuje komplexně sdružená
 dvojice pólů $-0.0267 \pm 0.0521i$. Třetí pól je ponechán na svém místě v $-231$. Čtvrtý pól je za účelem stabilizace záhodno umístit blízko počátku.
 Byly nalezeny dvě významné polohy:
-\begin{itemize}
+\begin{enumerate}
     \item \textbf{Čistý integrátor} $s = 0$ v přenosu uzavřené smyčky vedl na eliminaci stavu $x_1$ ze stavové zpětné vazby.
     Nezávislost výstupu regulátoru 
     \begin{equation*}
-        K = \begin{bmatrix}
+        K_1 = \begin{bmatrix}
             0 & -11.1715  & -0.8910  & -2.1115
         \end{bmatrix}
     \end{equation*}
     na $\theta$ zajistila translační invarianci stability. Segway tedy bylo možno dotlačit do nové polohy, v níž se opět stabilizoval. Nezávislost na $\theta$
     však byla souběžně i nevýhodou, neboť robot vlivem malých leč nenulových regulačních odchylek během času pomalu couval, až narazil na překážku v místnosti.
+    Simulace tohoto chování je ukázána později na obrázku \ref{fig:stavova_K2_nelin}.
 
-    \item \textbf{Pomalý mód} $s = -0.5$ ukázal nejlepší vlastnosti co se týče řízení stavových veličin k nule. Odpovídající regulátor
+    \item \textbf{Pomalý mód} $s = -0.5$ projevil nejlepší vlastnosti co se týče řízení stavových veličin k nule. Odpovídající regulátor
     \begin{equation*}
-        K = \begin{bmatrix}
+        K_2 = \begin{bmatrix}
             -0.1883 & -12.4845 &  -0.9211 &  -2.1853
         \end{bmatrix}
     \end{equation*}
     zohledňuje i úhel natočení kol $\theta$ a tudíž udržuje robota ve stabilní poloze na jednom místě.
-\end{itemize}
+\end{enumerate}
 Toto umístění pólů zajistí stavový regulátor
-jehož zapojení do obvodu je vidět na schématu \ref{fig:stavova_zv} zapůjčeném z \cite{img:full_state_feedback}.
+jehož zapojení do obvodu je vidět na obrázku \ref{fig:stavova_zv} zapůjčeném z \cite{img:full_state_feedback}.
 
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=\linewidth]{full_state_feedback_schematic.png}}
@@ -536,17 +569,58 @@ jehož zapojení do obvodu je vidět na schématu \ref{fig:stavova_zv} zapůjče
     \label{fig:stavova_zv}        
 \end{figure}
 
-\begin{figure}[htbp]
-    \centerline{\includegraphics[width=\linewidth]{stabilizace_lin_pocpodminky.eps}}
-    \caption{}
-    \label{fig:stabilizace_lin_model}        
-\end{figure}
-\begin{figure}[htbp]
-    \centerline{\includegraphics[width=\linewidth]{stabilizace_nelin_pocpodminky.eps}}
-    \caption{}
-    \label{fig:stabilizace_nelin}        
-\end{figure}
+Oba stavové regulátory zajistí teoreticky stabilní uzavřenou zpětnovazební smyčku, z definice by tedy měly všechny možné počáteční
+podmínky pro stavové proměnné odeznít s rostoucím časem do nuly. Pro experiment byly zvoleny počáteční podmínky
+\begin{equation*}
+    \begin{bmatrix}
+        \theta_0 & \psi_0 & \dot{\theta}_0 & \dot{\psi}_0
+    \end{bmatrix} = \begin{bmatrix}
+        0 & 15~\si{\degree} & 0 & 18~\si{\degree\per\second}
+    \end{bmatrix}
+\end{equation*}
+simulující zlovolnou vnější poruchu, kdy například vlivem srážky segway zastaví a začne přepadávat.
 
+Na obrázcích \ref{fig:stavova_K2_lin} a \ref{fig:stavova_K2_nelin}
+jsou k porovnání časové průběhy odezev linearizovaného modelu s regulátorem $K_2$ i nelineárního modelu se zapojeným regulátorem $K_2$ na nenulové počáteční podmínky.
+Přechodové děje na počátku nejsou příliš zajímavé, důležitý je ustálený stav. Zatímco linearizovaný model skutečně s použitím regulátoru $K_2$ všemi svými stavy 
+odezní do nuly, simulace nelineárního modelu ukazuje na jistotou nenulovou konstantní hodnotu úhlu natočení koleček $\theta$. Tento nedostatek však není nijak omezující
+a je snadno akceptovatelný. 
+
+\begin{figure*}[htbp]
+    \centering % <-- added
+    \begin{subfigure}{0.45\textwidth} 
+        \centerline{\includegraphics[width=\linewidth]{stavova_K2_lin.eps}}
+        \caption{Linearizovaný model a $K_2$ \\ dokonalé uklidnění systému}
+        \label{fig:stavova_K2_lin}        
+    \end{subfigure}\hfil
+    \begin{subfigure}{0.45\textwidth}
+        \centerline{\includegraphics[width=\linewidth]{stavova_K2_nelin.eps}}
+        \caption{Nelineární systém a $K_1$ \\ malá neměnná chyba, segway necestuje}
+        \label{fig:stavova_K2_nelin}        
+    \end{subfigure}\hfil
+
+    
+\medskip
+
+\begin{subfigure}{0.45\textwidth} 
+    \centerline{\includegraphics[width=\linewidth]{stavova_K1_lin.eps}}
+    \caption{Linearizovaný model a $K_1$ \\ velká neměnná chyba v ustáleném stavu}
+    \label{fig:stavova_K1_lin}        
+\end{subfigure}\hfil
+\begin{subfigure}{0.45\textwidth}
+    \centerline{\includegraphics[width=\linewidth]{stavova_K1_nelin.eps}}
+    \caption{Nelineární systém a $K_1$ \\ segway postupně odjíždí ($\theta$ diverguje)}
+    \label{fig:stavova_K1_nelin}        
+\end{subfigure}\hfil
+
+\caption{Srovnání stavových regulátorů $K_{1,2}$ pro ustálení z nenulových počátečních podmínek}
+\label{fig:charakteristiky}
+\end{figure*}
+
+
+Průběhy ze simulace použití stavového regulátoru $K_1$, jehož nasazení umístí jeden pól uzavřené smyčky do počátku $s$ roviny, jsou vykresleny na obrázkách 
+\ref{fig:stavova_K1_lin} a \ref{fig:stavova_K1_nelin}. Charaktery průběhů jsou shodné s ději pro regulátor $K_2$, liší se ovšem ustálený stav -- integrátor v přenosu
+soustavy způsobí konstantní nenulovou hodnotu v případě linearizovaného modelu a v případě nelineárního modelu dokonce úhel natočení koleček přímo pomalu diverguje.
 
 \subsection{Sledování vzdálenosti od překážky}
 
@@ -562,12 +636,18 @@ Pro zajištění nulové regulační odchylky bude nezbytná integrační složk
 
 \section{Závěr}
 
-\begin{thebibliography}{9}
 
+\begin{thebibliography}{9}
+    
     \bibitem{model_based_design}
     Yorihisa Yamamoto, \emph{NXTway-GS Model-Based Design} 
     
     \bibitem{img:full_state_feedback} G. Goodwin, S. Graebe, M. Salgado, \emph{Control system design}, supplementary materials to book \url{http://www.csd.elo.utfsm.cl/simulations/pend_sim5.html}
     
 \end{thebibliography}
+
+
+\section{Appendix}
+\label{sec:simulink_nelin_model}
+%TODO přidat model
 \end{document}
