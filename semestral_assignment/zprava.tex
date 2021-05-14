@@ -504,22 +504,27 @@ Matice soustavy $\textbf{A}$ má vlastní čísla
     \end{cases},
     \label{eq:unstable_poles}
 \end{equation}
-jedno je tedy nestabilní a jedno je na mezi stability. Za účelem splnění požadavků na chování bude potřeba před soustavu zařadit regulátor generující
-akční zásah $u$.
+jeden mód je na mezi stability a jeden je silně nestabilní. Za účelem splnění požadavků na chování bude potřeba před soustavu zařadit regulátor $K(s)$ generující
+akční zásah $u$ a uzavřít stabilizující zpětnovazební smyčku.
 \subsection{Kompenzace nelinearit}
  Pro částečnou kompenzaci pásma necitlivosti motorů dle \eqref{eq:deadzone} je mezi výstup regulátoru a vstup soustavy
-zařazen blok \textit{Coulombic and visous friction} s parametry $\text{Offset} = 0.3$, $\text{Gain} = 1$. Velikost offsetu byla laděna
+zařazen blok \textit{Coulombic and viscous friction} s parametry $\text{Offset} = 0.15$, $\text{Gain} = 1$. Velikost offsetu byla laděna
 experimentálně s cílem zajistit plynulé průběhy akčního zásahu. Na obrázku \ref{fig:bez_kompenzace_treni} jsou vidět body, v nichž nejsou průběhy stavů hladké.
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=\linewidth]{regulace_bez_kompenzace_treni.eps}}
     \caption{Neexistence derivace stavových proměnných v některých bodech kvůli nekompenzovanému statickému tření}
     \label{fig:bez_kompenzace_treni}        
 \end{figure}
-Příliš nízký offset (či žádná kompenzace pásma necitlivosti) vedl segway k oscilacím, neboť
-se akční zásah mohl projevit až od jisté velikosti. Offset vyšší jak $0.4$ způsoboval oscilace, neboť malá regulační odchylka stavových proměnných
-vygenerovala velkou hodnotu akčního zásahu, která přestřelila stabilní polohu.
-Tím byl vytyčen interval přípustných hodnot offsetu a další ladění probíhalo iteračně aproximační metodou. 
-Zásadním problémem pro přesnější určení optimálního offsetu je asymetrie pásma necitlivosti patrná z \eqref{eq:deadzone}.
+
+Bez kompenzace pásma necitlivosti měl segway tendenci k oscilacím kolem pracovního bodu, neboť akční zásah $u$ byl schopen pohnout motory
+až od jisté velikosti, kdy stavy segwaye byly již daleko vychýleny od nulové polohy.
+Offset vyšší jak $0.4$ rovněž způsoboval oscilace, neboť stačila malá regulační odchylka stavových proměnných k vygenerování velkého akčního zásahu,
+jenž přestřelil stabilní polohu.
+Z vytyčeného intervalu přípustných offsetů byla iteračně aproximační metodou vybrána hodnota $0.15$,
+neboť experimentálně zajišťovala nejplynulejší pohyb segwaye.
+Zásadním problémem pro přesnější kompenzaci pásma necitlivosti je jeho asymetrie patrná z \eqref{eq:deadzone}. Pro dosažení lepších výsledků by bylo možné
+použít různý offset v závislosti na hodnotě $\text{sign}(u)$, jednalo by se však o zbytečné zesložitění přinášející jen malé vylepšení
+ve srovnání s výše popsanou symetrickou kompenzací.
 S použitím kompenzace o výše uvedených parametrech byly průběhy signálů vyhlazeny, jak je patrno na obrázku \ref{fig:kompenzace_treni}. 
 
 
@@ -529,19 +534,32 @@ S použitím kompenzace o výše uvedených parametrech byly průběhy signálů
     \label{fig:kompenzace_treni}        
 \end{figure}
 
-\subsection{Balancování stavovou zpětnou vazbou}
-Pro úlohu balancování nám nezáleží na vzdálenosti od překážky $d$. Bez újmy na obecnosti tak lze položit $d = 0$
-a uvažovat čistě proporcionální regulátor $K$ generující akční zásah $u$ čistě jako lineární kombinaci stavů soustavy $\vec{x}$.
-Stavová zpětná vazba nevnáší do soustavy další dynamiku (je pouze proporcionální). Protože platí
+\subsection{Základní balancování stavovou zpětnou vazbou}
+Pro úlohu stabilizace robotu v nestabilní svislé poloze postačuje použití stavové zpětné vazby s regulátorem $K~=~\left[ k_1 ~ k_2 ~ k_3 ~ k_4 \right]$
+pro $k_i \in \mathbb{R}$, jehož zapojení do schématu je na obrázku \ref{fig:stavova_zv} zapůjčeném z \cite{img:full_state_feedback}.
+Pro tuto topologii systému je akční zásah lineární kombinací stavových proměnných soustavy, neboť
+\begin{equation}
+    u = K \cdot \vec{x} = \sum_{i=1}^4 k_i x_i.
+\end{equation}
+
+\begin{figure}[htbp]
+    \centerline{\includegraphics[width=\linewidth]{full_state_feedback_schematic.png}}
+    \caption{Blokové schéma zapojení stavové zpětné vazby}
+    \label{fig:stavova_zv}        
+\end{figure}
+
+Stavová zpětná vazba je pouze proporcionální a nevnáší do soustavy další dynamiku. Protože platí
 \begin{equation}
     \text{rank}(\text{ctrb}(\mathbf{A}, \mathbf{B})) = 4,
 \end{equation}
-je soustava plně řiditelná a stavová zpětná vazba umístí všechny čtyři póly.
-Stanovený cíle na dynamiku -- čas ustálení $T_s = 1.5$ \si{\second} a maximální překmit $OS = 20$ \% -- splňuje komplexně sdružená
-dvojice pólů $-0.0267 \pm 0.0521i$. Třetí pól je ponechán na svém místě v $-231$. Čtvrtý pól je za účelem stabilizace záhodno umístit blízko počátku.
+je soustava plně řiditelná a stavová zpětná vazba umístí všechny čtyři póly $p_i$ pro $i \in \left\{1, 2,3,4\right\}$ uzavřené smyčky.
+
+V zadání úlohy jsou stanoveny cíle na dynamiku -- rychlý čas ustálení $T_s$ (například $T_s = 1.5$ \si{\second}) a maximální překmit $OS = 20$ \%.
+Tyto požadavky  splňuje komplexně sdružená dvojice pólů $p_{1,2} = -0.0267 \pm 0.0521i$.
+Třetí pól je ponechán na svém místě v bodě $p_3 = -231$. Čtvrtý pól $p_4$ je za účelem stabilizace záhodno umístit blízko počátku.
 Byly nalezeny dvě významné polohy:
 \begin{enumerate}
-    \item \textbf{Čistý integrátor} $s = 0$ v přenosu uzavřené smyčky vedl na eliminaci stavu $x_1$ ze stavové zpětné vazby.
+    \item \textbf{Čistý integrátor} $p_4 = 0$ v přenosu uzavřené smyčky vedl na eliminaci stavu $x_1$ ze stavové zpětné vazby.
     Nezávislost výstupu regulátoru 
     \begin{equation*}
         K_1 = \begin{bmatrix}
@@ -550,9 +568,9 @@ Byly nalezeny dvě významné polohy:
     \end{equation*}
     na $\theta$ zajistila translační invarianci stability. Segway tedy bylo možno dotlačit do nové polohy, v níž se opět stabilizoval. Nezávislost na $\theta$
     však byla souběžně i nevýhodou, neboť robot vlivem malých leč nenulových regulačních odchylek během času pomalu couval, až narazil na překážku v místnosti.
-    Simulace tohoto chování je ukázána později na obrázku \ref{fig:stavova_K2_nelin}.
+    Výsledky simulace tohoto chování jsou vyneseny na obrázku \ref{fig:stavova_K2_nelin}.
 
-    \item \textbf{Pomalý mód} $s = -0.5$ projevil nejlepší vlastnosti co se týče řízení stavových veličin k nule. Odpovídající regulátor
+    \item \textbf{Pomalý mód} $p_4 = -0.5$ projevil nejlepší vlastnosti co se týče řízení stavových veličin k nule. Odpovídající regulátor
     \begin{equation*}
         K_2 = \begin{bmatrix}
             -0.1883 & -12.4845 &  -0.9211 &  -2.1853
@@ -560,33 +578,8 @@ Byly nalezeny dvě významné polohy:
     \end{equation*}
     zohledňuje i úhel natočení kol $\theta$ a tudíž udržuje robota ve stabilní poloze na jednom místě.
 \end{enumerate}
-Toto umístění pólů zajistí stavový regulátor
-jehož zapojení do obvodu je vidět na obrázku \ref{fig:stavova_zv} zapůjčeném z \cite{img:full_state_feedback}.
 
-\begin{figure}[htbp]
-    \centerline{\includegraphics[width=\linewidth]{full_state_feedback_schematic.png}}
-    \caption{Blokové schéma zapojení stavové zpětné vazby}
-    \label{fig:stavova_zv}        
-\end{figure}
-
-Oba stavové regulátory zajistí teoreticky stabilní uzavřenou zpětnovazební smyčku, z definice by tedy měly všechny možné počáteční
-podmínky pro stavové proměnné odeznít s rostoucím časem do nuly. Pro experiment byly zvoleny počáteční podmínky
-\begin{equation*}
-    \begin{bmatrix}
-        \theta_0 & \psi_0 & \dot{\theta}_0 & \dot{\psi}_0
-    \end{bmatrix} = \begin{bmatrix}
-        0 & 15~\si{\degree} & 0 & 18~\si{\degree\per\second}
-    \end{bmatrix}
-\end{equation*}
-simulující zlovolnou vnější poruchu, kdy například vlivem srážky segway zastaví a začne přepadávat.
-
-Na obrázcích \ref{fig:stavova_K2_lin} a \ref{fig:stavova_K2_nelin}
-jsou k porovnání časové průběhy odezev linearizovaného modelu s regulátorem $K_2$ i nelineárního modelu se zapojeným regulátorem $K_2$ na nenulové počáteční podmínky.
-Přechodové děje na počátku nejsou příliš zajímavé, důležitý je ustálený stav. Zatímco linearizovaný model skutečně s použitím regulátoru $K_2$ všemi svými stavy 
-odezní do nuly, simulace nelineárního modelu ukazuje na jistotou nenulovou konstantní hodnotu úhlu natočení koleček $\theta$. Tento nedostatek však není nijak omezující
-a je snadno akceptovatelný. 
-
-\begin{figure*}[htbp]
+\begin{figure*}[h!]
     \centering % <-- added
     \begin{subfigure}{0.45\textwidth} 
         \centerline{\includegraphics[width=\linewidth]{stavova_K2_lin.eps}}
@@ -617,12 +610,66 @@ a je snadno akceptovatelný.
 \label{fig:charakteristiky}
 \end{figure*}
 
+Oba stavové regulátory zajistí teoreticky stabilní uzavřenou zpětnovazební smyčku, z definice by tedy měly všechny možné počáteční
+podmínky pro stavové proměnné odeznít s rostoucím časem do nuly. Pro experiment byly zvoleny počáteční podmínky
+\begin{equation*}
+    \begin{bmatrix}
+        \theta_0 & \psi_0 & \dot{\theta}_0 & \dot{\psi}_0
+    \end{bmatrix} = \begin{bmatrix}
+        0 & 15~\si{\degree} & 0 & 18~\si{\degree\per\second}
+    \end{bmatrix}
+\end{equation*}
+odpovídající vnější poruše, kdy například vlivem srážky s překážkou segway zastaví $\dot{\theta} = 0$ a začne přepadávat $\dot{\psi} \neq 0$.
+
+
+Na obrázcích \ref{fig:stavova_K2_lin} a \ref{fig:stavova_K2_nelin}
+jsou k porovnání časové průběhy odezev linearizovaného modelu s regulátorem $K_2$ i nelineárního modelu se zapojeným regulátorem $K_2$ na nenulové počáteční podmínky.
+Přechodové děje na počátku nejsou příliš zajímavé, důležitý je ustálený stav. Zatímco linearizovaný model skutečně s použitím regulátoru $K_2$ všemi svými stavy 
+odezní do nuly, simulace nelineárního modelu ukazuje na jistotou nenulovou konstantní hodnotu úhlu natočení koleček $\theta$. Tento nedostatek však není nijak omezující
+a je snadno akceptovatelný. 
+
 
 Průběhy ze simulace použití stavového regulátoru $K_1$, jehož nasazení umístí jeden pól uzavřené smyčky do počátku $s$ roviny, jsou vykresleny na obrázkách 
 \ref{fig:stavova_K1_lin} a \ref{fig:stavova_K1_nelin}. Charaktery průběhů jsou shodné s ději pro regulátor $K_2$, liší se ovšem ustálený stav -- integrátor v přenosu
-soustavy způsobí konstantní nenulovou hodnotu v případě linearizovaného modelu a v případě nelineárního modelu dokonce úhel natočení koleček přímo pomalu diverguje.
+soustavy způsobí konstantní nenulovou hodnotu v případě linearizovaného modelu a v případě nelineárního modelu dokonce úhel natočení koleček pomalu diverguje.
+
+Stavovou zpětnou vazbou se podařilo dosáhnout rozumné stability odezvy na počáteční podmínky. Protože je SZV inherentně proporcionální, nelze očekávat
+dokonalé vlastnosti odezvy na poruchy v soustavě. Základní je garantovat stabilitu, je očekávatelná nenulová ustálená regulační odchylka,
+neboť proporcionální regulace není schopná zajistit asymptotické sledování. Na obrázku \ref{fig:porucha_stavova_ZV} je vykreslen průběh simulovaných signálů ve smyčce nelineárního
+systému a stavového regulátoru $K_2$, kde v čase $t = 20~\text{\si{\second}}$ nastane jednotkový skok poruchy.
+Segway se podle nastavené $T_s$ vrátí zpět do svislé polohy, ovšem vlivem působící poruchy dojde ke stabilizaci soustavy v jiném bodě stavového postoru ($\theta \neq 0$).
+Regulátor musí aktivně generovat akční zásah pro kompenzování poruchy tak, aby na vstupu soustavy byly hodnoty blízké nule.
+
+
+\begin{figure}[h!]
+    \centerline{\includegraphics[width=\linewidth]{stavova_ZV_porucha.eps}}
+    \caption{Neschopnost proporcionální stavové zpětné vazby asymptoticky sledovat poruchu}
+    \label{fig:porucha_stavova_ZV}        
+\end{figure}
+
+\subsection{Vylepšení stabilizace stavovou zpětnou vazbou}
+
+Lepší vlastnosti odezvy na poruchu by mohlo zajistit integrální řízení, jehož zavedení by však navýšilo řád soustavy a způsobilo tak nežádoucí zesložitění.
+Při experimentálních testech stability fyzickým vyváděním segwaye ze stabilní polohy konal problémy velký překmit ustalování, pakliže bylo vyvoláno
+několik poruch rychle po sobě. Segway se nechal rozkmitat a stal se nestabilním. Pro své obecně lepší vlastnosti byl regulátor $K_1$ zvolen jako základ
+pro další zlepšování. Cíl stabilizovat systém i v přítomnosti mnoha rychlých poruch vyžaduje upravení požadavků na dynamiku -- experimentálně byly zvoleny
+požadavky $T_s = 1.25~\text{\si{\second}}$ a $OS = 10~\%$ na póly $p_{1,2}$. Póly $p_{3,4}$ jsou ponechány v týchž polohách jako pro regulátor $K_1$.
+Výsledný regulátor
+\begin{equation*}
+    K_3 = \begin{bmatrix}
+        -0.1613 & -14.2147 &  -0.8729  & -2.0811
+    \end{bmatrix}
+\end{equation*}
+zajistil jen zanedbatelné popojíždění segwaye při zajištění velice dobré stability a schopnosti se vypořádat s dynamickými změnami rozložení
+hmotnosti například pověšením zátěže na jednu stranu robota. Z experimentů s tímto regulátorem byla pořízena videodokumentace přiložená k této zprávě.
+
 
 \subsection{Sledování vzdálenosti od překážky}
+
+První pokus o řízení pomocí vzdálenosti od překážky $d$ byl návrh proporcionálního regulátoru pro svou jednoduchou integrovatelnost do systému.
+Použitá stavová zpětná vazba spolehlivě udržuje robota ve stavovém prostoru poblíž bodu $\vec{o}$. Pomocí vztahu \eqref{eq:vzdalenost} se nabízí přímočarý
+způsob řízení veličiny $d$ -- dopočíst hodnotu $\theta$, pro kterou bude splněno $d = d_{ref}$, a následně robota dovést na tento nový úhel koleček. 
+
 
 Na obrázku \ref{fig:vzdalenost_P} je vykreslen časový průběh $d(t)$ z minutového spuštění robota.
 \begin{figure}[htbp]
@@ -631,7 +678,7 @@ Na obrázku \ref{fig:vzdalenost_P} je vykreslen časový průběh $d(t)$ z minut
     \label{fig:vzdalenost_P}        
 \end{figure}
 Proporcionální regulátor nedokázal zajistit ustálenou regulační odchylku. Při poruše (představované šťouchnutím do robota)
-se proporcionální regulace nedokázala vrátit na nastavenou referenční hodnotu $d_\text{ref} = 50 \text{\si{\centi\metre}}$.
+se proporcionální regulace nedokázala vrátit na nastavenou referenční hodnotu $d_\text{ref} = 50~\text{\si{\centi\metre}}$.
 Pro zajištění nulové regulační odchylky bude nezbytná integrační složka.
 
 \section{Závěr}
