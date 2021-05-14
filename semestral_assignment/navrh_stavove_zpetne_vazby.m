@@ -3,8 +3,8 @@
 
 %zadán je max pøekmit 20% a co nejkratší èas dosažení.
 
-overshoot = 0.2;
-settling_time = 1.5; %s
+overshoot = 0.1; % pro optimální øízení; pro regulátory K_1,2 je 0.2 
+settling_time = 1.25; %s; pro optimální øízení. Pro K_1,2 je 1.5
 damping = -log(overshoot)/sqrt(pi^2 + log(overshoot)^2);
 sigma = 4/settling_time;
 

@@ -6,6 +6,8 @@ Control Systems Toolbox
  - step, impulse, initial,
  - ctrb, obsv - výpočet matice řiditelnosti a pozorovatelnosti
  - place(A, B, [póly]), acker((A, B, [póly]) - umístí póly systému, případně hledá regulátor Ackermannovým vzorcem
+ - damp(SYS) vypíše všechny póly včetně přirozených frekvencí, tlumení, časových konstant
+ - pole, zero - vypočte nuly/póly systému ; pzmap - vykreslí v s/z rovině polohy pólů a nul 
 %Vypočtení zesílení a fáze přenosu pro danou frekvenci
 [gain, angle] = bode(transfer_function, frekvence) 
 
