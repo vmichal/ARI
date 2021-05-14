@@ -12,7 +12,7 @@ psidot = squeeze(signal_psidot.signals.values);
 hold on;
 stem(time, voltage, 'LineWidth', 2);
 plot(time, [theta, thetadot, psi, psidot], 'LineWidth', 2);
-xlim([0 12])
+ylim([-40 40])
 legend('akèní zásah','úhel natoèení kol','úhlová rychlost kol', 'náklon', 'úhlová rychlost pádu','Location','northwest')
 grid on;
 xlabel('Èas [s]')

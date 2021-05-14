@@ -5,6 +5,10 @@
 
 d_ref = 50; %cm
 
+%Poèáteèní podmínky pro simulaci:
+initial_theta = 0; initial_psi = pi/12; initial_thetadot = 0; initial_psidot = pi/10;
+simulation_initial_conditions = [initial_theta; initial_psi; initial_thetadot; initial_psidot]
+
 %moje konstanty
 U_max = 8.3;
 I_max = 0.3;
