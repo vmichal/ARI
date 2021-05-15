@@ -17,6 +17,7 @@
 \graphicspath{{./images}}
 \usepackage{caption}
 \captionsetup[subfigure]{justification=centering} %configure subfigures to use centered captions
+\captionsetup[figure*]{justification=centering} %configure subfigures to use centered captions
 
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
@@ -170,9 +171,9 @@ Další zjednodušní plyne z rozhodnutí řídit levý i pravý motor stejným 
 Toto zjednodušení má vliv na rovnice \eqref{eq:motor1} a \eqref{eq:motor2}.
 
 Součástí druhé úlohy je rovněž regulace vzdálenosti od překážky $d(t)$.
-Protože vzdálenost svazuje s proměnnou $\theta(t)$ bijektivní vztah
+Protože vzdálenost svazuje s proměnnou $\theta(t)$ vzájemně jednoznačný vztah
 \begin{equation}
-    d(t) \approx R \theta(t),
+    \Delta d(t) = R \Delta\theta(t),
     \label{eq:vzdalenost}
 \end{equation}
 není nezbytné přidávat vzdálenost $d$ jako další stav robota, neboť se jedná o lineární funkci již existujícícho stavu $\theta$.
@@ -467,7 +468,7 @@ Integrační charakter pólu v počátku i poloha kolem bodu $-6$ je několikrá
 
 \section{Porovnání modelu a systému}
 
-Rovnice \eqref{eq:pohyb1_easy} až \eqref{eq:motor2_easy} byly implementovány jako simulinkový model vyobrazený v sekci \ref{sec:simulink_nelin_model}.
+Rovnice \eqref{eq:pohyb1_easy} až \eqref{eq:motor2_easy} byly implementovány jako simulinkový model vyobrazený na schématu \ref{fig:simulink_nelin_model}.
 V nelineárním modelu je zohledněna saturace náklonu $\psi$ na interval $[-\frac{\pi}{2}, \frac{\pi}{2}]$ rad, stejnětak i pásmo necitlivosti motorů $u_{deadzone}$.
 Paralelně byl zařazen blok \textit{State space} obsahující linearizovaný model představovaný maticemi dle rovnice \eqref{eq:matice_linearizovane}.
 \subsection{Odezva na skok}
@@ -652,7 +653,7 @@ Regulátor musí aktivně generovat akční zásah pro kompenzování poruchy ta
     \label{fig:porucha_stavova_ZV}        
 \end{figure}
 
-\subsection{Vylepšení stabilizace stavovou zpětnou vazbou}
+\subsection{Optimalizace stabilizující stavové zpětné vazby}
 
 Lepší vlastnosti odezvy na poruchu by mohlo zajistit integrální řízení, jehož zavedení by však navýšilo řád soustavy a způsobilo tak nežádoucí zesložitění.
 Při experimentálních testech stability fyzickým vyváděním segwaye ze stabilní polohy konal problémy velký překmit ustalování, pakliže bylo vyvoláno
@@ -726,7 +727,20 @@ pro nasazení například v úlohách stabilizace kamer nebo při přepravě kř
     
 \end{thebibliography}
 
+\pagebreak
+\section{Appendix}
 
-\label{sec:simulink_nelin_model}
-%TODO přidat model
+Schémata a další přílohy z procesu návrhu řízení. Schémata jsou pouze orientační, kompletní simulinkové modely jsou přiloženy ke zprávě.
+
+\begin{figure*}[htbp]
+    \centerline{\includegraphics[width=\linewidth]{simulace_simulink.png}}
+    \caption{Model programu SIMULINK používaný pro porovnání odezev a řízení linearizovaného a nelineárního modelu systému}
+    \label{fig:simulink_simulace}        
+\end{figure*}
+
+\begin{figure*}[htbp]
+    \centerline{\includegraphics[width=\linewidth]{nelinearni_system_simulink.png}}
+    \caption{Model programu SIMULINK implementující diferenciální rovnice \eqref{eq:pohyb1_easy} až \eqref{eq:motor2_easy}}
+    \label{fig:simulink_nelin_model}        
+\end{figure*}
 \end{document}
