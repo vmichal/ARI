@@ -7,6 +7,7 @@
 \usepackage{multicol}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{caption}
 \usepackage{textcomp}
 \usepackage{xcolor}
 \usepackage{url}
@@ -14,7 +15,8 @@
 \usepackage{siunitx}
 
 \graphicspath{{./images}}
-
+\usepackage{caption}
+\captionsetup[subfigure]{justification=centering} %configure subfigures to use centered captions
 
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
@@ -586,20 +588,23 @@ Byly nalezeny dvě významné polohy:
         \caption{Linearizovaný model a $K_2$ \\ dokonalé uklidnění systému}
         \label{fig:stavova_K2_lin}        
     \end{subfigure}\hfil
+    \centering % <-- added
     \begin{subfigure}{0.45\textwidth}
         \centerline{\includegraphics[width=\linewidth]{stavova_K2_nelin.eps}}
-        \caption{Nelineární systém a $K_1$ \\ malá neměnná chyba, segway necestuje}
+        \caption{Nelineární systém a $K_2$ \\ malá neměnná chyba, segway necestuje}
         \label{fig:stavova_K2_nelin}        
     \end{subfigure}\hfil
-
     
-\medskip
-
-\begin{subfigure}{0.45\textwidth} 
-    \centerline{\includegraphics[width=\linewidth]{stavova_K1_lin.eps}}
-    \caption{Linearizovaný model a $K_1$ \\ velká neměnná chyba v ustáleném stavu}
-    \label{fig:stavova_K1_lin}        
-\end{subfigure}\hfil
+    
+    \medskip
+    
+    \centering % <-- added
+    \begin{subfigure}{0.45\textwidth} 
+        \centerline{\includegraphics[width=\linewidth]{stavova_K1_lin.eps}}
+        \caption{Linearizovaný model a $K_1$ \\ velká neměnná chyba v ustáleném stavu}
+        \label{fig:stavova_K1_lin}        
+    \end{subfigure}\hfil
+    \centering % <-- added
 \begin{subfigure}{0.45\textwidth}
     \centerline{\includegraphics[width=\linewidth]{stavova_K1_nelin.eps}}
     \caption{Nelineární systém a $K_1$ \\ segway postupně odjíždí ($\theta$ diverguje)}
@@ -681,7 +686,27 @@ Proporcionální regulátor nedokázal zajistit ustálenou regulační odchylku.
 se proporcionální regulace nedokázala vrátit na nastavenou referenční hodnotu $d_\text{ref} = 50~\text{\si{\centi\metre}}$.
 Pro zajištění nulové regulační odchylky bude nezbytná integrační složka.
 
+
+Výše diskutované nevýhody P regulátoru řeší regulátor typu PI.  
+
 \section{Závěr}
+V rámci práce se podařilo úspěšně ověřit validitu matematického modelu LEGO segwaye jako inverzního kyvadla.
+Nalezený linearizovaný model dostatečně aproximuje dynamiku skutečného nelineárního systému v okolí pracovního bodu ve svislé pozici,
+takže jej lze plně využít pro návrh řízení. Detailní rozebrání několika možností regulace stavovou zpětnou vazbou umožňuje
+hlubší vhled do problematiky stabilizace nelineárního systému včetně kompenzování neideálních vlastností.
+
+Využité metody návrhu regulátorů byly spíše základní, v navazující práci by bylo vhodné rigorozně odvodit -- nebo alespoň
+přesně vyšetřit -- kritéria návrhu regulátorů zohledňující saturaci akčního zásahu jako nejpodstatnější statickou nelinearitu.
+K vyzkoušení stojí regulace \textit{deadbeat}, jež byla pro využití v této práci zavržena kvůli celkově rychlé dynamice a velké nestabilitě
+systému v otevřené smyčce. Ve druhé řadě by úloha stabilizace robota ve svislé poloze benefitovala z přesnějšího stanovení hranic pásem necitlivosti
+motorů. Ve zprávě byla diskutována varianta symetrické a asymetrické kompenzace pásma necitlivosti, dále je ovšem potřeba zpochybnit
+zamlčený -- leč podstatný -- předpoklad identického pásma necitlivosti na všech dostupných motorech. Je nejvýše pravděpodobné,
+že nasazení adaptivní metody kompenzace pásma necitlivosti by přispělo k hladkému postoji robota.
+
+Protože je v případě modelování kinematiky dvoukolového vozítka označování stavů velmi intuitivní, je modelování systému stavovým popisem
+doporučeníhodné i pro navazující rozvíjející publikace.  Stěžejním závěrem je samotné zdařilé splnění zadané úlohy.
+Lze konstatovat, že mnoho stupňů volnosti stavové zpětné vazby je dostačujících pro plnění rozmanitých požadavků na dynamiku řízeného procesu
+lišících se v oblasti časové (parametry jako $T_s$, $OS$) i konkrétních polohách pólů.
 
 
 \begin{thebibliography}{9}
