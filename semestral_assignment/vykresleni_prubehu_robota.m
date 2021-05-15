@@ -15,7 +15,7 @@ stem(time, voltage, 'LineWidth', 2);
 plot(time, [theta, thetadot, psi, psidot], 'LineWidth', 2);
 hold off
 
-legend('akèní zásah','úhel natoèení kol','úhlová rychlost kol', 'náklon', 'úhlová rychlost pádu','Location','northwest')
+legend('akèní zásah','úhel natoèení kol','úhlová rychlost kol', 'náklon', 'úhlová rychlost pádu','Location','southwest')
 grid on;
 xlabel('Èas [s]')
 ylabel('Velikost odezvy [základní jednotky velièin]')

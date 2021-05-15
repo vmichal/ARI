@@ -407,14 +407,17 @@ na~akční zásah
 \end{equation}
 
 \subsection{Saturace stavů systému}
+\label{sec:saturace}
 
 Ze stavových proměnných soustavy může být saturováno $x_2$ odpovídající úhlu náklonu od svislice $\psi$.
-Hodnoty $\psi = \pm \frac{\pi}{2}$ odpovídají stavu, kdy robot spadne~a~položí se na~plocho na~konstrukci těla.
+Hodnoty $\psi~=~\pm \frac{\pi}{2}$ odpovídají stavu, kdy robot spadne~a~položí se naplocho na~konstrukci těla.
 Jedná se o stabilní ekvilibria, z hlediska řešení úlohy jsou ale silně nežádoucí. Pakliže je cílem udržet segway ve svislé poloze,
 musí se soustava těmto dvěma stavům vyhnout za každou cenu. Proto není tato saturace pro návrh řízení nijak podstatná.
 
-Proměnná $x_1$ odpovídající úhlu koleček $\theta$, ani stavy $x_{3,4}$ odpovídající úhlovým rychlostem $\dot{\theta}$~a~$\dot{\psi}$,
-nemohou být saturovány. Úhlová dráha uražená kolečky je obecně neomezená, stejnětak obě úhlové rychlosti.
+Proměnná $x_1$ odpovídající úhlu koleček $\theta$ nemůže být saturována již z principu -- vozítku dříve dojde energie, než ujede nekonečnou vzdálenost.
+Stav $x_3$ odpovídající úhlové rychlosti koleček $\dot{\theta}$ má saturci vyšetřenou v rovnici \eqref{eq:max_rpm}. U~stavu $x_4$ odpovídající rychlosti pádu $\dot{\psi}$
+rovněž existuje saturace související s konečným gravitačním zrychlením. Protože cílem práce je stabilizovat $\dot{\psi}$ na hodnotu blízkou nule, nemá tato saturace vliv na řízení.
+
 
 Saturovatelná je rovněž vzdálenost od překážky $d$. Ultrazvukový senzor vzdálenosti má rozlišení 8 bitů s~krokem 1 \si{\centi\metre},
 hodnota $d$ tak bude v každý okamžik saturována na~interval $d \in \left[0, 255\right]$. Tato saturace však není pro návrh řízení podstatná --
@@ -422,7 +425,7 @@ pakliže je totiž překážka více jak $2.5 \text{\si{\metre}}$ daleko, nezál
 
 \subsection{Dynamika motorů}
 
-Pro identifikaci parametrů motorů byl na~vstup motorů přiložen skok napětí z $0$ na~$60$ \% střídy PWM.
+Pro identifikaci parametrů motorů byl na~vstup motorů přiložen skok napětí z $0$ na~$60$~\% střídy PWM.
 Při uvážení $U_{bat}$ dle sekce \ref{sec:ubat} to odpovídá vstupnímu napětí $U_\text{in} = \frac{60}{100} U_{bar} = 4.8$ \si{\volt}.
 Změřená odezva je vykreslena na~obrázku \ref{fig:motor_skok}. V průběhu měření vypadla část vzorků mezi časy $250~\text{\si{\milli\second}}$ 
 a~$380~\text{\si{\milli\second}}$. Pro identifikaci je tak potřeba uvážit jen validní část průběhu.
@@ -448,10 +451,11 @@ Směrnice asymptoty
 \begin{equation}
     k_{60\%} = \frac{\Delta y}{\Delta x} = \frac{0.35521}{0.037} = 9.6~\text{\si{\radian\per\second}}
 \end{equation}
-odpovídá úhlové rychlosti otáčení motoru při použité střídě $60$ \%. Při plné střídě spínání nezatížených motorů lze dosáhnout rychlosti
-\begin{equation*}
+odpovídá úhlové rychlosti otáčení motoru při použité střídě $60$~\%. Při plné střídě spínání nezatížených motorů lze dosáhnout rychlosti
+\begin{equation}
     \omega_\text{max} = k_{60\%} \cdot \frac{100}{60} = 16~\text{\si{\radian\per\second}} \approx 152~\text{RPM},
-\end{equation*}
+    \label{eq:max_rpm}
+\end{equation}
 což souhlasí s~výsledky prezentovanými ve Figure 6-3 v \cite{model_based_design}.
 V čase $T$ musí mít asymptota nulovou hodnotu -- odečtením z grafu je vidět $T = 0.037$ \si{\second}.
 Protože testovací vstupní signál neměl jednotkovou amplitudu, je potřeba nalezené parametry ještě přeškálovat vydělením $U_\text{in}$. 
@@ -473,7 +477,7 @@ V nelineárním modelu je zohledněna saturace náklonu $\psi$ na~interval $[-\f
 Paralelně byl zařazen blok \textit{State space} obsahující linearizovaný model představovaný maticemi dle rovnice \eqref{eq:matice_linearizovane}.
 \subsection{Odezva na~skok}
 Při první simulaci byl nelineární~i~linearizovaný model
-vystaven jednotkovému skoku vstupního napětí $u$ v čase 1 \si{\second}. Průběhy stavových veličin jsou zobrazeny na~obrázku \ref{fig:porovnani_skok}.
+vystaven jednotkovému skoku vstupního napětí $u$ v čase 1~\si{\second}. Průběhy stavových veličin jsou zobrazeny na~obrázku \ref{fig:porovnani_skok}.
 Pro přehlednost není zobrazen průběh stavu $x_1$ (úhel koleček $\theta$), neboť jeho hodnota není pro úlohu balancování důležitá.
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=\linewidth]{porovnani_skok.eps}}
@@ -685,24 +689,56 @@ by vybudil stavový regulátor, jenž by dalšímu posunu zabránil. Pro ilustra
 požadavku na~$\theta = 0$~a~zároveň $d = d_{ref}$.
 Pro stabilizaci soustavy ve svislé poloze tak je vhodný dříve nalezený regulátor $K_1$. Paralelně k~němu bylo vyzkoušeno několik různých regulátorů.
 
-První pokus o řízení pomocí vzdálenosti od překážky $d$ byl návrh proporcionálního regulátoru pro svou jednoduchou integrovatelnost do systému.
- Pomocí vztahu \eqref{eq:vzdalenost} se nabízí přímočarý
-způsob řízení veličiny $d$ -- dopočíst hodnotu $\theta$, pro kterou bude splněno $d = d_{ref}$,~a~následně robota dovést na~tento nový úhel koleček.
+\subsubsection{Proporcionální regulace vzdálenosti}
+
+Pomocí vztahu \eqref{eq:vzdalenost} se nabízí přímočarý
+způsob řízení veličiny $d$. Chybová hodnota 
+\begin{equation}
+    error = \underbrace{(d - d_{ref})}_{\Delta d~\text{[cm]}} \cdot \frac{1}{R}
+\end{equation}
+je přivedena na vstup stabilizujícímu regulátoru, jehož působením odezní $error \to 0$ pro libovolné počáteční podmínky.
+Proporcionální regulátor s přenosem $K_{\text{P}}$ je přirozeně první možnost k vyzkoušení pro svou snadnou integrovatelnost do schématu řízení.
+Možností zapojení je vícero, například lze zapojit regulátor $d$ paralelně ke stavové zpětné vazbě zajišťující balanc segwaye a následně jejich výstupy prostě sečíst.
+Toto řešení má však zásadní nedostatek v okamžiku, kdy by se měly výstupy stavové zpětné vazby a regulátoru $d$ potkat ve fázi nebo v protifázi. V takovém případě by 
+se síla akčního zásahu zdvojnásobila, což by mohlo způsobit saturaci či překmit, nebo naopak kompletně odečetla a robot by bez regulace padal na zem. Týmž problémem
+do jisté míry trpí úplně každá lineární kombinace výstupů regulátorů, existuje však robustnější řešení dle str. 473 v \cite{franklin}.
+
+Protože SZV udržuje vektor stavů $\vec{x} \approx \vec{o}$, lze připojením $\vec{x} - \vec{x}_{ss}$ na vstup SZV zajistit $\vec{x} \approx \vec{x}_{ss} \neq \vec{o}$.
+Umělá modifikace stavů udá stavové zpětné vazbě nový cíl pro regulaci a celý návrh benefituje z výhod obou částí -- SZV s vysokou robustností udržuje $\vec{x}$ v okolí
+nastaveného bodu $\vec{x}_{ss}$ a regulátor vzdálenosti může stále zajišťovat správnou polohu v prostoru. Výběr stavu k umělému ovlivňování regulátorem vzdálenosti je jednoznačný.
+Protože SZV na $x_1$ vůbec nezávisí a $x_{2,4}$ jsou kritické pro stabilitu systému. Zbývá jediná možnost, aby se $error$ přenášel na rychlost kol $x_3$.
+Rovnice \eqref{eq:max_rpm} staví omezení na maximální úhlovou rychlost. Výstup regulátoru je však záhodno omezit ještě na menší interval, neboť velká vzdálenost od pracovního bodu
+by mohla vést na ztrátu stability. Velice opatrný odhad je omezení výstupu regulátoru vzdálenosti na $\pm 2$ \si{\radian\per\second}.
+
+\begin{figure}[htbp]
+    \centerline{\includegraphics[width=\linewidth]{proporcionalni_d_ustalena_odchylka.eps}}
+    \caption{Nenulová regulační odchylka P složky}
+    \label{fig:vzdalenost_P_odchylka}        
+\end{figure}
+
+Experimentální ladění konstanty proporcionální regulace ukázalo dobrou hodnotu $K_\text{P} = \frac{2}{200}$.
+S ohledem na parametry senzoru vzdálenosti popsané v sekci \ref{sec:saturace} je pro $d_{ref} = 50$ \si{\centi\metre} maximální hodnota $\Delta d = 205$ \si{\centi\metre}.
+Uvedená konstanta $K_\text{P}$ tak odpovídá rychlosti $1$ \si{\radian\per\second} za každých $100$ \si{\centi\metre} výchylky od referenční vzdálenosti.
+Průběh signálů z experimentů je vykreslen na obrázkách \ref{fig:vzdalenost_P_odchylka} a \ref{fig:vzdalenost_P}.
 
 
-
-Na~obrázku \ref{fig:vzdalenost_P} je vykreslen časový průběh $d(t)$ z minutového spuštění robota.
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=\linewidth]{vzdalenost_od_prekazky_proporcionalni.eps}}
-    \caption{}
+    \caption{Nenulová regulační odchylka P složky}
     \label{fig:vzdalenost_P}        
 \end{figure}
-Proporcionální regulátor nedokázal zajistit ustálenou regulační odchylku. Při poruše (představované šťouchnutím do robota)
-se proporcionální regulace nedokázala vrátit na~nastavenou referenční hodnotu $d_\text{ref} = 50~\text{\si{\centi\metre}}$.
+Je patrné, že proporcionální regulátor nedokázal zajistit ustálenou regulační odchylku. Při poruše (představované šťouchnutím do robota)
+se proporcionální regulace nedokázala vrátit na~nastavenou referenční hodnotu $d_{ref}$.
 Pro zajištění nulové regulační odchylky bude nezbytná integrační složka.
 
+\subsubsection{Proporcionálně integrační regulace vzdálenosti}
 
-Výše diskutované nevýhody P regulátoru řeší regulátor typu PI.  
+Výše diskutované nevýhody P regulátoru řeší regulátor typu PI, jehož paralelní struktura má přenos
+\begin{equation*}
+    K(z) = K_\text{P} + K_\text{I} \frac{h}{z-1},
+\end{equation*}
+v němž byl spojitý integrátor diskretizován pomocí metody dopředné diference.
+Hodnota konstanty $K_\text{I} = \frac{0.5}{200}$ byla nalezena stejnou metodou jako $K_\text{I}$.
 
 \section{Závěr}
 V rámci práce se podařilo úspěšně ověřit validitu matematického modelu LEGO segwaye jako inverzního kyvadla.
@@ -710,29 +746,28 @@ Nalezený linearizovaný model dostatečně aproximuje dynamiku skutečného nel
 takže jej lze plně využít pro návrh řízení. Důkladné rozebrání několika možností regulace stavovou zpětnou vazbou umožňuje
 hlubší vhled do problematiky stabilizace nelineárního systému včetně kompenzování neideálních vlastností.
 Protože je v případě modelování kinematiky dvoukolového vozítka pojem stavů velmi intuitivní, je modelování systému stavovým popisem
-hodno doporučení~i~pro navazující práce.  Stěžejním závěrem je samotné zdařilé splnění zadané úlohy.
-Lze konstatovat, že mnoho stupňů volnosti stavové zpětné vazby je dostačujících pro plnění rozmanitých požadavků na~dynamiku řízeného procesu
-lišících se v oblasti časové (parametry jako $T_s$, $OS$)~i~konkrétních polohách pólů.
+hodno doporučení~i~pro navazující práce v této oblasti.  Stěžejním závěrem je samotné zdařilé splnění zadané úlohy.
+Lze konstatovat, že $n = \text{rank}(\mathbf{A})$ stupňů volnosti stavové zpětné vazby je dostačujících pro plnění rozmanitých požadavků na~dynamiku řízeného procesu.
 
 Využité metody návrhu regulátorů byly spíše základní, v navazující práci by bylo vhodné rigorozně odvodit -- nebo alespoň
 přesně vyšetřit -- kritéria návrhu regulátorů zohledňující saturaci akčního zásahu.
-K vyzkoušení stojí rovněž regulace \textit{deadbeat}, jež byla pro využití v této práci zavržena kvůli celkově rychlé dynamice~a~velké nestabilitě
+K vyzkoušení stojí rovněž regulace \textit{deadbeat}, jež byla pro využití v této práci zavržena kvůli rychlé dynamice~a~velké nestabilitě
 systému v otevřené smyčce. Zpřesnění by si zasloužily rovněž konstantní parametry uvedené v tabulce \ref{tab:konstanty}.
 Mnohé konstanty jako například $J_\varPhi$ či $L$ mají hodnoty stanoveny na~základě předpokladu tuhého homogenního tělesa.
 Opuštěním tohoto předpokladu by sice narostla složitost jejich přeného numerického vypočtení, ovšem z hlediska úlohy automatického řízení
-by se jednalo o pouhou změnu konstant nijak neměnící složitost návrhu regulace.
+by se jednalo o pouhou změnu konstant nijak neovlivňující náročnost návrhu regulace.
 
 V neposlední řadě by úloha stabilizace robota ve svislé poloze benefitovala z přesnějšího stanovení hranic pásem necitlivosti
 motorů. Ve zprávě byla diskutována varianta symetrické~a~asymetrické kompenzace pásma necitlivosti, dále je ovšem potřeba zpochybnit
-zamlčený předpoklad identického pásma necitlivosti na~všech dostupných motorech. Hladký postoj robota by byl nezbytným předpokladem
+zamlčený předpoklad identického pásma necitlivosti na~všech dostupných motorech. Klidný postoj robota by byl nezbytným předpokladem
 pro nasazení například v úlohách stabilizace kamer nebo při přepravě křehkého zboží.
-
-
 
 \begin{thebibliography}{9}
     
     \bibitem{model_based_design}
     Yorihisa Yamamoto, \emph{NXTway-GS Model-Based Design} 
+    
+    \bibitem{franklin} Gene F. Franklin, J. David Powell, Abbas Emami-Naeini, \emph{Feedback Control of Dynamic Systems, 7th edition}, Pearson, 2015, ISBN-10: 0133496597 \url{https://www.pearson.com/us/higher-education/product/Franklin-Feedback-Control-of-Dynamic-Systems-7th-Edition/9780133496598.html}
     
     \bibitem{img:full_state_feedback} G. Goodwin, S. Graebe, M. Salgado, \emph{Control system design}, supplementary materials to book \url{http://www.csd.elo.utfsm.cl/simulations/pend_sim5.html}
     
@@ -752,5 +787,11 @@ Schémata~a~další přílohy z procesu návrhu řízení. Schémata jsou pouze 
     \centerline{\includegraphics[width=\linewidth]{nelinearni_system_simulink.png}}
     \caption{Model programu SIMULINK implementující diferenciální rovnice \eqref{eq:pohyb1_easy} až \eqref{eq:motor2_easy}}
     \label{fig:simulink_nelin_model}        
+\end{figure*}
+
+\begin{figure*}[htbp]
+    \centerline{\includegraphics[width=\linewidth]{rizeni_simulink.png}}
+    \caption{Schéma PI regulátoru vzdálenosti od překážky}
+    \label{fig:simulink_rizeni}        
 \end{figure*}
 \end{document}
