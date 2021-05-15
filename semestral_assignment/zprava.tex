@@ -658,15 +658,18 @@ Lepší vlastnosti odezvy na poruchu by mohlo zajistit integrální řízení, j
 Při experimentálních testech stability fyzickým vyváděním segwaye ze stabilní polohy konal problémy velký překmit ustalování, pakliže bylo vyvoláno
 několik poruch rychle po sobě. Segway se nechal rozkmitat a stal se nestabilním. Pro své obecně lepší vlastnosti byl regulátor $K_1$ zvolen jako základ
 pro další zlepšování. Cíl stabilizovat systém i v přítomnosti mnoha rychlých poruch vyžaduje upravení požadavků na dynamiku -- experimentálně byly zvoleny
-požadavky $T_s = 1.25~\text{\si{\second}}$ a $OS = 10~\%$ na póly $p_{1,2}$. Póly $p_{3,4}$ jsou ponechány v týchž polohách jako pro regulátor $K_1$.
+požadavky $T_s = 1~\text{\si{\second}}$ a $OS = 8~\%$ na póly $p_{1,2}$. Póly $p_{3,4}$ jsou ponechány v týchž polohách jako pro regulátor $K_1$.
 Výsledný regulátor
 \begin{equation*}
     K_3 = \begin{bmatrix}
-        -0.1613 & -14.2147 &  -0.8729  & -2.0811
+        -0.2243 & -17.1901 &  -1.0080 &  -2.4071
     \end{bmatrix}
 \end{equation*}
-zajistil jen zanedbatelné popojíždění segwaye při zajištění velice dobré stability a schopnosti se vypořádat s dynamickými změnami rozložení
+zajistil jen zanedbatelné popojíždění segwaye srovnatelné s regulátorem $K_1$ při dosažení velice dobré stability a schopnosti se vypořádat i s dynamickými změnami rozložení
 hmotnosti například pověšením zátěže na jednu stranu robota. Z experimentů s tímto regulátorem byla pořízena videodokumentace přiložená k této zprávě.
+Další snižování parametru $T_s$ není příliš možné s ohledem na velikost akčního zásahu patrnou např. na obrázku \ref{fig:stavova_K2_nelin}, na němž je vidět že již pro
+konzervativnější volbu $T_s = 1.5~\text{\si{\second}}$ je potřebný akční zásah větší než polovina maximální hodnoty omezené saturací.   
+Volba ještě menšího $T_s$ obecně vyžaduje agresivnější a rychlejší regulátor, který všek v našem kontextu velmi rychle narazí na saturaci akčního zásahu do soustavy.
 
 
 \subsection{Sledování vzdálenosti od překážky}
@@ -692,21 +695,26 @@ Výše diskutované nevýhody P regulátoru řeší regulátor typu PI.
 \section{Závěr}
 V rámci práce se podařilo úspěšně ověřit validitu matematického modelu LEGO segwaye jako inverzního kyvadla.
 Nalezený linearizovaný model dostatečně aproximuje dynamiku skutečného nelineárního systému v okolí pracovního bodu ve svislé pozici,
-takže jej lze plně využít pro návrh řízení. Detailní rozebrání několika možností regulace stavovou zpětnou vazbou umožňuje
+takže jej lze plně využít pro návrh řízení. Důkladné rozebrání několika možností regulace stavovou zpětnou vazbou umožňuje
 hlubší vhled do problematiky stabilizace nelineárního systému včetně kompenzování neideálních vlastností.
-
-Využité metody návrhu regulátorů byly spíše základní, v navazující práci by bylo vhodné rigorozně odvodit -- nebo alespoň
-přesně vyšetřit -- kritéria návrhu regulátorů zohledňující saturaci akčního zásahu jako nejpodstatnější statickou nelinearitu.
-K vyzkoušení stojí regulace \textit{deadbeat}, jež byla pro využití v této práci zavržena kvůli celkově rychlé dynamice a velké nestabilitě
-systému v otevřené smyčce. Ve druhé řadě by úloha stabilizace robota ve svislé poloze benefitovala z přesnějšího stanovení hranic pásem necitlivosti
-motorů. Ve zprávě byla diskutována varianta symetrické a asymetrické kompenzace pásma necitlivosti, dále je ovšem potřeba zpochybnit
-zamlčený -- leč podstatný -- předpoklad identického pásma necitlivosti na všech dostupných motorech. Je nejvýše pravděpodobné,
-že nasazení adaptivní metody kompenzace pásma necitlivosti by přispělo k hladkému postoji robota.
-
-Protože je v případě modelování kinematiky dvoukolového vozítka označování stavů velmi intuitivní, je modelování systému stavovým popisem
-doporučeníhodné i pro navazující rozvíjející publikace.  Stěžejním závěrem je samotné zdařilé splnění zadané úlohy.
+Protože je v případě modelování kinematiky dvoukolového vozítka pojem stavů velmi intuitivní, je modelování systému stavovým popisem
+hodno doporučení i pro navazující práce.  Stěžejním závěrem je samotné zdařilé splnění zadané úlohy.
 Lze konstatovat, že mnoho stupňů volnosti stavové zpětné vazby je dostačujících pro plnění rozmanitých požadavků na dynamiku řízeného procesu
 lišících se v oblasti časové (parametry jako $T_s$, $OS$) i konkrétních polohách pólů.
+
+Využité metody návrhu regulátorů byly spíše základní, v navazující práci by bylo vhodné rigorozně odvodit -- nebo alespoň
+přesně vyšetřit -- kritéria návrhu regulátorů zohledňující saturaci akčního zásahu.
+K vyzkoušení stojí rovněž regulace \textit{deadbeat}, jež byla pro využití v této práci zavržena kvůli celkově rychlé dynamice a velké nestabilitě
+systému v otevřené smyčce. Zpřesnění by si zasloužily rovněž konstantní parametry uvedené v tabulce \ref{tab:konstanty}.
+Mnohé konstanty jako například $J_\varPhi$ či $L$ mají hodnoty stanoveny na základě předpokladu tuhého homogenního tělesa.
+Opuštěním tohoto předpokladu by sice narostla složitost jejich přeného numerického vypočtení, ovšem z hlediska úlohy automatického řízení
+by se jednalo o pouhou změnu konstant nijak neměnící složitost návrhu regulace.
+
+V neposlední řadě by úloha stabilizace robota ve svislé poloze benefitovala z přesnějšího stanovení hranic pásem necitlivosti
+motorů. Ve zprávě byla diskutována varianta symetrické a asymetrické kompenzace pásma necitlivosti, dále je ovšem potřeba zpochybnit
+zamlčený předpoklad identického pásma necitlivosti na všech dostupných motorech. Hladký postoj robota by byl nezbytným předpokladem
+pro nasazení například v úlohách stabilizace kamer nebo při přepravě křehkého zboží.
+
 
 
 \begin{thebibliography}{9}
@@ -719,7 +727,6 @@ lišících se v oblasti časové (parametry jako $T_s$, $OS$) i konkrétních p
 \end{thebibliography}
 
 
-\section{Appendix}
 \label{sec:simulink_nelin_model}
 %TODO přidat model
 \end{document}
