@@ -4,6 +4,9 @@
 % Copyright 2011 The MathWorks, Inc.
 
 d_ref = 50; %cm
+K_3 = [-0.2243  -17.1901   -1.0080   -2.4071]
+K_2 = [-0.1883  -12.4845   -0.9211   -2.1853]
+K_1 = [      0  -11.1715   -0.8910   -2.1115]
 
 %Poèáteèní podmínky pro simulaci:
 initial_theta = 0; initial_psi = pi/12; initial_thetadot = 0; initial_psidot = pi/10;

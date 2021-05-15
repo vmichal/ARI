@@ -13,7 +13,7 @@ plot(time, [theta, thetadot, psi, psidot, vystupZV], 'LineWidth', 2);
 
 legend('úhel natoèení kol','úhlová rychlost kol', 'náklon', 'úhlová rychlost pádu', 'akèní zásah','Location','northeast')
 grid on;
-xlim([0 12])
+xlim([0 2])
 xlabel('Èas [s]')
 ylabel('Velikost signálu [základní jednotky velièin]')
 title({'Odezva nelineárního modelu s regulátorem K_2 na poèáteèní podmínky'})

@@ -58,7 +58,7 @@ ekvilibriu aktivně udržovat pomocí řízení. Cílem úlohy je analyzovat mod
 \end{figure}
 
 \section{Matematický model}
-Na obrázcích \ref{fig:segway_bok}~a~\ref{fig:segway_shora} je zaveden souřadný systém~a~vyznačen význam dalších veličin
+Na~obrázcích \ref{fig:segway_bok}~a~\ref{fig:segway_shora} je zaveden souřadný systém~a~vyznačen význam dalších veličin
 nezbytných pro matematický popis segwaye. Odvození matematického modelu je založeno na~\cite{model_based_design}.
 Uvažujeme tři zobecněné souřadnice
 \begin{equation*}
@@ -164,8 +164,8 @@ S ohledem na~charakter úlohy popsané v sekci \ref{sec:uvod} si lze dovolit dv�
 má pouze balancovat nebo jezdit po~rovné čáře, bude jeho azimut $\varPhi$ vždy konstantní. 
 Bez újmy na~obecnosti lze postavit dokonce $\varPhi = 0$ (odtud~i~$\dot{\varPhi} = \ddot{\varPhi} = 0$),
 čímž se z modelu úplně eliminuje rovnice \eqref{eq:pohyb3}
-a rovnice \eqref{eq:pohyb2} se zjednoduší vynulováním jednoho sčítance. Zároveň již není potřeba pracovat se silou $F_\varPhi$
-a rovnice \eqref{eq:motor3} tak též může být odstraněna.
+a~rovnice \eqref{eq:pohyb2} se zjednoduší vynulováním jednoho sčítance. Zároveň již není potřeba pracovat se silou $F_\varPhi$
+a~rovnice \eqref{eq:motor3} tak též může být odstraněna.
 
 Další zjednodušní plyne z rozhodnutí řídit levý~i~pravý motor stejným napětím $v_l = v_r = v$.
 Toto zjednodušení má vliv na~rovnice \eqref{eq:motor1}~a~\eqref{eq:motor2}.
@@ -370,7 +370,7 @@ modulací. Zařízení je napájeno baterií o nominálním napětí 7.4 \si{V}.
     \label{fig:pwm_saturace}        
 \end{figure}
 
-Na obrázku \ref{fig:pwm_saturace} je patrná první statická nelinearita -- při plné střídě PWM lze na~motory přiložit nejvýše $\pm U_{bat}$,
+Na~obrázku \ref{fig:pwm_saturace} je patrná první statická nelinearita -- při plné střídě PWM lze na~motory přiložit nejvýše $\pm U_{bat}$,
 kde $U_{bat}$ je okamžité napětí baterie. Velikost akčního zásahu je tak omezena na~interval $u \in [-U_{bat}, U_{bat}]$.
 S ohledem na~změřené parametry $U_\text{max}$, $I_\text{max}$~a~$R_\text{in}$ napájecího zdroje zanesené v tabulce \ref{tab:konstanty} lze určit,
 že maximální úbytek napětí na~vnitřním odporu baterie bude $U_{drop} = R_\text{in} \cdot I_\text{max} = 195~\si{\milli\volt}$.
@@ -384,7 +384,7 @@ Ve standardních podmínkách bude činnost segwaye ukončena dříve, než výs
 \end{figure}
 
 \subsection{Pásmo necitlivosti}
-Na motorech lze identifikovat pásmo necitlivosti při aplikaci napětí blízkého nule. Při velmi nízké hodnotě
+Na~motorech lze identifikovat pásmo necitlivosti při aplikaci napětí blízkého nule. Při velmi nízké hodnotě
 akčního zásahu není schopen kroutivý moment motorů překonat statické tření v motoru.
 Šířku pásma necitlivosti lze určit připojením napěťové rampy~a~sledováním závislosti úhlové rychlosti kol na~napětí.
 Opakováním pro rampu s~kladnou~a~zápornou derivací lze určit šířku pásma necitlivosti na~obě strany od nuly.
@@ -400,7 +400,7 @@ Odezva na~rostoucí rampu napětí je vykreslena v grafu \ref{fig:deadzone_vpred
 
 Jízdě dozadu odpovídá pásmo necitlivosti vykreslené na~grafu \ref{fig:deadzone_vzad}, ze kterého
 lze odečíst šířka pásma necitlivosti přibližně 0.22 \si{V}. Motory jsou tedy necitlivé
-na akční zásah
+na~akční zásah
 \begin{equation}
     u_{deadzone} \in [-0.22, 0.3] ~\si{V}.
     \label{eq:deadzone}
@@ -425,7 +425,7 @@ pakliže je totiž překážka více jak $2.5 \text{\si{\metre}}$ daleko, nezál
 Pro identifikaci parametrů motorů byl na~vstup motorů přiložen skok napětí z $0$ na~$60$ \% střídy PWM.
 Při uvážení $U_{bat}$ dle sekce \ref{sec:ubat} to odpovídá vstupnímu napětí $U_\text{in} = \frac{60}{100} U_{bar} = 4.8$ \si{\volt}.
 Změřená odezva je vykreslena na~obrázku \ref{fig:motor_skok}. V průběhu měření vypadla část vzorků mezi časy $250~\text{\si{\milli\second}}$ 
-a $380~\text{\si{\milli\second}}$. Pro identifikaci je tak potřeba uvážit jen validní část průběhu.
+a~$380~\text{\si{\milli\second}}$. Pro identifikaci je tak potřeba uvážit jen validní část průběhu.
 
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=\linewidth]{motor_skok.eps}}
@@ -485,7 +485,7 @@ V čase cca. $1.6~\si{\second}$ nastane modelově pád robota na~zem~a~hodnota $
 Pakliže zůstanou dodrženy podmínky linearizace na~blízkost pracovnímu bodu, odpovídá linearizovaný model modelu nelineárnímu.
 
 \subsection{Odezva na~rampu}
-V případě připojení rampy na~vstup $u$ soustavy se projeví pásmo necitlivosti na~motorech. na~obrázku \ref{fig:porovnani_rampa} jsou pro porovnání
+V případě připojení rampy na~vstup $u$ soustavy se projeví pásmo necitlivosti na~motorech. Na~obrázku \ref{fig:porovnani_rampa} jsou pro porovnání
 vykresleny odezvy na~rampu vstupního signálu s~předpisem $u(t) = t$ (sklon 1). 
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=\linewidth]{porovnani_rampa.eps}}
@@ -628,11 +628,11 @@ podmínky pro stavové proměnné odeznít s~rostoucím časem do nuly. Pro expe
 odpovídající vnější poruše, kdy například vlivem srážky s~překážkou segway zastaví $\dot{\theta} = 0$~a~začne přepadávat $\dot{\psi} \neq 0$.
 
 
-Na obrázcích \ref{fig:stavova_K2_lin}~a~\ref{fig:stavova_K2_nelin}
+Na~obrázcích \ref{fig:stavova_K2_lin}~a~\ref{fig:stavova_K2_nelin}
 jsou k~porovnání časové průběhy odezev linearizovaného modelu s~regulátorem $K_2$~i~nelineárního modelu se zapojeným regulátorem $K_2$ na~nenulové počáteční podmínky.
 Přechodové děje na~počátku nejsou příliš zajímavé, důležitý je ustálený stav. Zatímco linearizovaný model skutečně s~použitím regulátoru $K_2$ všemi svými stavy 
 odezní do nuly, simulace nelineárního modelu ukazuje na~jistotou nenulovou konstantní hodnotu úhlu natočení koleček $\theta$. Tento nedostatek však není nijak omezující
-a je snadno akceptovatelný. 
+a~je snadno akceptovatelný. 
 
 
 Průběhy ze simulace použití stavového regulátoru $K_1$, jehož nasazení umístí jeden pól uzavřené smyčky do počátku $s$ roviny, jsou vykresleny na~obrázkách 
@@ -672,15 +672,26 @@ Další snižování parametru $T_s$ není příliš možné s~ohledem na~veliko
 konzervativnější volbu $T_s = 1.5~\text{\si{\second}}$ je potřebný akční zásah větší než polovina maximální hodnoty omezené saturací.   
 Volba ještě menšího $T_s$ obecně vyžaduje agresivnější~a~rychlejší regulátor, který všek v našem kontextu velmi rychle narazí na~saturaci akčního zásahu do soustavy.
 
+\subsection{Sledování vzdálenosti od překážky $d$}
 
-\subsection{Sledování vzdálenosti od překážky}
+Sledování vzdálenosti od překážky je druhořadým úkolem ve srovnání s~primární stabilizací ve svislé poloze. na~základě hlubších znalostí specifické aplikace 
+lze přesně rozhodnout, jak závažné je případné fluktuování $d$ kolem nastavené reference. Nicméně nikdy není přípustné polevit v regulaci
+úhlu náklonu $\psi$, neboť pád segwaye je konečný~a~v reálu může přivodit závažné důsledky.
+
+Pro rozšíření úlohy o řízení $d$ je přímočarým řešením vhodná kombinace dříve nalezené stavové zpětné vazby s~novým regulátorem 
+vzdálenosti od překážky. Pakliže by stabilizující stavová zpětná vazba závisela
+na~stavu $x_1$, nebylo by možno úlohu uspokojivě splnit -- posun robota za účelem dosažení požadované vzdálenosti od překážky
+by vybudil stavový regulátor, jenž by dalšímu posunu zabránil. Pro ilustraci tohoto problému byla pořízena videodokumentace ilustující obecnou nesplnitelnost
+požadavku na~$\theta = 0$~a~zároveň $d = d_{ref}$.
+Pro stabilizaci soustavy ve svislé poloze tak je vhodný dříve nalezený regulátor $K_1$. Paralelně k~němu bylo vyzkoušeno několik různých regulátorů.
 
 První pokus o řízení pomocí vzdálenosti od překážky $d$ byl návrh proporcionálního regulátoru pro svou jednoduchou integrovatelnost do systému.
-Použitá stavová zpětná vazba spolehlivě udržuje robota ve stavovém prostoru poblíž bodu $\vec{o}$. Pomocí vztahu \eqref{eq:vzdalenost} se nabízí přímočarý
-způsob řízení veličiny $d$ -- dopočíst hodnotu $\theta$, pro kterou bude splněno $d = d_{ref}$, a následně robota dovést na tento nový úhel koleček. 
+ Pomocí vztahu \eqref{eq:vzdalenost} se nabízí přímočarý
+způsob řízení veličiny $d$ -- dopočíst hodnotu $\theta$, pro kterou bude splněno $d = d_{ref}$,~a~následně robota dovést na~tento nový úhel koleček.
 
 
-Na obrázku \ref{fig:vzdalenost_P} je vykreslen časový průběh $d(t)$ z minutového spuštění robota.
+
+Na~obrázku \ref{fig:vzdalenost_P} je vykreslen časový průběh $d(t)$ z minutového spuštění robota.
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=\linewidth]{vzdalenost_od_prekazky_proporcionalni.eps}}
     \caption{}
