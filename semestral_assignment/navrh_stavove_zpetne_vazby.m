@@ -3,8 +3,8 @@
 
 %zadán je max pøekmit 20% a co nejkratší èas dosažení.
 
-overshoot = 0.08; % pro optimální øízení; pro regulátory K_1,2 je 0.2 
-settling_time = 1; %s; pro optimální øízení. Pro K_1,2 je 1.5
+overshoot = 0.08; % 0.08 pro optimální øízení; pro regulátory K_1,2 je 0.2 
+settling_time = 1.0; %s; 1 pro optimální øízení. Pro K_1,2 je 1.5
 damping = -log(overshoot)/sqrt(pi^2 + log(overshoot)^2);
 sigma = 4/settling_time;
 
@@ -12,8 +12,8 @@ current_poles = eig(maticeA)
 rank(ctrb(maticeA, maticeB)) % vychází 4, systém je plnì øiditelný a lze umístit všechny póly.
 omega_damped = sigma/damping * sqrt(1-damping^2);
 
-last_placed_pole = 0; %for independence on theta
-%last_placed_pole = -0.5 %for good stability (K_2, K_3)
+%last_placed_pole = 0; %for independence on theta
+last_placed_pole = -0.5 %for good stability (K_2, K_3)
 
 desired_poles = [-231; last_placed_pole; -sigma + omega_damped * i; -sigma - omega_damped * i]
 
